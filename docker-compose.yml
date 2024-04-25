@@ -1,0 +1,32 @@
+version: '3'
+services:
+  quiz_server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: quiz_server
+    working_dir: /var/www/html/quiz
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - .:/var/www/html/quiz
+      - ./docker/nginx_log:/var/log/nginx
+      - ./docker/php-fpm/php8.2-fpm.log:/var/log/php8.2-fpm.log
+      - ./docker/config/quiz.conf:/etc/nginx/conf.d/quiz.conf
+      - ./docker/ssl:/etc/nginx/ssl
+    links:
+      - mysql
+
+  mysql:
+    image: mysql:5.7
+    container_name: quiz_mysql
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./docker/mysql:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: eT57X3zkV49etb
+      MYSQL_DATABASE: quiz
+      MYSQL_USER: longnguyen
+      MYSQL_PASSWORD: uauWzKwE2CJ9NW
