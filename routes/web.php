@@ -10,6 +10,8 @@ use App\Http\Controllers\BlockController;
 use App\Http\Controllers\LevelController;
 use App\Http\Controllers\ExamController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\IndexController;
+use App\Http\Controllers\LoginStudentsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,9 +24,15 @@ use App\Http\Controllers\HomeController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+//route homepage
+Route::get('/', [IndexController::class, 'homepage'])->name('homepage');
+
+Route::middleware(['auth.student'])->group(function () {
+    Route::get('/login-quiz', [LoginStudentsController::class, 'redirectToLogin'])->name('redirectToLogin');
+    Route::post('/checkLoginStudents', [LoginStudentsController::class, 'checkLoginStudents'])->name('checkLoginStudents');
 });
+Route::get('/logoutStudents', [LoginStudentsController::class, 'logoutStudents'])->name('logoutStudents');
+
 
 Auth::routes();
 // Route::match(['get', 'post'], 'register', function(){
