@@ -2,6 +2,16 @@
 
 @section('content')
     @if (Auth::id())
+        <style>
+            #error-message-container {
+                margin-top: 10px;
+                padding: 10px;
+                background-color: #f8d7da;
+                border: 1px solid #f5c6cb;
+                color: #721c24;
+                border-radius: 5px;
+            }
+        </style>
         <div class="app-main__outer">
             <div class="app-main__inner">
                 <div class="app-page-title">
@@ -23,6 +33,7 @@
                         </ul>
                     </div>
                 @endif
+                <div id="error-message-container" hidden></div>
                 <div class="tabs-animation">
                     {{-- <div class="mb-3 card">
                         <div class="card-header-tab card-header">
@@ -105,7 +116,7 @@
                             </button>
                         </div>
                     </div> --}}
-                    <form action="{{route('exams.store')}}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('exams.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="row">
                             <div class="col-sm-12 col-lg-6">
@@ -124,10 +135,11 @@
                                                     <form method="POST" action="{{ route('exams_request') }}">
                                                         @csrf
                                                         <div class="position-relative row form-group">
-                                                            <label for="subject_id" class="col-sm-2 col-form-label">Môn học
+                                                            <label for="subjects_id" class="col-sm-2 col-form-label">Môn học
                                                                 :</label>
                                                             <div class="col-sm-10">
-                                                                <select name="subject" class="form-control" id="subject">
+                                                                <select name="subjects_id" class="form-control"
+                                                                    id="subject">
                                                                     @foreach ($subjects as $subject)
                                                                         <option value="{{ $subject->id }}">
                                                                             {{ $subject->name }}
@@ -144,7 +156,7 @@
                                                                     <div class="col-sm-3">
                                                                         <label>{{ $level->name }} :</label>
                                                                         <input type="number"
-                                                                            class="col-sm-10 rounded count form-control"
+                                                                            class="col-sm-10 count form-control"
                                                                             data-level-id="{{ $level->id }}"
                                                                             min="0" value="0">
                                                                     </div>
@@ -178,29 +190,23 @@
                                             <div class="main-card card">
                                                 <div class="card-body">
                                                     <div class="position-relative row form-group">
-                                                        <label for="opening_time" class="col-sm-3 col-form-label">Thời gian mở
-                                                            đề
-                                                            :</label>
+                                                        <label for="opening_time" class="col-sm-3 col-form-label">Thời gian mở đề :</label>
                                                         <div class="col-sm-5">
-                                                            <input type="datetime-local" class="form-control"
-                                                                name="opening_time" id="opening_time">
+                                                            <input type="datetime-local" class="form-control" name="opening_time" id="opening_time">
                                                         </div>
                                                     </div>
                                                     <div class="position-relative row form-group">
-                                                        <label for="closing_time" class="col-sm-4 col-form-label">Thời gian đóng
-                                                            đề
-                                                            :</label>
+                                                        <label for="closing_time" class="col-sm-4 col-form-label">Thời gian đóng đề :</label>
                                                         <div class="col-sm-5">
-                                                            <input type="datetime-local" class="form-control"
-                                                                name="closing_time" id="closing_time">
+                                                            <input type="datetime-local" class="form-control" name="closing_time" id="closing_time">
                                                         </div>
                                                     </div>
                                                     <div class="position-relative row form-group">
                                                         <label for="content" class="col-sm-3 col-form-label">Tên bài thi
                                                             :</label>
                                                         <div class="col-sm-5">
-                                                            <input type="text" name="content" id="content" class="form-control"
-                                                                placeholder="Nhập tên bài thi">
+                                                            <input type="text" name="content" id="content"
+                                                                class="form-control" placeholder="Nhập tên bài thi">
                                                         </div>
                                                     </div>
                                                     <div class="position-relative row form-group">
@@ -208,7 +214,7 @@
                                                             bài
                                                             (phút) :</label>
                                                         <div class="col-sm-5">
-                                                            <input type="number"placeholder="Nhập thời gian làm bài"
+                                                            <input type="number" placeholder="Nhập thời gian làm bài"
                                                                 class="form-control" min="1" name="duration"
                                                                 id="duration">
                                                         </div>
@@ -217,15 +223,18 @@
                                                         <div class="mb-2 mr-sm-2 mb-sm-0 position-relative form-group">
                                                             <label for="exampleEmail22" class="mr-sm-2">Mật khẩu đề
                                                                 :</label>
-                                                            <input name="password" id="password" placeholder="Nhập mật khẩu"
-                                                                type="password" class="form-control">
+                                                            <input name="password" id="password"
+                                                                placeholder="Nhập mật khẩu" type="password"
+                                                                class="form-control">
                                                         </div>
                                                         <div class="mb-2 mr-sm-2 mb-sm-0 position-relative form-group">
-                                                            <input name="same_password" id="same_password" placeholder="Nhập lại mật khẩu"
-                                                                type="password" class="form-control">
+                                                            <input name="confirm_password" id="confirm_password"
+                                                                placeholder="Nhập lại mật khẩu" type="password"
+                                                                class="form-control">
                                                         </div>
                                                         <div>
-                                                            <input type="button" id="save_exams" class="btn btn-shadow btn-secondary" value="Tạo đề thi">
+                                                            <input type="button" id="save_exams"
+                                                                class="btn btn-shadow btn-secondary" value="Tạo đề thi">
                                                         </div>
                                                     </div>
                                                 </div>

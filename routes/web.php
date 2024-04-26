@@ -45,5 +45,6 @@ Route::resource('exams', ExamController::class);
 Route::post('quick_view', [QuestionsController::class, 'quick_view'])->name('quick_view');
 Route::post('quick_view_class', [ClasssController::class, 'quick_view_class'])->name('quick_view_class');
 Route::post('quick_view_students', [StudentsController::class, 'quick_view_students'])->name('quick_view_students');
+Route::post('quick_view_exam', [ExamController::class, 'quick_view_exam'])->name('quick_view_exam');
 Route::post('questions/import', [QuestionsController::class, 'ImportExcelData'])->name('questions.import');
 Route::post('/exam/handle-request', [ExamController::class, 'ExamRequest'])->name('exams_request');

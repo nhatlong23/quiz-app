@@ -1465,7 +1465,7 @@
                                         </li>
                                     </ul>
                                 </li>
-                                <li class="{{ $segment == 'exems' ? 'mm-active' : '' }}">
+                                <li class="{{ $segment == 'exams' ? 'mm-active' : '' }}">
                                     <a href="#">
                                         <i class="metismenu-icon pe-7s-umbrella"></i> Quản lý bộ đề thi
                                         <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
@@ -2138,233 +2138,60 @@
             </div>
         </div>
     </div>
+    {{-- quick view exams --}}
+    <div class="modal fade quick_view_exam" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="quick_view_exam_title">Tin - Bài thi cuối kì môn tin</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="main-card mb-3 card">
+                        <div class="card-body">
+                            <table style="width: 100%;" id="example"
+                                class="table table-hover table-striped table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>STT</th>
+                                        <th>Câu hỏi</th>
+                                        <th>Đáp án A</th>
+                                        <th>Đáp án B</th>
+                                        <th>Đáp án C</th>
+                                        <th>Đáp án D</th>
+                                        <th>Câu trả lời</th>
+                                        <th>Trạng thái</th>
+                                        <th>Hành động</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="example_tbody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
     </div>
     <div class="app-drawer-overlay d-none animated fadeIn"></div>
     <script type="text/javascript" src="{{ asset('backend/scripts/main.d810cf0ae7f39f28f336.js') }}"></script>
     <script src="https://kit.fontawesome.com/c3bc0ae91e.js" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" src="{{ asset('backend/scripts/main.js') }}"></script>
     <script>
-        $(document).ready(function() {
-            $("#wizard-picture").on('change', function() {
-                readURL(this);
-            });
-        });
-
-        function readURL(input) {
-            if (input.files && input.files[0]) {
-                var reader = new FileReader();
-
-                reader.onload = function(e) {
-                    $("#wizardPicturePreview").attr("src", e.target.result).fadeIn("slow");
-                };
-
-                reader.readAsDataURL(input.files[0]);
-            }
-        }
-    </script>
-    <script>
-        $(document).ready(function() {
-            $('.quick_view_button').click(function() {
-                var question = $(this).data('question');
-                $('#quick_view_question').text(question);
-                $('#quick_view_subject').text(subject);
-
-                var question_id = $(this).siblings('input[name="id_questions"]').val();
-                var subject_id = $(this).siblings('input[name="id_subjects"]').val();
-                $.ajax({
-                    url: '{{ route('quick_view') }}',
-                    type: 'POST',
-                    data: {
-                        id_questions: question_id,
-                        id_subjects: subject_id,
-                        _token: '{{ csrf_token() }}'
-                    },
-                    success: function(response) {
-                        $('#question').text(response.question);
-                        $('#option_a').text(response.option_a);
-                        $('#option_b').text(response.option_b);
-                        $('#option_c').text(response.option_c);
-                        $('#option_d').text(response.option_d);
-                        $('#answer').text(response.answer);
-                        $('#picture').text(response.picture);
-                        $('#subject').text(response.subject);
-                        $('#level').text(response.level);
-                    },
-                    error: function(xhr, status, error) {
-                        console.error(xhr.responseText);
-                    }
-                });
-            });
-        });
-
-        $(document).ready(function() {
-            $('.quick_view_class_button').click(function() {
-                var question = $(this).data('question');
-                $('#quick_view_description').text(question);
-
-                var class_id = $(this).siblings('input[name="id_class"]').val();
-                var blocks_id = $(this).siblings('input[name="id_block"]').val(); // Corrected to 'id_block'
-
-                $.ajax({
-                    url: '{{ route('quick_view_class') }}',
-                    type: 'POST',
-                    data: {
-                        id_class: class_id,
-                        id_block: blocks_id,
-                        _token: '{{ csrf_token() }}'
-                    },
-                    success: function(response) {
-                        $('#name').text(response.name);
-                        $('#desc').text(response.desc);
-                        $('#block').text(response.block);
-                        $('#number').text(response.number);
-                    },
-                    error: function(xhr, status, error) {
-                        console.error(xhr.responseText);
-                    }
-                });
-            });
-        });
-
-        $(document).ready(function() {
-            $('.quick_view_students_button').click(function() {
-                var description = $(this).data('description');
-                $('#quick_view_description').text(description);
-
-                var student_id = $(this).siblings('input[name="id_students"]').val();
-                var class_id = $(this).siblings('input[name="class"]').val();
-
-                $.ajax({
-                    url: '{{ route('quick_view_students') }}',
-                    type: 'POST',
-                    data: {
-                        id_student: student_id,
-                        id_class: class_id,
-                        _token: '{{ csrf_token() }}'
-                    },
-                    success: function(response) {
-                        $('#quick_view_students_title').text(response.name + ' - ' + response
-                            .class);
-                        $('#student_code').text(response.student_code);
-                        $('#names').text(response.names);
-                        $('#school_year').text(response.school_year);
-                        $('#birth').text(response.birth);
-                        $('#gender').text(response.gender);
-                        $('#email').text(response.email);
-                        $('#phone').text(response.phone);
-                        $('#cccd').text(response.cccd);
-                        $('#class').text(response.class);
-                        $('#images').attr('src', response.images);
-                    },
-                    error: function(xhr, status, error) {
-                        console.error(xhr.responseText);
-                    }
-                });
-            });
-        });
-    </script>
-    <script>
-        $(document).ready(function() {
-            $("#randomize_questions").on('click', function() {
-                var subjectId = $("#subject").val();
-                var counts = {};
-                var countFieldsFilled = 0;
-
-                $(".count").each(function() {
-                    var levelId = $(this).data('level-id');
-                    var count = $(this).val();
-
-                    if (count && count > 0) {
-                        counts[levelId] = count;
-                        countFieldsFilled++;
-                    }
-                });
-
-                if (countFieldsFilled < 2) {
-                    alert("Vui lòng nhập số lượng câu hỏi cho mỗi cấp độ (có thể bỏ qua 1 cấp độ).");
-                    return;
-                }
-
-                $.ajax({
-                    type: "POST",
-                    url: "{{ route('exams_request') }}",
-                    data: {
-                        subject: subjectId,
-                        counts: counts,
-                        _token: '{{ csrf_token() }}'
-                    },
-                    success: function(response) {
-                        displayCountQuestions(response);
-                        displayRandomQuestions(response.questionsByLevel);
-                    },
-                    error: function(xhr, status, error) {}
-                });
-            });
-        });
-
-        function displayCountQuestions(response) {
-            var totalQuestions = response.totalQuestions;
-            $("#total_questions").text(totalQuestions);
-        }
-
-        function displayRandomQuestions(questions) {
-            var tbody = $('#example tbody');
-            tbody.empty();
-
-            var questionCount = 0;
-
-            $.each(questions, function(levelId, levelQuestions) {
-                $.each(levelQuestions, function(index, question) {
-                    var row = $('<tr>');
-                    row.append('<td>' + (++questionCount) + '</td>');
-                    row.append('<td>' + question.question + '</td>');
-                    row.append('<td><ul>' +
-                        '<li>' + question.option_a + '</li>' +
-                        '<li>' + question.option_b + '</li>' +
-                        '<li>' + question.option_c + '</li>' +
-                        '<li>' + question.option_d + '</li>' +
-                        '</ul></td>');
-                    row.append('<td>' + question.answer + '</td>');
-                    row.append('<td><a href="#" class="btn btn-danger delete-question">Xoá</a></td>');
-                    
-                    tbody.append(row);
-                });
-            });
-        }
-
-        $(document).ready(function() {
-            $("#save_exams").on('click', function() {
-                var subjectId = $("#subject").val();
-                var content = $("#content").val();
-                var count_question = $("#total_questions").html();
-                var opening_time = $("#opening_time").val();
-                var closing_time = $("#closing_time").val();
-                var duration = $("#duration").val();
-                var password = $("#password").val();
-                var same_password = $("#same_password").val();
-
-                // $.ajax({
-                //     type: "POST",
-                //     url: "{{ route('exams_request') }}",
-                //     data: {
-                //         subject: subjectId,
-                //         counts: counts,
-                //         _token: '{{ csrf_token() }}'
-                //     },
-                //     success: function(response) {
-                //         displayCountQuestions(response);
-                //         displayRandomQuestions(response.questionsByLevel);
-                //     },
-                //     error: function(xhr, status, error) {}
-                // });
-                console.log(count_question);
-            });
-        });
-
-    </script>
-
-    <script>
-
+        const examsRequestUrl = "{{ route('exams_request') }}";
+        const examsRequestStore = "{{ route('exams.store') }}";
+        const examsRequestIndex = "{{ route('exams.index') }}";
+        const quickViewRequest = "{{ route('quick_view') }}";
+        const quickViewClassRequest = "{{ route('quick_view_class') }}";
+        const quickViewStudentsRequest = "{{ route('quick_view_students') }}";
+        const quickViewExamRequest = "{{ route('quick_view_exam') }}";
+        const csrfToken = "{{ csrf_token() }}";
     </script>
 </body>
 

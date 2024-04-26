@@ -9,7 +9,7 @@
                             <div class="page-title-icon">
                                 <i class="pe-7s-medal icon-gradient bg-tempting-azure"></i>
                             </div>
-                            <div>Liệt kê các mức độ câu hỏi</div>
+                            <div>Liệt kê các đề thi</div>
                         </div>
                     </div>
                 </div>
@@ -28,36 +28,52 @@
                             <thead>
                                 <tr>
                                     <th>STT</th>
-                                    <th>Tên mức độ câu hỏi</th>
-                                    <th>Mô tả mức độ</th>
+                                    <th>Tên đề thi</th>
+                                    <th>Môn thi</th>
+                                    <th>Số câu hỏi</th>
+                                    <th>Thời gian bắt đầu thi</th>
+                                    <th>Thời gian kết thúc thi</th>
                                     <th>Trạng thái</th>
                                     <th>Hành động</th>
                                 </tr>
                             </thead>
 
                             <tbody>
-                                @foreach ($levels_list as $key => $list)
+                                @foreach ($exams_list as $key => $list)
                                     <tr>
                                         <td>{{ $key + 1 }}</td>
-                                        <td>{{ $list->name }}</td>
-                                        <td>{{ $list->desc }}</td>
                                         <td>
-                                            @if ($list->status)
-                                                Hiển thị mức độ câu hỏi
+                                            <form method="POST" action="{{ route('quick_view_exam') }}">
+                                                @csrf
+                                                <input type="hidden" name="id_exam" value="{{ $list->id }}">
+                                                <input type="hidden" name="subjects_id" value="{{ $list->exam_subject->id }}">
+                                                <button type="button" class="btn mr-2 mb-2 btn-shadow btn-alternate quick_view_exam_button"
+                                                    data-toggle="modal" data-target=".quick_view_exam"
+                                                    data-exam="{{ $list->content }}">
+                                                    {{ $list->content }}
+                                                </button>
+                                            </form>
+                                        </td>
+                                        <td>{{ $list->exam_subject->name }}</td>
+                                        <td>{{ $list->max_questions }}</td>
+                                        <td>{{ $list->opening_time }}</td>
+                                        <td>{{ $list->closing_time }}</td>
+                                        <td>
+                                            @if ($list->status == 1)
+                                                Hiển thị
                                             @else
-                                                Ẩn mức độ câu hỏi
+                                                Ẩn
                                             @endif
                                         </td>
                                         <td>
-                                            <form method="POST" action="{{ route('levels.destroy', $list->id) }}"
-                                                onsubmit="return confirm('Bạn có chắc chắn muốn xóa sinh viên này?')">
+                                            <form method="POST" action="{{ route('exams.destroy', $list->id) }}"
+                                                onsubmit="return confirm('Bạn có chắc chắn muốn xóa đề thi này?')">
                                                 @csrf
                                                 @method('DELETE')
-                                                <a href="{{ route('levels.edit', $list->id) }}" class="btn btn-secondary">
+                                                <a href="{{ route('exams.edit', $list->id) }}" class="btn btn-secondary">
                                                     <i class="pe-7s-note"></i>
                                                 </a>
-                                                <button type="submit" class="btn btn-danger"><i
-                                                        class="pe-7s-trash"></i></button>
+                                                <button type="submit" class="btn btn-danger"><i class="pe-7s-trash"></i></button>
                                             </form>
                                         </td>
                                     </tr>

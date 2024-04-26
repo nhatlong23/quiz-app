@@ -28,4 +28,16 @@ class Exam extends Model
     {
         return $this->belongsTo(Subject::class, 'subjects_id');
     }
+
+    public function questions()
+    {
+        return $this->hasManyThrough(
+            Question::class, // Model của bảng cuối cùng
+            StandardizeQuestion::class, // Model của bảng trung gian
+            'exam_id', // Khóa ngoại trong bảng trung gian
+            'id', // Khóa chính trong bảng đích
+            'id', // Khóa chính của model hiện tại
+            'questions_id' // Khóa ngoại của model đích
+        );
+    }
 }

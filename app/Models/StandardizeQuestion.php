@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Standardize_question extends Model
+class StandardizeQuestion extends Model
 {
     public $timestamps = false;
     use HasFactory;
@@ -15,4 +15,9 @@ class Standardize_question extends Model
         'exam_id',
         'questions_id',
     ];
+    
+    public function exam()
+    {
+        return $this->belongsTo(Exam::class, 'exam_id', 'id');
+    }
 }
