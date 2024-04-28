@@ -43,7 +43,8 @@
                                                 @csrf
                                                 <input type="hidden" name="id_students" value="{{ $list->id }}">
                                                 <input type="hidden" name="class" value="{{ $list->student_class->id }}">
-                                                <button type="button" class="btn mr-2 mb-2 btn-primary quick_view_students_button"
+                                                <button type="button"
+                                                    class="btn mr-2 mb-2 btn-primary quick_view_students_button"
                                                     data-toggle="modal" data-target=".quick_view_students"
                                                     data-students="{{ $list->name }}">
                                                     {{ $list->name }}
@@ -52,11 +53,12 @@
                                         </td>
                                         <td>{{ $list->student_class->name }}</td>
                                         <td>
-                                            @if ($list->status)
-                                                Hiển thị
-                                            @else
-                                                Ẩn
-                                            @endif
+                                        <td>
+                                            <input class="students_status" id="toggle-demo"
+                                                data-student-id="{{ $list->id }}" type="checkbox" data-on="Hiển thị"
+                                                data-off="Ẩn" data-toggle="toggle"
+                                                {{ isset($list->status) && $list->status == 1 ? 'checked' : '' }}>
+                                        </td>
                                         </td>
                                         <td>
                                             <form method="POST" action="{{ route('students.destroy', $list->id) }}"

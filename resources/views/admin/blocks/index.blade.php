@@ -42,11 +42,11 @@
                                         <td>{{ $list->name }}</td>
                                         <td>{{ $list->desc }}</td>
                                         <td>
-                                            @if ($list->status)
-                                                Hiển thị khối học
-                                            @else
-                                                Ẩn khối học
-                                            @endif
+                                            <td>
+                                                <input class="blocks_status" id="toggle-demo" data-block-id="{{ $list->id }}"
+                                                    type="checkbox" data-on="Hiển thị" data-off="Ẩn" data-toggle="toggle"
+                                                    {{ isset($list->status) && $list->status == 1 ? 'checked' : '' }}>
+                                            </td>
                                         </td>
                                         <td>
                                             <form method="POST" action="{{ route('blocks.destroy', $list->id) }}"

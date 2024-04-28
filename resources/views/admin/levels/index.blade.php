@@ -34,7 +34,6 @@
                                     <th>Hành động</th>
                                 </tr>
                             </thead>
-
                             <tbody>
                                 @foreach ($levels_list as $key => $list)
                                     <tr>
@@ -42,11 +41,10 @@
                                         <td>{{ $list->name }}</td>
                                         <td>{{ $list->desc }}</td>
                                         <td>
-                                            @if ($list->status)
-                                                Hiển thị mức độ câu hỏi
-                                            @else
-                                                Ẩn mức độ câu hỏi
-                                            @endif
+                                            <input class="levels_status" id="toggle-demo"
+                                                data-levels-id="{{ $list->id }}" type="checkbox" data-on="Hiển thị"
+                                                data-off="Ẩn" data-toggle="toggle"
+                                                {{ isset($list->status) && $list->status == 1 ? 'checked' : '' }}>
                                         </td>
                                         <td>
                                             <form method="POST" action="{{ route('levels.destroy', $list->id) }}"

@@ -131,4 +131,15 @@ class BlockController extends Controller
         }
         return redirect()->route('blocks.index');
     }
+
+    public function updateStatusBlocks(Request $request)
+    {
+        $block = Block::findOrFail($request->id);
+        $status = $request->checked ? 1 : 0;
+        $block->status = $status;
+        $block->updated_at = now('Asia/Ho_Chi_Minh');
+        $block->save();
+    
+        return $status;
+    }
 }

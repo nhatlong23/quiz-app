@@ -127,4 +127,16 @@ class SubjectsController extends Controller
 
         return redirect()->route('subjects.index');
     }
+
+    public function updateStatusSubjects(Request $request)
+    {
+        $subject = Subject::findOrFail($request->id);
+        $status = $request->checked ? 1 : 0;
+        $subject->status = $status;
+        $subject->updated_at = now('Asia/Ho_Chi_Minh');
+        $subject->save();
+    
+        return $status;
+    }
+    
 }

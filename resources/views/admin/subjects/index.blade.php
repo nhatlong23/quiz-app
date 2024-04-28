@@ -39,35 +39,26 @@
                                         <td>{{ $key + 1 }}</td>
                                         <td>{{ $list->name }}</td>
                                         <td>
-                                            @if ($list->status)
-                                                Hiển thị
-                                            @else
-                                                Ẩn
-                                            @endif
+                                            <input class="subjects_status" id="toggle-demo"
+                                                data-subject-id="{{ $list->id }}" type="checkbox" data-on="Hiển thị"
+                                                data-off="Ẩn" data-toggle="toggle"
+                                                {{ isset($list->status) && $list->status == 1 ? 'checked' : '' }}>
                                         </td>
                                         <td>
-                                            <form method="POST" action="{{ route('subjects.destroy', $list->id) }}" onsubmit="return confirm('Bạn có chắc chắn muốn xóa môn học này?')">
+                                            <form method="POST" action="{{ route('subjects.destroy', $list->id) }}"
+                                                onsubmit="return confirm('Bạn có chắc chắn muốn xóa môn học này?')">
                                                 @csrf
                                                 @method('DELETE')
                                                 <a href="{{ route('subjects.edit', $list->id) }}" class="btn btn-secondary">
                                                     <i class="pe-7s-note"></i>
                                                 </a>
-                                                <button type="submit" class="btn btn-danger"><i class="pe-7s-trash"></i></button>
+                                                <button type="submit" class="btn btn-danger"><i
+                                                        class="pe-7s-trash"></i></button>
                                             </form>
                                         </td>
                                     </tr>
                                 @endforeach
                             </tbody>
-                            {{-- <tfoot>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Position</th>
-                                    <th>Office</th>
-                                    <th>Age</th>
-                                    <th>Start date</th>
-                                    <th>Salary</th>
-                                </tr>
-                            </tfoot> --}}
                         </table>
                     </div>
                 </div>
