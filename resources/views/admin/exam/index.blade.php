@@ -46,8 +46,10 @@
                                             <form method="POST" action="{{ route('quick_view_exam') }}">
                                                 @csrf
                                                 <input type="hidden" name="id_exam" value="{{ $list->id }}">
-                                                <input type="hidden" name="subjects_id" value="{{ $list->exam_subject->id }}">
-                                                <button type="button" class="btn mr-2 mb-2 btn-shadow btn-alternate quick_view_exam_button"
+                                                <input type="hidden" name="subjects_id"
+                                                    value="{{ $list->exam_subject->id }}">
+                                                <button type="button"
+                                                    class="btn mr-2 mb-2 btn-shadow btn-alternate quick_view_exam_button"
                                                     data-toggle="modal" data-target=".quick_view_exam"
                                                     data-exam="{{ $list->content }}">
                                                     {{ $list->content }}
@@ -59,11 +61,9 @@
                                         <td>{{ $list->opening_time }}</td>
                                         <td>{{ $list->closing_time }}</td>
                                         <td>
-                                            @if ($list->status == 1)
-                                                Hiển thị
-                                            @else
-                                                Ẩn
-                                            @endif
+                                            <input class="exams_status" id="toggle-demo" data-exam-id="{{ $list->id }}"
+                                                type="checkbox" data-on="Hiển thị" data-off="Ẩn" data-toggle="toggle"
+                                                {{ isset($list->status) && $list->status == 1 ? 'checked' : '' }}>
                                         </td>
                                         <td>
                                             <form method="POST" action="{{ route('exams.destroy', $list->id) }}"
@@ -73,7 +73,14 @@
                                                 <a href="{{ route('exams.edit', $list->id) }}" class="btn btn-secondary">
                                                     <i class="pe-7s-note"></i>
                                                 </a>
-                                                <button type="submit" class="btn btn-danger"><i class="pe-7s-trash"></i></button>
+                                                <button type="submit" class="btn btn-danger"><i
+                                                        class="pe-7s-trash"></i></button>
+
+                                                <button type="button"
+                                                    class="btn btn-shadow btn-primary add_exam_to_class_button"
+                                                    data-toggle="modal" data-target="#exampleModal">
+                                                    <i class="pe-7s-plus"></i>
+                                                </button>
                                             </form>
                                         </td>
                                     </tr>

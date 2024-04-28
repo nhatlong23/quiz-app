@@ -6,6 +6,8 @@ use App\Models\Exam;
 use App\Models\Level;
 use App\Models\Question;
 use App\Models\Subject;
+use App\Models\Classs;
+use App\Models\Standardize_Exam;
 use App\Models\StandardizeQuestion;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
@@ -18,7 +20,8 @@ class ExamController extends Controller
     public function index()
     {
         $exams_list = Exam::orderBy('id', 'desc')->get();
-        return view('admin.exam.index', compact('exams_list'));
+        $class_list = Classs::orderBy('id', 'desc')->get();
+        return view('admin.exam.index', compact('exams_list', 'class_list'));
     }
 
     /**
@@ -28,7 +31,6 @@ class ExamController extends Controller
     {
         $subjects = Subject::orderBy('id', 'desc')->get();
         $levels = Level::orderBy('id', 'asc')->get();
-
         return view('admin.exam.form', compact('subjects', 'levels'));
     }
 
@@ -99,17 +101,37 @@ class ExamController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Exam $exam)
+    public function edit($id)
     {
-        //
+        $exam = Exam::findOrFail($id);
+        $subjects = Subject::orderBy('id', 'desc')->get();
+        $levels = Level::orderBy('id', 'asc')->get();
+        return view('admin.exam.form', compact('exam', 'subjects', 'levels'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Exam $exam)
+    public function update(Request $request, $id)
     {
-        //
+        $dataValidate = $request->validate([
+            'content' => 'required',
+            'opening_time' => 'required',
+            'closing_time' => 'required',
+            'duration' => 'required',
+        ], [
+            'content.required' => 'Vui lòng nhập nội dung bài thi',
+            'opening_time.required' => 'Vui lòng nhập thời gian bắt đầu',
+            'closing_time.required' => 'Vui lòng nhập thời gian kết thúc',
+            'duration.required' => 'Vui lòng nhập thời gian làm bài',
+        ]);
+
+        $exam = Exam::findOrFail($id);
+        $exam->fill($dataValidate);
+        $exam->updated_at = now('Asia/Ho_Chi_Minh');
+        $exam->save();
+
+        return redirect()->route('exams.index');
     }
 
     /**
@@ -118,21 +140,21 @@ class ExamController extends Controller
     public function destroy($id)
     {
         $exam = Exam::findOrFail($id);
-    
+
         if (!$exam) {
             toastr()->error('Bài thi không tồn tại');
             return redirect()->route('exams.index');
         }
-    
+
         $deletedQuestions = StandardizeQuestion::where('exam_id', $exam->id)->delete();
-    
+
         if (!$deletedQuestions) {
             toastr()->error('Không thể xóa câu hỏi liên quan đến bài thi');
             return redirect()->route('exams.index');
         }
-    
+
         $exam->delete();
-    
+
         toastr()->success('Xóa bài thi và các câu hỏi liên quan thành công');
         return redirect()->route('exams.index');
     }
@@ -178,14 +200,15 @@ class ExamController extends Controller
         return $totalQuestions;
     }
 
-    public function quick_view_exam(Request $request){
+    public function quick_view_exam(Request $request)
+    {
         $exam_id = $request->id_exam;
         $subject_id = $request->subjects_id;
 
         $exam = Exam::findOrFail($exam_id);
         $subject = Subject::findOrFail($subject_id);
         $questions = $exam->questions;
-        
+
         $output = [
             'content' => $exam->content,
             'subject' => $subject->name,
@@ -193,5 +216,36 @@ class ExamController extends Controller
         ];
 
         return response()->json($output);
+    }
+
+    public function addExamToClass(Request $request)
+    {
+        $examId = $request->input('exam_id');
+        $classIds = $request->input('class_ids');
+
+        foreach ($classIds as $classId) {
+            $existingRecord = Standardize_Exam::where('exam_id', $examId)->where('class_id', $classId)->first();
+
+            if (!$existingRecord) {
+                Standardize_Exam::create([
+                    'exam_id' => $examId,
+                    'class_id' => $classId,
+                    'created_at' => now('Asia/Ho_Chi_Minh'),
+                ]);
+            }
+        }
+
+        return response()->json(['success' => 'Bài thi đã được thêm vào lớp học.'], 200);
+    }
+
+    public function updateStatusExams(Request $request)
+    {
+        $exam = Exam::findOrFail($request->id);
+        $status = $request->checked ? 1 : 0;
+        $exam->status = $status;
+        $exam->updated_at = now('Asia/Ho_Chi_Minh');
+        $exam->save();
+    
+        return $status;
     }
 }

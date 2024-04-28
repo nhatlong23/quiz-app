@@ -261,4 +261,15 @@ class StudentsController extends Controller
 
         return response()->json($output);
     }
+
+    public function updateStatusStudents(Request $request)
+    {
+        $student = Student::findOrFail($request->id);
+        $status = $request->checked ? 1 : 0;
+        $student->status = $status;
+        $student->updated_at = now('Asia/Ho_Chi_Minh');
+        $student->save();
+    
+        return $status;
+    }
 }

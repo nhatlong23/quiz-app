@@ -155,16 +155,25 @@ class ClasssController extends Controller
         $class_id = $request->id_class;
         $class = Classs::findOrFail($class_id);
 
-        $blocks_id = $request->id_block;
-        $blocks = Block::findOrFail($blocks_id);
+        $students = $class->students;
+        
         $output = [
             'name' => $class->name,
-            'desc' => $class->desc,
-            'block' => $blocks->name,
             'number' => $class->number,
-            'status' => $class->status
+            'students' => $students
         ];
 
         return response()->json($output);
+    }
+
+    public function updateStatusClasss(Request $request)
+    {
+        $class = Classs::findOrFail($request->id);
+        $status = $request->checked ? 1 : 0;
+        $class->status = $status;
+        $class->updated_at = now('Asia/Ho_Chi_Minh');
+        $class->save();
+    
+        return $status;
     }
 }

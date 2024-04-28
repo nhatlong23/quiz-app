@@ -11,7 +11,6 @@
                             </div>
                             <div>Liệt kê các Câu hỏi</div>
                         </div>
-                        
                     </div>
                 </div>
                 @if ($errors->any())
@@ -53,11 +52,12 @@
                                         </td>
                                         <td>{{ $list->subject->name }}</td>
                                         <td>
-                                            @if ($list->status)
-                                                Hiển thị
-                                            @else
-                                                Ẩn
-                                            @endif
+                                        <td>
+                                            <input class="question_status" id="toggle-demo"
+                                                data-question-id="{{ $list->id }}" type="checkbox" data-on="Hiển thị"
+                                                data-off="Ẩn" data-toggle="toggle"
+                                                {{ isset($list->status) && $list->status == 1 ? 'checked' : '' }}>
+                                        </td>
                                         </td>
                                         <td>
                                             <form method="POST" action="{{ route('questions.destroy', $list->id) }}"
@@ -82,7 +82,8 @@
                     <div class="main-card mb-3 card">
                         <div class="card-body">
                             <h5 class="card-title">Thêm file từ Excel</h5>
-                            <form action="{{ route('questions.import') }}" method="POST" enctype="multipart/form-data" class="">
+                            <form action="{{ route('questions.import') }}" method="POST" enctype="multipart/form-data"
+                                class="">
                                 @csrf
                                 <div class="position-relative form-group">
                                     <label for="subject_id">Môn học:</label>
@@ -97,7 +98,8 @@
                                 <input type="hidden" name="selected_subject_id" id="selected_subject_id">
                                 <div class="position-relative form-group">
                                     <label for="file_import">File:</label>
-                                    <input name="file_import" id="file_import" type="file" class="form-control-file" accept=".xlsx, .xls, .csv" required>
+                                    <input name="file_import" id="file_import" type="file" class="form-control-file"
+                                        accept=".xlsx, .xls, .csv" required>
                                 </div>
                                 <button type="submit" class="mt-1 btn btn-primary">Thêm từ file Excel</button>
                             </form>

@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta http-equiv="Content-Language" content="en">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Quản lý thi trắc nghiệm.</title>
     <meta name="viewport"
         content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, shrink-to-fit=no" />
@@ -16,6 +17,7 @@
     <link rel="stylesheet" href="{{ asset('backend/icon/css/pe-icon-7-stroke.css') }}">
     <link rel="stylesheet" href="{{ asset('backend/icon/css/helper.css') }}">
     <link rel="stylesheet" href="https://cdn.linearicons.com/free/1.0.0/icon-font.min.css">
+    <link href="{{asset('backend/css/toastr.css')}}" rel="stylesheet"/>
 </head>
 
 <body>
@@ -2046,7 +2048,7 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="">Lớp học</h5>
+                    <h5 class="modal-title" id="quick_view_title"></h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -2058,20 +2060,19 @@
                                 class="table table-hover table-striped table-bordered">
                                 <thead>
                                     <tr>
-                                        <th>Tên lớp</th>
-                                        <th>Mô tả lớp</th>
-                                        <th>Khối lớp</th>
-                                        <th>Sỉ số</th>
+                                        <th>STT</th>
+                                        <th>MSTS</th>
+                                        <th>Tên</th>
+                                        <th>Giới tính</th>
+                                        <th>Ngày sinh</th>
+                                        <th>CCCD</th>
+                                        <th>Email</th>
+                                        <th>SĐT</th>
+                                        <th>Năm học</th>
+                                        <th>Trạng thái</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    <tr>
-                                        <td id="name"></td>
-                                        <td id="desc"></td>
-                                        <td id="block"></td>
-                                        <td id="number"></td>
-                                    </tr>
-                                </tbody>
+                                <tbody id="quick_view_class"></tbody>
                             </table>
                         </div>
                     </div>
@@ -2178,11 +2179,48 @@
             </div>
         </div>
     </div>
+    {{-- add exam to class --}}
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Thêm đề thi vào lớp</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="position-relative row form-group">
+                        @if (isset($class_list))
+                            @foreach ($class_list as $class)
+                                <label for="class_{{ $class->id }}"
+                                    class="col-sm-2 col-form-label">{{ $class->name }} :</label>
+                                <div class="input-group-prepend col-sm-10">
+                                    <div class="input-group-text">
+                                        <input type="checkbox" id="class_{{ $class->id }}" name="class_id[]"
+                                            value="{{ $class->id }}">
+                                    </div>
+                                </div>
+                            @endforeach
+                        @endif
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn btn-primary" id="saveChanges">Lưu</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="app-drawer-overlay d-none animated fadeIn"></div>
     <script type="text/javascript" src="{{ asset('backend/scripts/main.d810cf0ae7f39f28f336.js') }}"></script>
     <script src="https://kit.fontawesome.com/c3bc0ae91e.js" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script type="text/javascript" src="{{ asset('backend/scripts/main.js') }}"></script>
+    <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+    <script src="{{asset('backend/scripts/toastr.min.js')}}"></script>
+
     <script>
         const examsRequestUrl = "{{ route('exams_request') }}";
         const examsRequestStore = "{{ route('exams.store') }}";
@@ -2191,6 +2229,14 @@
         const quickViewClassRequest = "{{ route('quick_view_class') }}";
         const quickViewStudentsRequest = "{{ route('quick_view_students') }}";
         const quickViewExamRequest = "{{ route('quick_view_exam') }}";
+        const addExamToClass = "{{ route('addExamToClass') }}";
+        const updateStatusSubjects = "{{ route('updateStatusSubjects') }}";
+        const updateStatusLevels = "{{ route('updateStatusLevels') }}";
+        const updateStatusQuestions = "{{ route('updateStatusQuestions') }}";
+        const updateStatusExams  = "{{ route('updateStatusExams') }}";
+        const updateStatusStudents  = "{{ route('updateStatusStudents') }}";
+        const updateStatusClasss  = "{{ route('updateStatusClasss') }}";
+        const updateStatusBlocks  = "{{ route('updateStatusBlocks') }}";
         const csrfToken = "{{ csrf_token() }}";
     </script>
 </body>

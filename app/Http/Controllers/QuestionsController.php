@@ -204,4 +204,15 @@ class QuestionsController extends Controller
         toastr()->success('Import dữ liệu thành công');
         return redirect()->route('questions.index');
     }
+
+    public function updateStatusQuestions(Request $request)
+    {
+        $question = Question::findOrFail($request->id);
+        $status = $request->checked ? 1 : 0;
+        $question->status = $status;
+        $question->updated_at = now('Asia/Ho_Chi_Minh');
+        $question->save();
+    
+        return $status;
+    }
 }

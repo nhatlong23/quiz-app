@@ -52,25 +52,35 @@ $(document).ready(function () {
 
 $(document).ready(function () {
     $('.quick_view_class_button').click(function () {
-        var question = $(this).data('question');
-        $('#quick_view_description').text(question);
-
         var class_id = $(this).siblings('input[name="id_class"]').val();
-        var blocks_id = $(this).siblings('input[name="id_block"]').val();
 
         $.ajax({
             url: quickViewClassRequest,
             type: 'POST',
             data: {
                 id_class: class_id,
-                id_block: blocks_id,
                 _token: csrfToken,
             },
             success: function (response) {
-                $('#name').text(response.name);
-                $('#desc').text(response.desc);
-                $('#block').text(response.block);
-                $('#number').text(response.number);
+                $('#quick_view_title').text('Lớp :' + response.name + ' - Sĩ số : ' + response.number);
+
+                $('#quick_view_class').empty();
+
+                $.each(response.students, function (index, student) {
+                    var row = '<tr>' +
+                        '<td>' + (index + 1) + '</td>' +
+                        '<td>' + student.student_code + '</td>' +
+                        '<td>' + student.name + '</td>' +
+                        '<td>' + student.gender + '</td>' +
+                        '<td>' + student.birth + '</td>' +
+                        '<td>' + student.cccd + '</td>' +
+                        '<td>' + student.email + '</td>' +
+                        '<td>' + student.phone + '</td>' +
+                        '<td>' + student.school_year + '</td>' +
+                        '<td><button class="btn btn-danger delete-question">Xoá</button></td>' +
+                        '</tr>';
+                    $('#quick_view_class').append(row);
+                });
             },
             error: function (xhr, status, error) {
                 console.error(xhr.responseText);
@@ -143,7 +153,7 @@ $(document).ready(function () {
                         '<td>' + question.option_c + '</td>' +
                         '<td>' + question.option_d + '</td>' +
                         '<td>' + question.answer + '</td>' +
-                        // '<td>' + question.status + '</td>' +
+                        '<td>' + question.status + '</td>' +
                         '<td><button class="btn btn-danger delete-question">Xoá</button></td>' +
                         '</tr>';
                     $('#example_tbody').append(row);
@@ -288,5 +298,218 @@ $(document).ready(function () {
         } else {
             $("#error-message-container").attr("hidden", "hidden");
         }
+    });
+});
+
+$(document).ready(function () {
+    $('#saveChanges').click(function () {
+        // Lấy exam_id từ input ẩn trong modal
+        var exam_id = $('input[name="id_exam"]').val();
+
+        // Lấy ID của các lớp được chọn
+        var class_ids = [];
+        $('input[name="class_id[]"]:checked').each(function () {
+            class_ids.push($(this).val());
+        });
+
+        $.ajax({
+            url: addExamToClass,
+            method: 'POST',
+            data: {
+                exam_id: exam_id,
+                class_ids: class_ids,
+                _token: csrfToken,
+            },
+            success: function (response) {
+                console.log(response);
+                // Xử lý kết quả nếu cần
+            },
+            error: function (xhr, status, error) {
+                console.error(xhr.responseText);
+            }
+        });
+    });
+});
+
+$(document).ready(function(){
+    $('.subjects_status').each(function() {
+        $(this).bootstrapToggle();
+    });
+
+    $('.subjects_status').change(function(){
+        var subjectId = $(this).data('subject-id');
+        var checked = $(this).prop('checked') ? 0 : 1;
+        $.ajax({
+            type: 'POST',
+            url: updateStatusSubjects,
+            data: {
+                id: subjectId,
+                checked: checked,
+                _token: csrfToken,
+            },
+            success: function(response){
+                location.reload();
+            },
+            error: function(xhr, status, error) {
+                console.error(xhr.responseText); 
+            }
+        });
+    });
+});
+
+
+$(document).ready(function(){
+    $('.levels_status').each(function() {
+        $(this).bootstrapToggle();
+    });
+
+    $('.levels_status').change(function(){
+        var levelsId = $(this).data('levels-id');
+        var checked = $(this).prop('checked') ? 0 : 1;
+        $.ajax({
+            type: 'POST',
+            url: updateStatusLevels,
+            data: {
+                id: levelsId,
+                checked: checked,
+                _token: csrfToken,
+            },
+            success: function(response){
+                location.reload();
+            },
+            error: function(xhr, status, error) {
+                console.error(xhr.responseText); 
+            }
+        });
+    });
+});
+
+$(document).ready(function(){
+    $('.question_status').each(function() {
+        $(this).bootstrapToggle();
+    });
+
+    $('.question_status').change(function(){
+        var questionId = $(this).data('question-id');
+        var checked = $(this).prop('checked') ? 0 : 1;
+        $.ajax({
+            type: 'POST',
+            url: updateStatusQuestions,
+            data: {
+                id: questionId,
+                checked: checked,
+                _token: csrfToken,
+            },
+            success: function(response){
+                location.reload();
+            },
+            error: function(xhr, status, error) {
+                console.error(xhr.responseText); 
+            }
+        });
+    });
+});
+
+$(document).ready(function(){
+    $('.exams_status').each(function() {
+        $(this).bootstrapToggle();
+    });
+
+    $('.exams_status').change(function(){
+        var examId = $(this).data('exam-id');
+        var checked = $(this).prop('checked') ? 0 : 1;
+        $.ajax({
+            type: 'POST',
+            url: updateStatusExams,
+            data: {
+                id: examId,
+                checked: checked,
+                _token: csrfToken,
+            },
+            success: function(response){
+                location.reload();
+            },
+            error: function(xhr, status, error) {
+                console.error(xhr.responseText); 
+            }
+        });
+    });
+});
+
+$(document).ready(function(){
+    $('.students_status').each(function() {
+        $(this).bootstrapToggle();
+    });
+
+    $('.students_status').change(function(){
+        var studentsId = $(this).data('student-id');
+        var checked = $(this).prop('checked') ? 0 : 1;
+        $.ajax({
+            type: 'POST',
+            url: updateStatusStudents,
+            data: {
+                id: studentsId,
+                checked: checked,
+                _token: csrfToken,
+            },
+            success: function(response){
+                location.reload();
+            },
+            error: function(xhr, status, error) {
+                console.error(xhr.responseText); 
+            }
+        });
+    });
+});
+
+$(document).ready(function(){
+    $('.classs_status').each(function() {
+        $(this).bootstrapToggle();
+    });
+
+    $('.classs_status').change(function(){
+        var classId = $(this).data('class-id');
+        var checked = $(this).prop('checked') ? 0 : 1;
+        $.ajax({
+            type: 'POST',
+            url: updateStatusClasss,
+            data: {
+                id: classId,
+                checked: checked,
+                _token: csrfToken,
+            },
+            success: function(response){
+                location.reload();
+            },
+            error: function(xhr, status, error) {
+                console.error(xhr.responseText); 
+            }
+        });
+    });
+});
+
+$(document).ready(function(){
+    $('.blocks_status').each(function() {
+        $(this).bootstrapToggle();
+    });
+
+    $('.blocks_status').change(function(){
+        var blockId = $(this).data('block-id');
+        var checked = $(this).prop('checked') ? 0 : 1;
+        $.ajax({
+            type: 'POST',
+            url: updateStatusBlocks,
+            data: {
+                id: blockId,
+                checked: checked,
+                _token: csrfToken,
+            },
+            success: function(response){
+                location.reload();
+            },
+            error: function(xhr, status, error) {
+                console.error(xhr.responseText); 
+            }
+        });
     });
 });

@@ -133,4 +133,15 @@ class LevelController extends Controller
         }
         return redirect()->route('blocks.index');
     }
+
+    public function updateStatusLevels(Request $request)
+    {
+        $level = Level::findOrFail($request->id);
+        $status = $request->checked ? 1 : 0;
+        $level->status = $status;
+        $level->updated_at = now('Asia/Ho_Chi_Minh');
+        $level->save();
+    
+        return $status;
+    }
 }

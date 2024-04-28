@@ -20,7 +20,11 @@
                             <div class="page-title-icon">
                                 <i class="pe-7s-car icon-gradient bg-mean-fruit"></i>
                             </div>
-                            <div>Thêm bộ đề thi</div>
+                            @if (!isset($exam))
+                                <div>Thêm bộ đề thi</div>
+                            @else
+                                <div>Chỉnh sửa bộ đề thi</div>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -116,126 +120,142 @@
                             </button>
                         </div>
                     </div> --}}
-                    <form action="{{ route('exams.store') }}" method="POST" enctype="multipart/form-data">
-                        @csrf
-                        <div class="row">
-                            <div class="col-sm-12 col-lg-6">
-                                <div class="mb-3 card">
-                                    <div class="card-header-tab card-header">
-                                        <div class="card-header-title font-size-lg text-capitalize font-weight-normal">
-                                            <i class="header-icon lnr-cloud-download icon-gradient bg-happy-itmeo"></i>
-                                            Quản lý
-                                        </div>
+                    @if (!isset($exam))
+                        <form action="{{ route('exams.store') }}" method="POST" enctype="multipart/form-data">
+                        @else
+                            <form action="{{ route('exams.update', $exam->id) }}" method="POST"
+                                enctype="multipart/form-data">
+                    @endif
+                    @csrf
+                    <div class="row">
+                        <div class="col-sm-12 col-lg-6">
+                            <div class="mb-3 card">
+                                <div class="card-header-tab card-header">
+                                    <div class="card-header-title font-size-lg text-capitalize font-weight-normal">
+                                        <i class="header-icon lnr-cloud-download icon-gradient bg-happy-itmeo"></i>
+                                        Quản lý
                                     </div>
-                                    <div class="p-0 card-body">
-                                        <div class="tab-pane tabs-animation fade show active" id="tab-content-1"
-                                            role="tabpanel">
-                                            <div class="main-card card">
-                                                <div class="card-body">
-                                                    <form method="POST" action="{{ route('exams_request') }}">
-                                                        @csrf
-                                                        <div class="position-relative row form-group">
-                                                            <label for="subjects_id" class="col-sm-2 col-form-label">Môn học
-                                                                :</label>
-                                                            <div class="col-sm-10">
-                                                                <select name="subjects_id" class="form-control"
-                                                                    id="subject">
-                                                                    @foreach ($subjects as $subject)
-                                                                        <option value="{{ $subject->id }}">
-                                                                            {{ $subject->name }}
-                                                                        </option>
-                                                                    @endforeach
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                        <div class="position-relative row form-group">
-                                                            <h3 class="col-sm-12 text-center">Loại câu hỏi</h3>
-                                                            <div class="col-sm-12 d-flex custom-control text-center"
-                                                                style="margin: inherit;">
-                                                                @foreach ($levels as $level)
-                                                                    <div class="col-sm-3">
-                                                                        <label>{{ $level->name }} :</label>
-                                                                        <input type="number"
-                                                                            class="col-sm-10 count form-control"
-                                                                            data-level-id="{{ $level->id }}"
-                                                                            min="0" value="0">
-                                                                    </div>
+                                </div>
+                                <div class="p-0 card-body">
+                                    <div class="tab-pane tabs-animation fade show active" id="tab-content-1"
+                                        role="tabpanel">
+                                        <div class="main-card card">
+                                            <div class="card-body">
+                                                <form method="POST" action="{{ route('exams_request') }}">
+                                                    @csrf
+                                                    <div class="position-relative row form-group">
+                                                        <label for="subjects_id" class="col-sm-2 col-form-label">Môn học
+                                                            :</label>
+                                                        <div class="col-sm-10">
+                                                            <select name="subjects_id" class="form-control" id="subject">
+                                                                @foreach ($subjects as $subject)
+                                                                    <option value="{{ $subject->id }}">
+                                                                        {{ $subject->name }}
+                                                                    </option>
                                                                 @endforeach
-                                                                <input type="button" id="randomize_questions"
-                                                                    class="btn btn-shadow btn-secondary"
-                                                                    value="Tạo ngẫu nhiên đề thi">
-                                                            </div>
-                                                            <h2 class="text-center col-sm-12">
-                                                                <div id="total_questions">0</div>
-                                                            </h2>
+                                                            </select>
                                                         </div>
-                                                    </form>
-                                                </div>
+                                                    </div>
+                                                    <div class="position-relative row form-group">
+                                                        <h3 class="col-sm-12 text-center">Loại câu hỏi</h3>
+                                                        <div class="col-sm-12 d-flex custom-control text-center"
+                                                            style="margin: inherit;">
+                                                            @foreach ($levels as $level)
+                                                                <div class="col-sm-3">
+                                                                    <label>{{ $level->name }} :</label>
+                                                                    <input type="number"
+                                                                        class="col-sm-10 count form-control"
+                                                                        data-level-id="{{ $level->id }}" min="0"
+                                                                        value="0">
+                                                                </div>
+                                                            @endforeach
+                                                            <input type="button" id="randomize_questions"
+                                                                class="btn btn-shadow btn-secondary"
+                                                                value="Tạo ngẫu nhiên đề thi">
+                                                        </div>
+                                                        <h2 class="text-center col-sm-12">
+                                                            <div id="total_questions">0</div>
+                                                        </h2>
+                                                    </div>
+                                                </form>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-sm-12 col-lg-6">
-                                <div class="card-hover-shadow-2x mb-3 card">
-                                    <div class="card-header-tab card-header">
-                                        <div class="card-header-title font-size-lg text-capitalize font-weight-normal">
-                                            <i class="header-icon lnr-lighter icon-gradient bg-amy-crisp"></i>
-                                            Tuỳ chọn đề
-                                        </div>
+                        </div>
+                        <div class="col-sm-12 col-lg-6">
+                            <div class="card-hover-shadow-2x mb-3 card">
+                                <div class="card-header-tab card-header">
+                                    <div class="card-header-title font-size-lg text-capitalize font-weight-normal">
+                                        <i class="header-icon lnr-lighter icon-gradient bg-amy-crisp"></i>
+                                        Tuỳ chọn đề
                                     </div>
-                                    <div class="p-0 card-body">
-                                        <div class="tab-pane tabs-animation fade show active" id="tab-content-1"
-                                            role="tabpanel">
-                                            <div class="main-card card">
-                                                <div class="card-body">
-                                                    <div class="position-relative row form-group">
-                                                        <label for="opening_time" class="col-sm-3 col-form-label">Thời gian mở đề :</label>
-                                                        <div class="col-sm-5">
-                                                            <input type="datetime-local" class="form-control" name="opening_time" id="opening_time">
-                                                        </div>
+                                </div>
+                                <div class="p-0 card-body">
+                                    <div class="tab-pane tabs-animation fade show active" id="tab-content-1"
+                                        role="tabpanel">
+                                        <div class="main-card card">
+                                            <div class="card-body">
+                                                <div class="position-relative row form-group">
+                                                    <label for="opening_time" class="col-sm-3 col-form-label">Thời gian mở
+                                                        đề :</label>
+                                                    <div class="col-sm-5">
+                                                        <input type="datetime-local" class="form-control"
+                                                            name="opening_time" id="opening_time"
+                                                            value="{{ isset($exam) ? $exam->opening_time : '' }}">
                                                     </div>
-                                                    <div class="position-relative row form-group">
-                                                        <label for="closing_time" class="col-sm-4 col-form-label">Thời gian đóng đề :</label>
-                                                        <div class="col-sm-5">
-                                                            <input type="datetime-local" class="form-control" name="closing_time" id="closing_time">
-                                                        </div>
+                                                </div>
+                                                <div class="position-relative row form-group">
+                                                    <label for="closing_time" class="col-sm-4 col-form-label">Thời gian đóng
+                                                        đề :</label>
+                                                    <div class="col-sm-5">
+                                                        <input type="datetime-local" class="form-control"
+                                                            name="closing_time" id="closing_time"
+                                                            value="{{ isset($exam) ? $exam->closing_time : '' }}">
                                                     </div>
-                                                    <div class="position-relative row form-group">
-                                                        <label for="content" class="col-sm-3 col-form-label">Tên bài thi
+                                                </div>
+                                                <div class="position-relative row form-group">
+                                                    <label for="content" class="col-sm-3 col-form-label">Tên bài thi
+                                                        :</label>
+                                                    <div class="col-sm-5">
+                                                        <input type="text" name="content" id="content"
+                                                            class="form-control" placeholder="Nhập tên bài thi"
+                                                            value="{{ isset($exam) ? $exam->content : '' }}">
+                                                    </div>
+                                                </div>
+                                                <div class="position-relative row form-group">
+                                                    <label for="duration" class="col-sm-3 col-form-label">Thời gian làm
+                                                        bài
+                                                        (phút) :</label>
+                                                    <div class="col-sm-5">
+                                                        <input type="datetime" placeholder="Nhập thời gian làm bài"
+                                                            class="form-control" min="1" name="duration"
+                                                            id="duration"
+                                                            value="{{ isset($exam) ? $exam->duration : '' }}">
+                                                    </div>
+                                                </div>
+                                                <div class="form-row form-inline">
+                                                    <div class="mb-2 mr-sm-2 mb-sm-0 position-relative form-group">
+                                                        <label for="exampleEmail22" class="mr-sm-2">Mật khẩu đề
                                                             :</label>
-                                                        <div class="col-sm-5">
-                                                            <input type="text" name="content" id="content"
-                                                                class="form-control" placeholder="Nhập tên bài thi">
-                                                        </div>
+                                                        <input name="password" id="password" placeholder="Nhập mật khẩu"
+                                                            type="password" class="form-control">
                                                     </div>
-                                                    <div class="position-relative row form-group">
-                                                        <label for="duration" class="col-sm-3 col-form-label">Thời gian làm
-                                                            bài
-                                                            (phút) :</label>
-                                                        <div class="col-sm-5">
-                                                            <input type="number" placeholder="Nhập thời gian làm bài"
-                                                                class="form-control" min="1" name="duration"
-                                                                id="duration">
-                                                        </div>
+                                                    <div class="mb-2 mr-sm-2 mb-sm-0 position-relative form-group">
+                                                        <input name="confirm_password" id="confirm_password"
+                                                            placeholder="Nhập lại mật khẩu" type="password"
+                                                            class="form-control">
                                                     </div>
-                                                    <div class="form-row form-inline">
-                                                        <div class="mb-2 mr-sm-2 mb-sm-0 position-relative form-group">
-                                                            <label for="exampleEmail22" class="mr-sm-2">Mật khẩu đề
-                                                                :</label>
-                                                            <input name="password" id="password"
-                                                                placeholder="Nhập mật khẩu" type="password"
-                                                                class="form-control">
-                                                        </div>
-                                                        <div class="mb-2 mr-sm-2 mb-sm-0 position-relative form-group">
-                                                            <input name="confirm_password" id="confirm_password"
-                                                                placeholder="Nhập lại mật khẩu" type="password"
-                                                                class="form-control">
-                                                        </div>
-                                                        <div>
+                                                    <div>
+                                                        @if (!isset($exam))
                                                             <input type="button" id="save_exams"
                                                                 class="btn btn-shadow btn-secondary" value="Tạo đề thi">
-                                                        </div>
+                                                        @else
+                                                            <input type="button" id="save_exams"
+                                                                class="btn btn-shadow btn-secondary"
+                                                                value="Cập nhật đề thi">
+                                                        @endif
                                                     </div>
                                                 </div>
                                             </div>
@@ -244,6 +264,7 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
                     </form>
                     <div class="card mb-3">
                         <div class="card-header-tab card-header">

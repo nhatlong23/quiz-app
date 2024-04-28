@@ -23,4 +23,9 @@ class Classs extends Model
     {
         return $this->belongsTo(Block::class, 'block_id');
     }
+    //quan hệ 1 lớp học có nhiều học sinh
+    public function students()
+    {
+        return $this->hasMany(Student::class, 'class_id');
+    }
 }
