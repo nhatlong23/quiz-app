@@ -127,8 +127,9 @@
                                 <div class="position-relative row form-group">
                                     <label for="school_year" class="col-sm-2 col-form-label">Năm học :</label>
                                     <div class="col-sm-10">
-                                        <input name="school_year" id="school_year" placeholder="Nhập năm học thí sinh vào đây!!"
-                                            type="text" class="form-control"
+                                        <input name="school_year" id="school_year"
+                                            placeholder="Nhập năm học thí sinh vào đây!!" type="text"
+                                            class="form-control"
                                             value="{{ isset($students) ? $students->school_year : '' }}">
                                     </div>
                                 </div>
@@ -147,9 +148,9 @@
                                 <div class="position-relative row form-group">
                                     <label for="birth" class="col-sm-2 col-form-label">Ngày sinh :</label>
                                     <div class="col-sm-10">
-                                        <input name="birth" id="birth"
-                                            placeholder="Nhập ngày sinh thí sinh vào đây!!" type="date"
-                                            class="form-control" value="{{ isset($students) ? $students->birth : '' }}">
+                                        <input name="birth" id="birth" placeholder="Nhập ngày sinh thí sinh vào đây!!"
+                                            type="date" class="form-control"
+                                            value="{{ isset($students) ? $students->birth : '' }}">
                                     </div>
                                 </div>
                                 <div class="position-relative row form-group">
@@ -249,6 +250,27 @@
                 </div>
             </div>
         </div>
+        @push('scripts')
+            <script>
+                $(document).ready(function() {
+                    $("#wizard-picture").on('change', function() {
+                        readURL(this);
+                    });
+                });
+
+                function readURL(input) {
+                    if (input.files && input.files[0]) {
+                        var reader = new FileReader();
+
+                        reader.onload = function(e) {
+                            $("#wizardPicturePreview").attr("src", e.target.result).fadeIn("slow");
+                        };
+
+                        reader.readAsDataURL(input.files[0]);
+                    }
+                }
+            </script>
+        @endpush
     @else
         <script>
             window.location = "/";

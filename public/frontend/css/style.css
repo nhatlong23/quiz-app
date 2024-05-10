@@ -139,8 +139,8 @@ ol {
 }
 
 .spad {
-	padding-top: 100px;
-	padding-bottom: 100px;
+	padding-top: 50px;
+	padding-bottom: 50px;
 }
 
 .text-white h1,
@@ -451,7 +451,7 @@ ol {
 	position: absolute;
 	right: -8px;
 	top: -2px;
-	content: "/";
+	/* content: "/"; */
 	font-size: 13px;
 }
 
@@ -2996,8 +2996,8 @@ ol {
 -----------------------*/
 
 .contact {
-	padding-top: 80px;
-	padding-bottom: 80px;
+	padding-top: 50px;
+	padding-bottom: 50px;
 }
 
 .contact__address {

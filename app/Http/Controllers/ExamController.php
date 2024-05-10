@@ -93,7 +93,7 @@ class ExamController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Exam $exam)
+    public function show($id)
     {
         //
     }
@@ -220,24 +220,25 @@ class ExamController extends Controller
 
     public function addExamToClass(Request $request)
     {
-        $examId = $request->input('exam_id');
-        $classIds = $request->input('class_ids');
+        $classId = $request->class_id;
+        $examId = $request->exam_id;
 
-        foreach ($classIds as $classId) {
-            $existingRecord = Standardize_Exam::where('exam_id', $examId)->where('class_id', $classId)->first();
+        $existingRecord = Standardize_Exam::where('class_id', $classId)
+            ->where('exam_id', $examId)
+            ->first();
 
-            if (!$existingRecord) {
-                Standardize_Exam::create([
-                    'exam_id' => $examId,
-                    'class_id' => $classId,
-                    'created_at' => now('Asia/Ho_Chi_Minh'),
-                ]);
-            }
+        if ($existingRecord) {
+            return response()->json(['success' => false, 'message' => 'Đề thi này đã được thêm vào lớp.']);
         }
 
-        return response()->json(['success' => 'Bài thi đã được thêm vào lớp học.'], 200);
-    }
+        $standardizedExam = new Standardize_Exam();
+        $standardizedExam->class_id = $classId;
+        $standardizedExam->exam_id = $examId;
+        $standardizedExam->created_at = now('Asia/Ho_Chi_Minh');
+        $standardizedExam->save();
 
+        return response()->json(['success' => true, 'message' => 'Đã thêm đề thi vào lớp thành công.']);
+    }
     public function updateStatusExams(Request $request)
     {
         $exam = Exam::findOrFail($request->id);
@@ -245,7 +246,7 @@ class ExamController extends Controller
         $exam->status = $status;
         $exam->updated_at = now('Asia/Ho_Chi_Minh');
         $exam->save();
-    
+
         return $status;
     }
 }

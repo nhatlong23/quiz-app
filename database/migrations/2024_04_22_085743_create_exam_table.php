@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('password');
             $table->datetime('opening_time');
             $table->datetime('closing_time');
-            $table->time('duration');
+            $table->string('duration');
             $table->unsignedBigInteger('subjects_id')->index();
             $table->boolean('status');
             $table->timestamps();

@@ -10,7 +10,7 @@ class Result extends Model
     public $timestamps = false;
     use HasFactory;
 
-    protected $table = 'students';
+    protected $table = 'result';
     protected $fillable = [
         'students_id',
         'exam_id',

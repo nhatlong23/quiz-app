@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Block;
 use App\Models\Classs;
+use App\Models\Standardize_Exam;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
@@ -65,11 +66,12 @@ class ClasssController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show($id)
+    public function show($classId)
     {
-        //
+        $class = Classs::findOrFail($classId);
+        $exams = $class->standardizeExams()->with('exam')->get();
+        return view('admin.class.show', compact('class', 'exams'));
     }
-
     /**
      * Show the form for editing the specified resource.
      */
@@ -156,7 +158,7 @@ class ClasssController extends Controller
         $class = Classs::findOrFail($class_id);
 
         $students = $class->students;
-        
+
         $output = [
             'name' => $class->name,
             'number' => $class->number,
@@ -173,7 +175,7 @@ class ClasssController extends Controller
         $class->status = $status;
         $class->updated_at = now('Asia/Ho_Chi_Minh');
         $class->save();
-    
+
         return $status;
     }
 }

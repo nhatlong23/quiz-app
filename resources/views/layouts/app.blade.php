@@ -16,8 +16,9 @@
     <link href="{{ asset('backend/css/main.d810cf0ae7f39f28f336.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('backend/icon/css/pe-icon-7-stroke.css') }}">
     <link rel="stylesheet" href="{{ asset('backend/icon/css/helper.css') }}">
+    <link rel="stylesheet" href="{{ asset('backend/css/bootstrap-tagsinput.css') }}">
     <link rel="stylesheet" href="https://cdn.linearicons.com/free/1.0.0/icon-font.min.css">
-    <link href="{{asset('backend/css/toastr.css')}}" rel="stylesheet"/>
+    <link href="{{ asset('backend/css/toastr.css') }}" rel="stylesheet" />
 </head>
 
 <body>
@@ -1400,7 +1401,8 @@
                                     </a>
                                     <ul>
                                         <li>
-                                            <a href="#" class="">
+                                            <a href="{{ route('home') }}"
+                                                class="{{ $segment == 'home' && $segment2 != 'create' ? 'mm-active' : '' }}">
                                                 <i class="metismenu-icon"></i>Home
                                             </a>
                                         </li>
@@ -1547,6 +1549,53 @@
                                         </li>
                                     </ul>
                                 </li>
+                                <li class="{{ $segment == 'blogs' ? 'mm-active' : '' }}">
+                                    <a href="#">
+                                        <i class="metismenu-icon pe-7s-hammer"></i> Quản lý blog
+                                        <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
+                                    </a>
+                                    <ul>
+                                        <li>
+                                            <a href="{{ route('blogs.index') }}"
+                                                class="{{ $segment == 'blogs' && $segment2 != 'create' ? 'mm-active' : '' }}">
+                                                <i class="metismenu-icon"></i> Liệt kê blogs
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="{{ route('blogs.create') }}"
+                                                class="{{ $segment == 'blogs' && $segment2 == 'create' ? 'mm-active' : '' }}">
+                                                <i class="metismenu-icon"></i>Thêm blogs
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="#">
+                                                <i class="metismenu-icon pe-7s-light"></i> Duyệt bình luận blog
+                                                <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
+                                            </a>
+                                            <ul>
+                                                <li>
+                                                    <a href="forms-controls.html">
+                                                        <i class="metismenu-icon"></i>Liệt kê bình luận
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li class="{{ $segment == 'infos' ? 'mm-active' : '' }}">
+                                    <a href="#">
+                                        <i class="metismenu-icon pe-7s-info"></i> Quản lý thông tin website
+                                        <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
+                                    </a>
+                                    <ul>
+                                        <li>
+                                            <a href="{{ route('infos.index') }}"
+                                                class="{{ $segment == 'infos' && $segment2 != 'create' ? 'mm-active' : '' }}">
+                                                <i class="metismenu-icon"></i> Liệt kê thông tin website
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
                             </ul>
                         </div>
                     </div>
@@ -1555,6 +1604,7 @@
             @yield('content')
         </div>
     </div>
+    @stack('model')
     {{-- <div class="app-drawer-wrapper">
         <div class="drawer-nav-btn">
             <button type="button" class="hamburger hamburger--elastic is-active">
@@ -1991,252 +2041,51 @@
             </div>
         </div>
     </div> --}}
-    {{-- quick view question --}}
-    <div class="modal fade quick_view" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="subject"></h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="main-card mb-3 card">
-                        <div class="card-body">
-                            <table style="width: 100%;" id="example"
-                                class="table table-hover table-striped table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th>Câu hỏi</th>
-                                        <th>Đáp án A</th>
-                                        <th>Đáp án B</th>
-                                        <th>Đáp án C</th>
-                                        <th>Đáp án D</th>
-                                        <th>Đáp án đúng</th>
-                                        <th>Mức độ</th>
-                                        <th>Hình ảnh</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td id="question"></td>
-                                        <td id="option_a"></td>
-                                        <td id="option_b"></td>
-                                        <td id="option_c"></td>
-                                        <td id="option_d"></td>
-                                        <td id="answer"></td>
-                                        <td id="level"></td>
-                                        <td id="picture"></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    {{-- <button type="button" class="btn btn-primary">Save changes</button> --}}
-                </div>
-            </div>
-        </div>
-    </div>
-    {{-- quick view class --}}
-    <div class="modal fade quick_view_class" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="quick_view_title"></h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="main-card mb-3 card">
-                        <div class="card-body">
-                            <table style="width: 100%;" id="example"
-                                class="table table-hover table-striped table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th>STT</th>
-                                        <th>MSTS</th>
-                                        <th>Tên</th>
-                                        <th>Giới tính</th>
-                                        <th>Ngày sinh</th>
-                                        <th>CCCD</th>
-                                        <th>Email</th>
-                                        <th>SĐT</th>
-                                        <th>Năm học</th>
-                                        <th>Trạng thái</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="quick_view_class"></tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    {{-- <button type="button" class="btn btn-primary">Save changes</button> --}}
-                </div>
-            </div>
-        </div>
-    </div>
-    {{-- quick view students --}}
-    <div class="modal fade quick_view_students" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="quick_view_students_title"></h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="main-card mb-3 card">
-                        <div class="card-body">
-                            <table style="width: 100%;" id="example"
-                                class="table table-hover table-striped table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th>Mã thí sinh</th>
-                                        <th>Tên thí sinh</th>
-                                        <th>Lớp</th>
-                                        <th>Năm học</th>
-                                        <th>Ngày sinh</th>
-                                        <th>Giới tính</th>
-                                        <th>Email</th>
-                                        <th>Số điện thoại</th>
-                                        <th>CCCD</th>
-                                        <th>Ảnh đại diện</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td id="student_code"></td>
-                                        <td id="names"></td>
-                                        <td id="class"></td>
-                                        <td id="school_year"></td>
-                                        <td id="birth"></td>
-                                        <td id="gender"></td>
-                                        <td id="email"></td>
-                                        <td id="phone"></td>
-                                        <td id="cccd"></td>
-                                        <td><img id="images" src="" alt="Student Image"
-                                                style="width: 100%;"></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    {{-- quick view exams --}}
-    <div class="modal fade quick_view_exam" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="quick_view_exam_title">Tin - Bài thi cuối kì môn tin</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="main-card mb-3 card">
-                        <div class="card-body">
-                            <table style="width: 100%;" id="example"
-                                class="table table-hover table-striped table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th>STT</th>
-                                        <th>Câu hỏi</th>
-                                        <th>Đáp án A</th>
-                                        <th>Đáp án B</th>
-                                        <th>Đáp án C</th>
-                                        <th>Đáp án D</th>
-                                        <th>Câu trả lời</th>
-                                        <th>Trạng thái</th>
-                                        <th>Hành động</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="example_tbody"></tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    {{-- add exam to class --}}
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Thêm đề thi vào lớp</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="position-relative row form-group">
-                        @if (isset($class_list))
-                            @foreach ($class_list as $class)
-                                <label for="class_{{ $class->id }}"
-                                    class="col-sm-2 col-form-label">{{ $class->name }} :</label>
-                                <div class="input-group-prepend col-sm-10">
-                                    <div class="input-group-text">
-                                        <input type="checkbox" id="class_{{ $class->id }}" name="class_id[]"
-                                            value="{{ $class->id }}">
-                                    </div>
-                                </div>
-                            @endforeach
-                        @endif
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-                    <button type="button" class="btn btn-primary" id="saveChanges">Lưu</button>
-                </div>
-            </div>
-        </div>
-    </div>
+    @stack('model')
     <div class="app-drawer-overlay d-none animated fadeIn"></div>
     <script type="text/javascript" src="{{ asset('backend/scripts/main.d810cf0ae7f39f28f336.js') }}"></script>
     <script src="https://kit.fontawesome.com/c3bc0ae91e.js" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script type="text/javascript" src="{{ asset('backend/scripts/main.js') }}"></script>
     <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
-    <script src="{{asset('backend/scripts/toastr.min.js')}}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="{{ asset('backend/scripts/toastr.min.js') }}"></script>
+    <script src="{{ asset('backend/ckeditor5/ckeditor.js') }}"></script>
+    <script src="{{ asset('backend/scripts/bootstrap-tagsinput.js') }}"></script>
 
+    <script type="text/javascript">
+        function ChangeToSlug() {
+            var slug;
+
+            //Lấy text từ thẻ input title
+            slug = document.getElementById("slug").value;
+            slug = slug.toLowerCase();
+            //Đổi ký tự có dấu thành không dấu
+            slug = slug.replace(/á|à|ả|ạ|ã|ă|ắ|ằ|ẳ|ẵ|ặ|â|ấ|ầ|ẩ|ẫ|ậ/gi, 'a');
+            slug = slug.replace(/é|è|ẻ|ẽ|ẹ|ê|ế|ề|ể|ễ|ệ/gi, 'e');
+            slug = slug.replace(/i|í|ì|ỉ|ĩ|ị/gi, 'i');
+            slug = slug.replace(/ó|ò|ỏ|õ|ọ|ô|ố|ồ|ổ|ỗ|ộ|ơ|ớ|ờ|ở|ỡ|ợ/gi, 'o');
+            slug = slug.replace(/ú|ù|ủ|ũ|ụ|ư|ứ|ừ|ử|ữ|ự/gi, 'u');
+            slug = slug.replace(/ý|ỳ|ỷ|ỹ|ỵ/gi, 'y');
+            slug = slug.replace(/đ/gi, 'd');
+            //Xóa các ký tự đặt biệt
+            slug = slug.replace(/\`|\~|\!|\@|\#|\||\$|\%|\^|\&|\*|\(|\)|\+|\=|\,|\.|\/|\?|\>|\<|\'|\"|\:|\;|_/gi, '');
+            //Đổi khoảng trắng thành ký tự gạch ngang
+            slug = slug.replace(/ /gi, "-");
+            //Đổi nhiều ký tự gạch ngang liên tiếp thành 1 ký tự gạch ngang
+            //Phòng trường hợp người nhập vào quá nhiều ký tự trắng
+            slug = slug.replace(/\-\-\-\-\-/gi, '-');
+            slug = slug.replace(/\-\-\-\-/gi, '-');
+            slug = slug.replace(/\-\-\-/gi, '-');
+            slug = slug.replace(/\-\-/gi, '-');
+            //Xóa các ký tự gạch ngang ở đầu và cuối
+            slug = '@' + slug + '@';
+            slug = slug.replace(/\@\-|\-\@|\@/gi, '');
+            //In slug ra textbox có id “slug”
+            document.getElementById('convert_slug').value = slug;
+        }
+    </script>
+    @stack('scripts')
     <script>
-        const examsRequestUrl = "{{ route('exams_request') }}";
-        const examsRequestStore = "{{ route('exams.store') }}";
-        const examsRequestIndex = "{{ route('exams.index') }}";
-        const quickViewRequest = "{{ route('quick_view') }}";
-        const quickViewClassRequest = "{{ route('quick_view_class') }}";
-        const quickViewStudentsRequest = "{{ route('quick_view_students') }}";
-        const quickViewExamRequest = "{{ route('quick_view_exam') }}";
-        const addExamToClass = "{{ route('addExamToClass') }}";
-        const updateStatusSubjects = "{{ route('updateStatusSubjects') }}";
-        const updateStatusLevels = "{{ route('updateStatusLevels') }}";
-        const updateStatusQuestions = "{{ route('updateStatusQuestions') }}";
-        const updateStatusExams  = "{{ route('updateStatusExams') }}";
-        const updateStatusStudents  = "{{ route('updateStatusStudents') }}";
-        const updateStatusClasss  = "{{ route('updateStatusClasss') }}";
-        const updateStatusBlocks  = "{{ route('updateStatusBlocks') }}";
         const csrfToken = "{{ csrf_token() }}";
     </script>
 </body>

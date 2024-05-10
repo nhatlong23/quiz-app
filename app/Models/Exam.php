@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -39,5 +40,15 @@ class Exam extends Model
             'id', // Khóa chính của model hiện tại
             'questions_id' // Khóa ngoại của model đích
         );
+    }
+
+    public function getFormattedOpeningTimeAttribute()
+    {
+        return Carbon::createFromFormat('Y-m-d H:i:s', $this->attributes['opening_time'])->format('H:i:s d.m.Y');
+    }
+
+    public function getFormattedClosingTimeAttribute()
+    {
+        return Carbon::createFromFormat('Y-m-d H:i:s', $this->attributes['closing_time'])->format('H:i:s d.m.Y');
     }
 }

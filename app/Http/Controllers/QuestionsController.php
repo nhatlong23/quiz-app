@@ -167,7 +167,7 @@ class QuestionsController extends Controller
         return redirect()->route('questions.index');
     }
 
-    public function quick_view(Request $request)
+    public function quick_view_question(Request $request)
     {
         $subjects_id = $request->id_subjects;
         $question_id = $request->id_questions;

@@ -229,7 +229,7 @@
                                                         bài
                                                         (phút) :</label>
                                                     <div class="col-sm-5">
-                                                        <input type="datetime" placeholder="Nhập thời gian làm bài"
+                                                        <input type="number" placeholder="Nhập thời gian làm bài"
                                                             class="form-control" min="1" name="duration"
                                                             id="duration"
                                                             value="{{ isset($exam) ? $exam->duration : '' }}">
@@ -327,6 +327,152 @@
                 </div>
             </div>
         </div>
+
+        @push('scripts')
+            <script>
+                const examsRequestIndex = "{{ route('exams.index') }}";
+                const examsRequestUrl = "{{ route('exams_request') }}";
+                const examsRequestStore = "{{ route('exams.store') }}";
+                var randomQuestions;
+
+                $(document).ready(function() {
+                    $("#randomize_questions").on('click', function() {
+                        var subjectId = $("#subject").val();
+                        var counts = {};
+                        var countFieldsFilled = 0;
+
+                        $(".count").each(function() {
+                            var levelId = $(this).data('level-id');
+                            var count = $(this).val();
+
+                            if (count && count > 0) {
+                                counts[levelId] = count;
+                                countFieldsFilled++;
+                            }
+                        });
+
+                        if (countFieldsFilled < 2) {
+                            alert("Vui lòng nhập số lượng câu hỏi cho mỗi cấp độ (có thể bỏ qua 1 cấp độ).");
+                            return;
+                        }
+
+                        $.ajax({
+                            type: "POST",
+                            url: examsRequestUrl,
+                            data: {
+                                subject: subjectId,
+                                counts: counts,
+                                _token: csrfToken,
+                            },
+                            success: function(response) {
+                                displayCountQuestions(response);
+                                randomQuestions = response.questionsByLevel;
+                                displayRandomQuestions(response.questionsByLevel);
+                            },
+                            error: function(xhr, status, error) {}
+                        });
+                    });
+                });
+
+                function displayCountQuestions(response) {
+                    var totalQuestions = response.totalQuestions;
+                    $("#total_questions").text(totalQuestions);
+                }
+
+                function displayRandomQuestions(questions) {
+                    var tbody = $('#example tbody');
+                    tbody.empty();
+
+                    var questionCount = 0;
+
+                    $.each(questions, function(levelId, levelQuestions) {
+                        $.each(levelQuestions, function(index, question) {
+                            var row = $('<tr>');
+                            row.append('<td>' + (++questionCount) + '</td>');
+                            row.append('<td>' + question.question + '</td>');
+                            row.append('<td><ul>' +
+                                '<li>' + question.option_a + '</li>' +
+                                '<li>' + question.option_b + '</li>' +
+                                '<li>' + question.option_c + '</li>' +
+                                '<li>' + question.option_d + '</li>' +
+                                '</ul></td>');
+                            row.append('<td>' + question.answer + '</td>');
+                            row.append(
+                                '<td><input type="button" class="btn btn-danger delete-question" value="Xoá"></td>'
+                            );
+
+                            tbody.append(row);
+                        });
+                    });
+                }
+
+                $("#save_exams").on('click', function() {
+                    var subjectId = $("#subject").val();
+                    var content = $("#content").val();
+                    var max_questions = $("#total_questions").html();
+                    var opening_time = $("#opening_time").val();
+                    var closing_time = $("#closing_time").val();
+                    var duration = $("#duration").val();
+                    var password = $("#password").val();
+                    var confirm_password = $("#confirm_password").val();
+
+                    if (!randomQuestions) {
+                        alert("Vui lòng ngẫu nhiên câu hỏi trước khi lưu bài kiểm tra.");
+                        return;
+                    }
+
+                    var randomQuestionsJSON = JSON.stringify(randomQuestions);
+
+                    $.ajax({
+                        type: "POST",
+                        url: examsRequestStore,
+                        data: {
+                            subjectId: subjectId,
+                            content: content,
+                            max_questions: max_questions,
+                            opening_time: opening_time,
+                            closing_time: closing_time,
+                            duration: duration,
+                            password: password,
+                            confirm_password: confirm_password,
+                            randomQuestions: randomQuestionsJSON,
+                            _token: csrfToken,
+                        },
+                        success: function(response) {
+                            window.location.href = examsRequestIndex;
+                        },
+                        error: function(xhr, status, error) {
+                            var response = xhr.responseJSON;
+                            var errorDetails = response.errors;
+
+                            var errorMessage = '';
+                            for (var field in errorDetails) {
+                                errorMessage += errorDetails[field].join(', ') + '<br>';
+                            }
+                            $('#error-message-container').html(errorMessage);
+                            $("#error-message-container").removeAttr("hidden");
+                        }
+                    });
+                });
+
+                $(document).ready(function() {
+                    $("#closing_time").on('change', function() {
+                        var openingTime = new Date($("#opening_time").val());
+                        var closingTime = new Date($(this).val());
+
+                        if (closingTime < openingTime) {
+                            $("#error-message-container").html("Thời gian đóng đề không thể trước thời gian mở đề");
+                            $("#error-message-container").removeAttr("hidden");
+                            $(this).val("");
+                        } else {
+                            $("#error-message-container").attr("hidden", "hidden");
+                        }
+                    });
+                });
+
+                
+            </script>
+        @endpush
     @else
         <script>
             window.location = "/";

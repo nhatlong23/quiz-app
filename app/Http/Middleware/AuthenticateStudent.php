@@ -17,12 +17,18 @@ class AuthenticateStudent
      */
     public function handle(Request $request, Closure $next)
     {
-        // Kiểm tra xem người dùng đã đăng nhập với guard 'students' chưa
-        if (!Auth::guard('students')->check()) {
-            return $next($request);
+        if (Auth::guard('students')->check()) {
+            // Nếu đã đăng nhập và đang trên trang đăng nhập, chuyển hướng người dùng đến trang chính
+            if ($request->route()->named('redirectToLogin')) {
+                return redirect()->route('homepage');
+            }
+        } else {
+            // Nếu chưa đăng nhập và đang không ở trên trang đăng nhập, chuyển hướng người dùng đến trang đăng nhập
+            if (!$request->route()->named('redirectToLogin')) {
+                return redirect()->route('redirectToLogin');
+            }
         }
 
-        return redirect('/');
-
+        return $next($request);
     }
 }

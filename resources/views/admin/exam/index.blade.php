@@ -58,8 +58,8 @@
                                         </td>
                                         <td>{{ $list->exam_subject->name }}</td>
                                         <td>{{ $list->max_questions }}</td>
-                                        <td>{{ $list->opening_time }}</td>
-                                        <td>{{ $list->closing_time }}</td>
+                                        <td>{{ $list->formatted_opening_time }}</td>
+                                        <td>{{ $list->formatted_closing_time }}</td>
                                         <td>
                                             <input class="exams_status" id="toggle-demo" data-exam-id="{{ $list->id }}"
                                                 type="checkbox" data-on="Hiển thị" data-off="Ẩn" data-toggle="toggle"
@@ -73,12 +73,13 @@
                                                 <a href="{{ route('exams.edit', $list->id) }}" class="btn btn-secondary">
                                                     <i class="pe-7s-note"></i>
                                                 </a>
-                                                <button type="submit" class="btn btn-danger"><i
-                                                        class="pe-7s-trash"></i></button>
-
+                                                <button type="submit" class="btn btn-danger">
+                                                    <i class="pe-7s-trash"></i>
+                                                </button>
                                                 <button type="button"
                                                     class="btn btn-shadow btn-primary add_exam_to_class_button"
-                                                    data-toggle="modal" data-target="#exampleModal">
+                                                    data-toggle="modal" data-target="#exampleModal"
+                                                    data-exam-model-id="{{ $list->id }}">
                                                     <i class="pe-7s-plus"></i>
                                                 </button>
                                             </form>
@@ -91,6 +92,207 @@
                 </div>
             </div>
         </div>
+        @push('model')
+            <div class="modal fade quick_view_exam" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="quick_view_exam_title">Tin - Bài thi cuối kì môn tin</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="main-card mb-3 card">
+                                <div class="card-body">
+                                    <table style="width: 100%;" id="example"
+                                        class="table table-hover table-striped table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>STT</th>
+                                                <th>Câu hỏi</th>
+                                                <th>Đáp án A</th>
+                                                <th>Đáp án B</th>
+                                                <th>Đáp án C</th>
+                                                <th>Đáp án D</th>
+                                                <th>Câu trả lời</th>
+                                                <th>Trạng thái</th>
+                                                <th>Hành động</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="example_tbody"></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {{-- add exam to class --}}
+            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Thêm đề thi vào lớp</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="position-relative row form-group">
+                                @if (isset($class_list))
+                                    <select class="form-select form-control">
+                                        <option disabled selected>------Chọn lớp học------</option>
+                                        @foreach ($class_list as $class)
+                                            <option value="{{ $class->id }}">{{ $class->name }}</option>
+                                        @endforeach
+
+                                    </select>
+                                @endif
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                            <button type="button" class="btn btn-primary" id="saveChanges">Lưu</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endpush
+        @push('scripts')
+            <script>
+                const updateStatusExams = "{{ route('updateStatusExams') }}";
+                const quickViewExamRequest = "{{ route('quick_view_exam') }}";
+                const addExamToClass = "{{ route('addExamToClass') }}";
+
+                $(document).ready(function() {
+                    $('.exams_status').each(function() {
+                        $(this).bootstrapToggle();
+                    });
+
+                    $('.exams_status').change(function() {
+                        var examId = $(this).data('exam-id');
+                        var checked = $(this).prop('checked') ? 0 : 1;
+                        $.ajax({
+                            type: 'POST',
+                            url: updateStatusExams,
+                            data: {
+                                id: examId,
+                                checked: checked,
+                                _token: csrfToken,
+                            },
+                            success: function(response) {
+                                location.reload();
+                            },
+                            error: function(xhr, status, error) {
+                                console.error(xhr.responseText);
+                            }
+                        });
+                    });
+                });
+
+                $(document).ready(function() {
+                    $('.quick_view_exam_button').click(function() {
+                        var exam_id = $(this).siblings('input[name="id_exam"]').val();
+                        var subjects_id = $(this).siblings('input[name="subjects_id"]').val();
+
+                        $.ajax({
+                            url: quickViewExamRequest,
+                            type: 'POST',
+                            data: {
+                                id_exam: exam_id,
+                                subjects_id: subjects_id,
+                                _token: csrfToken,
+                            },
+                            success: function(response) {
+                                $('#quick_view_exam_title').text(response.subject + ' - ' + response
+                                    .content);
+
+                                $('#example_tbody').empty();
+
+                                $.each(response.questions, function(index, question) {
+                                    var row = '<tr>' +
+                                        '<td>' + (index + 1) + '</td>' +
+                                        '<td>' + question.question + '</td>' +
+                                        '<td>' + question.option_a + '</td>' +
+                                        '<td>' + question.option_b + '</td>' +
+                                        '<td>' + question.option_c + '</td>' +
+                                        '<td>' + question.option_d + '</td>' +
+                                        '<td>' + question.answer + '</td>' +
+                                        '<td>' + question.status + '</td>' +
+                                        '<td><button class="btn btn-danger delete-question">Xoá</button></td>' +
+                                        '</tr>';
+                                    $('#example_tbody').append(row);
+                                });
+                            },
+                            error: function(xhr, status, error) {
+                                console.error(xhr.responseText);
+                            }
+                        });
+                    });
+                });
+
+                document.addEventListener("DOMContentLoaded", function() {
+                    var selectedClassId;
+                    var examId;
+
+                    document.getElementById('saveChanges').addEventListener('click', function() {
+                        if (selectedClassId && examId) {
+                            $.ajax({
+                                type: "POST",
+                                url: addExamToClass,
+                                data: {
+                                    class_id: selectedClassId,
+                                    exam_id: examId,
+                                    _token: csrfToken,
+                                },
+                                success: function(response) {
+                                    Swal.fire({
+                                        icon: 'success',
+                                        text: response.message,
+                                        timer: 3000,
+                                        timerProgressBar: true,
+                                    });
+                                },
+                                error: function(xhr, status, error) {
+                                    console.error(error);
+                                }
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: "Oops...",
+                                text: "Vui lòng chọn lớp trước khi lưu.",
+                            });
+                        }
+                    });
+
+                    // Lắng nghe sự kiện khi thay đổi giá trị của dropdown
+                    var formSelect = document.querySelectorAll('.form-select');
+                    formSelect.forEach(function(select) {
+                        select.addEventListener('change', function() {
+                            selectedClassId = this.value;
+                            // console.log("ID của lớp đã chọn:", selectedClassId);
+                        });
+                    });
+
+                    // Lắng nghe sự kiện khi nút "Thêm đề thi vào lớp" được nhấn
+                    var addExamButtons = document.querySelectorAll('.add_exam_to_class_button');
+                    addExamButtons.forEach(function(button) {
+                        button.addEventListener('click', function() {
+                            examId = this.dataset.examModelId;
+                            // console.log("ID của đề thi:", examId);
+                        });
+                    });
+                });
+            </script>
+        @endpush
     @else
         <script>
             window.location = "/";

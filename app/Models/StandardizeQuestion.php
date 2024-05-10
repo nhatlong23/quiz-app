@@ -15,9 +15,14 @@ class StandardizeQuestion extends Model
         'exam_id',
         'questions_id',
     ];
-    
+
     public function exam()
     {
         return $this->belongsTo(Exam::class, 'exam_id', 'id');
+    }
+
+    public function question()
+    {
+        return $this->belongsTo(Question::class, 'questions_id', 'id');
     }
 }

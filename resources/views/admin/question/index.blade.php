@@ -39,7 +39,7 @@
                                     <tr>
                                         <td>{{ $key + 1 }}</td>
                                         <td>
-                                            <form method="POST" action="{{ route('quick_view') }}">
+                                            <form method="POST" action="{{ route('quick_view_question') }}">
                                                 @csrf
                                                 <input type="hidden" name="id_questions" value="{{ $list->id }}">
                                                 <input type="hidden" name="id_subjects" value="{{ $list->subject->id }}">
@@ -108,12 +108,130 @@
                 </div>
             </div>
         </div>
-        <script>
-            document.getElementById('subject_id').addEventListener('change', function() {
-                var selectedSubjectId = this.value;
-                document.getElementById('selected_subject_id').value = selectedSubjectId;
-            });
-        </script>
+        @push('model')
+            <div class="modal fade quick_view" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="subject"></h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="main-card mb-3 card">
+                                <div class="card-body">
+                                    <table style="width: 100%;" id="example"
+                                        class="table table-hover table-striped table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>Câu hỏi</th>
+                                                <th>Đáp án A</th>
+                                                <th>Đáp án B</th>
+                                                <th>Đáp án C</th>
+                                                <th>Đáp án D</th>
+                                                <th>Đáp án đúng</th>
+                                                <th>Mức độ</th>
+                                                <th>Hình ảnh</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td id="question"></td>
+                                                <td id="option_a"></td>
+                                                <td id="option_b"></td>
+                                                <td id="option_c"></td>
+                                                <td id="option_d"></td>
+                                                <td id="answer"></td>
+                                                <td id="level"></td>
+                                                <td id="picture"></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            {{-- <button type="button" class="btn btn-primary">Save changes</button> --}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endpush
+
+        @push('scripts')
+            <script>
+                const updateStatusQuestions = "{{ route('updateStatusQuestions') }}";
+                const quickViewQuestion = "{{ route('quick_view_question') }}";
+
+                $(document).ready(function() {
+                    $('.question_status').each(function() {
+                        $(this).bootstrapToggle();
+                    });
+
+                    $('.question_status').change(function() {
+                        var questionId = $(this).data('question-id');
+                        var checked = $(this).prop('checked') ? 0 : 1;
+                        $.ajax({
+                            type: 'POST',
+                            url: updateStatusQuestions,
+                            data: {
+                                id: questionId,
+                                checked: checked,
+                                _token: csrfToken,
+                            },
+                            success: function(response) {
+                                location.reload();
+                            },
+                            error: function(xhr, status, error) {
+                                console.error(xhr.responseText);
+                            }
+                        });
+                    });
+                });
+
+                $(document).ready(function() {
+                    $('.quick_view_button').click(function() {
+                        var question = $(this).data('question');
+                        $('#quick_view_question').text(question);
+                        $('#quick_view_subject').text(subject);
+
+                        var question_id = $(this).siblings('input[name="id_questions"]').val();
+                        var subject_id = $(this).siblings('input[name="id_subjects"]').val();
+                        $.ajax({
+                            url: quickViewQuestion,
+                            type: 'POST',
+                            data: {
+                                id_questions: question_id,
+                                id_subjects: subject_id,
+                                _token: csrfToken,
+                            },
+                            success: function(response) {
+                                $('#question').text(response.question);
+                                $('#option_a').text(response.option_a);
+                                $('#option_b').text(response.option_b);
+                                $('#option_c').text(response.option_c);
+                                $('#option_d').text(response.option_d);
+                                $('#answer').text(response.answer);
+                                $('#picture').text(response.picture);
+                                $('#subject').text(response.subject);
+                                $('#level').text(response.level);
+                            },
+                            error: function(xhr, status, error) {
+                                console.error(xhr.responseText);
+                            }
+                        });
+                    });
+                });
+                document.getElementById('subject_id').addEventListener('change', function() {
+                    var selectedSubjectId = this.value;
+                    document.getElementById('selected_subject_id').value = selectedSubjectId;
+                });
+            </script>
+
+        @endpush
     @else
         <script>
             window.location = "/";

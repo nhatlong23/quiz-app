@@ -64,6 +64,37 @@
                 </div>
             </div>
         </div>
+        @push('scripts')
+            <script>
+                const updateStatusSubjects = "{{ route('updateStatusSubjects') }}";
+
+                $(document).ready(function() {
+                    $('.subjects_status').each(function() {
+                        $(this).bootstrapToggle();
+                    });
+
+                    $('.subjects_status').change(function() {
+                        var subjectId = $(this).data('subject-id');
+                        var checked = $(this).prop('checked') ? 0 : 1;
+                        $.ajax({
+                            type: 'POST',
+                            url: updateStatusSubjects,
+                            data: {
+                                id: subjectId,
+                                checked: checked,
+                                _token: csrfToken,
+                            },
+                            success: function(response) {
+                                location.reload();
+                            },
+                            error: function(xhr, status, error) {
+                                console.error(xhr.responseText);
+                            }
+                        });
+                    });
+                });
+            </script>
+        @endpush
     @else
         <script>
             window.location = "/";

@@ -66,6 +66,37 @@
                 </div>
             </div>
         </div>
+        @push('scripts')
+            <script>
+                const updateStatusLevels = "{{ route('updateStatusLevels') }}";
+
+                $(document).ready(function() {
+                    $('.levels_status').each(function() {
+                        $(this).bootstrapToggle();
+                    });
+
+                    $('.levels_status').change(function() {
+                        var levelsId = $(this).data('levels-id');
+                        var checked = $(this).prop('checked') ? 0 : 1;
+                        $.ajax({
+                            type: 'POST',
+                            url: updateStatusLevels,
+                            data: {
+                                id: levelsId,
+                                checked: checked,
+                                _token: csrfToken,
+                            },
+                            success: function(response) {
+                                location.reload();
+                            },
+                            error: function(xhr, status, error) {
+                                console.error(xhr.responseText);
+                            }
+                        });
+                    });
+                });
+            </script>
+        @endpush
     @else
         <script>
             window.location = "/";

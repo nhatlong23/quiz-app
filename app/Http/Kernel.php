@@ -65,5 +65,10 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'auth.student' => \App\Http\Middleware\AuthenticateStudent::class,
+        'check.class.access' => \App\Http\Middleware\CheckClassAccess::class,
+        'check_exam_availability' => \App\Http\Middleware\CheckExamAvailability::class,
+        'check_exam_submission' => \App\Http\Middleware\CheckExamSubmission::class,
+        'check_exam_expiration' => \App\Http\Middleware\CheckExamExpiration::class,
+        'check_exam_password' => \App\Http\Middleware\CheckExamPassword::class,
     ];
 }

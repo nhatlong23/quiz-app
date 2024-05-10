@@ -42,15 +42,15 @@
                                         <td>{{ $list->name }}</td>
                                         <td>{{ $list->desc }}</td>
                                         <td>
-                                            <td>
-                                                <input class="blocks_status" id="toggle-demo" data-block-id="{{ $list->id }}"
-                                                    type="checkbox" data-on="Hiển thị" data-off="Ẩn" data-toggle="toggle"
-                                                    {{ isset($list->status) && $list->status == 1 ? 'checked' : '' }}>
-                                            </td>
+                                            <input class="blocks_status" id="toggle-demo"
+                                                data-block-id="{{ $list->id }}" type="checkbox" data-on="Hiển thị"
+                                                data-off="Ẩn" data-toggle="toggle"
+                                                {{ isset($list->status) && $list->status == 1 ? 'checked' : '' }}>
+                                        </td>
                                         </td>
                                         <td>
                                             <form method="POST" action="{{ route('blocks.destroy', $list->id) }}"
-                                                onsubmit="return confirm('Bạn có chắc chắn muốn xóa sinh viên này?')">
+                                                onsubmit="return confirm('Bạn có chắc chắn muốn xóa khối học này?')">
                                                 @csrf
                                                 @method('DELETE')
                                                 <a href="{{ route('blocks.edit', $list->id) }}" class="btn btn-secondary">
@@ -68,6 +68,37 @@
                 </div>
             </div>
         </div>
+        @push('scripts')
+            <script>
+                const updateStatusBlocks = "{{ route('updateStatusBlocks') }}";
+
+                $(document).ready(function() {
+                    $('.blocks_status').each(function() {
+                        $(this).bootstrapToggle();
+                    });
+
+                    $('.blocks_status').change(function() {
+                        var blockId = $(this).data('block-id');
+                        var checked = $(this).prop('checked') ? 0 : 1;
+                        $.ajax({
+                            type: 'POST',
+                            url: updateStatusBlocks,
+                            data: {
+                                id: blockId,
+                                checked: checked,
+                                _token: csrfToken,
+                            },
+                            success: function(response) {
+                                location.reload();
+                            },
+                            error: function(xhr, status, error) {
+                                console.error(xhr.responseText);
+                            }
+                        });
+                    });
+                });
+            </script>
+        @endpush
     @else
         <script>
             window.location = "/";

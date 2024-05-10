@@ -28,4 +28,9 @@ class Classs extends Model
     {
         return $this->hasMany(Student::class, 'class_id');
     }
+
+    public function standardizeExams()
+    {
+        return $this->hasMany(Standardize_Exam::class, 'class_id', 'id');
+    }
 }

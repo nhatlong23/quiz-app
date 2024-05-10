@@ -11,6 +11,8 @@ use App\Http\Controllers\LevelController;
 use App\Http\Controllers\ExamController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\IndexController;
+use App\Http\Controllers\BlogController;
+use App\Http\Controllers\InfoController;
 use App\Http\Controllers\LoginStudentsController;
 
 /*
@@ -26,13 +28,32 @@ use App\Http\Controllers\LoginStudentsController;
 
 //route homepage
 Route::get('/', [IndexController::class, 'homepage'])->name('homepage');
+Route::get('/load-more-blogs', [IndexController::class, 'loadMoreBlogs'])->name('loadMoreBlogs');
+
+Route::middleware(['auth.student', 'check.class.access'])->group(function () {
+    Route::get('/exam/{class_id}', [IndexController::class, 'redirectToExam'])->name('redirectToExam');
+});
+
+Route::middleware(['auth.student', 'check_exam_availability', 'check_exam_submission', 'check_exam_expiration', 'check_exam_password'])->group(function () {
+    Route::get('/test-exam/{exam_id}', [IndexController::class, 'testExam'])->name('testExam');
+});
+
+Route::post('/submit-answers', [IndexController::class, 'submitAnswers'])->name('submitAnswers');
 
 Route::middleware(['auth.student'])->group(function () {
     Route::get('/login-quiz', [LoginStudentsController::class, 'redirectToLogin'])->name('redirectToLogin');
-    Route::post('/checkLoginStudents', [LoginStudentsController::class, 'checkLoginStudents'])->name('checkLoginStudents');
+    Route::get('/logoutStudents', [LoginStudentsController::class, 'logoutStudents'])->name('logoutStudents');
+    Route::post('/check-password-exam', [IndexController::class, 'checkPasswordExam'])->name('checkPasswordExam');
+    Route::get('/profile', [IndexController::class, 'profile'])->name('profile');
+    Route::get('/history-exam', [IndexController::class, 'history_exam'])->name('history_exam');
+    Route::post('/save-profile', [IndexController::class, 'save_profile'])->name('save_profile');
+    Route::get('/detail-exam-history/{id}', [IndexController::class, 'detailExamHistory'])->name('detailExamHistory');
 });
-Route::get('/logoutStudents', [LoginStudentsController::class, 'logoutStudents'])->name('logoutStudents');
 
+Route::post('/checkLoginStudents', [LoginStudentsController::class, 'checkLoginStudents'])->name('checkLoginStudents');
+Route::get('/knowledge', [IndexController::class, 'knowledge'])->name('knowledge');
+Route::get('/contact', [IndexController::class, 'contact'])->name('contact');
+Route::get('/blog-detail/{slug}', [IndexController::class, 'blog_detail'])->name('blog_detail');
 
 Auth::routes();
 // Route::match(['get', 'post'], 'register', function(){
@@ -49,8 +70,10 @@ Route::resource('questions', QuestionsController::class);
 Route::resource('blocks', BlockController::class);
 Route::resource('levels', LevelController::class);
 Route::resource('exams', ExamController::class);
+Route::resource('blogs', BlogController::class);
+Route::resource('infos', InfoController::class);
 
-Route::post('quick-view', [QuestionsController::class, 'quick_view'])->name('quick_view');
+Route::post('quick-view-question', [QuestionsController::class, 'quick_view_question'])->name('quick_view_question');
 Route::post('quick-view-class', [ClasssController::class, 'quick_view_class'])->name('quick_view_class');
 Route::post('quick-view-students', [StudentsController::class, 'quick_view_students'])->name('quick_view_students');
 Route::post('quick-view-exam', [ExamController::class, 'quick_view_exam'])->name('quick_view_exam');
@@ -64,3 +87,4 @@ Route::post('update-status-exams', [ExamController::class, 'updateStatusExams'])
 Route::post('update-status-students', [StudentsController::class, 'updateStatusStudents'])->name('updateStatusStudents');
 Route::post('update-status-class', [ClasssController::class, 'updateStatusClasss'])->name('updateStatusClasss');
 Route::post('update-status-blocks', [BlockController::class, 'updateStatusBlocks'])->name('updateStatusBlocks');
+Route::post('update-status-blogs', [BlogController::class, 'updateStatusBlogs'])->name('updateStatusBlogs');

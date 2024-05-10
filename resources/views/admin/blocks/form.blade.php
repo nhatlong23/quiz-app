@@ -69,7 +69,7 @@
                                 </div>
                                 <div class="position-relative row form-check">
                                     <div class="col-sm-10 offset-sm-2">
-                                        @if (!isset($class))
+                                        @if (!isset($blocks))
                                             <button type="submit" class="btn btn-secondary">Lưu dữ liệu</button>
                                         @else
                                             <button type="submit" class="btn btn-secondary">Cập nhật dữ liệu</button>

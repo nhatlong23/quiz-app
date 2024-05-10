@@ -53,7 +53,6 @@
                                         </td>
                                         <td>{{ $list->student_class->name }}</td>
                                         <td>
-                                        <td>
                                             <input class="students_status" id="toggle-demo"
                                                 data-student-id="{{ $list->id }}" type="checkbox" data-on="Hiển thị"
                                                 data-off="Ẩn" data-toggle="toggle"
@@ -81,6 +80,130 @@
                 </div>
             </div>
         </div>
+        @push('model')
+            <div class="modal fade quick_view_students" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="quick_view_students_title"></h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="main-card mb-3 card">
+                                <div class="card-body">
+                                    <table style="width: 100%;" id="example"
+                                        class="table table-hover table-striped table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>Mã thí sinh</th>
+                                                <th>Tên thí sinh</th>
+                                                <th>Lớp</th>
+                                                <th>Năm học</th>
+                                                <th>Ngày sinh</th>
+                                                <th>Giới tính</th>
+                                                <th>Email</th>
+                                                <th>Số điện thoại</th>
+                                                <th>CCCD</th>
+                                                <th>Ảnh đại diện</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td id="student_code"></td>
+                                                <td id="names"></td>
+                                                <td id="class"></td>
+                                                <td id="school_year"></td>
+                                                <td id="birth"></td>
+                                                <td id="gender"></td>
+                                                <td id="email"></td>
+                                                <td id="phone"></td>
+                                                <td id="cccd"></td>
+                                                <td><img id="images" src="" alt="Student Image" style="width: 100%;">
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endpush
+        @push('scripts')
+            <script>
+                const updateStatusStudents = "{{ route('updateStatusStudents') }}";
+                const quickViewStudentsRequest = "{{ route('quick_view_students') }}";
+
+                $(document).ready(function() {
+                    $('.students_status').each(function() {
+                        $(this).bootstrapToggle();
+                    });
+
+                    $('.students_status').change(function() {
+                        var studentsId = $(this).data('student-id');
+                        var checked = $(this).prop('checked') ? 0 : 1;
+                        $.ajax({
+                            type: 'POST',
+                            url: updateStatusStudents,
+                            data: {
+                                id: studentsId,
+                                checked: checked,
+                                _token: csrfToken,
+                            },
+                            success: function(response) {
+                                location.reload();
+                            },
+                            error: function(xhr, status, error) {
+                                console.error(xhr.responseText);
+                            }
+                        });
+                    });
+                });
+
+                $(document).ready(function() {
+                    $('.quick_view_students_button').click(function() {
+                        var description = $(this).data('description');
+                        $('#quick_view_description').text(description);
+
+                        var student_id = $(this).siblings('input[name="id_students"]').val();
+                        var class_id = $(this).siblings('input[name="class"]').val();
+
+                        $.ajax({
+                            url: quickViewStudentsRequest,
+                            type: 'POST',
+                            data: {
+                                id_student: student_id,
+                                id_class: class_id,
+                                _token: csrfToken,
+                            },
+                            success: function(response) {
+                                $('#quick_view_students_title').text(response.names + ' - ' + response.class);
+                                $('#student_code').text(response.student_code);
+                                $('#names').text(response.names);
+                                $('#school_year').text(response.school_year);
+                                $('#birth').text(response.birth);
+                                $('#gender').text(response.gender);
+                                $('#email').text(response.email);
+                                $('#phone').text(response.phone);
+                                $('#cccd').text(response.cccd);
+                                $('#class').text(response.class);
+                                $('#images').attr('src', response.images);
+                            },
+                            error: function(xhr, status, error) {
+                                console.error(xhr.responseText);
+                            }
+                        });
+                    });
+                });
+            </script>
+        @endpush
     @else
         <script>
             window.location = "/";
