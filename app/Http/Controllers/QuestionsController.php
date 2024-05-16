@@ -20,7 +20,7 @@ class QuestionsController extends Controller
     {
         $question_list = Question::orderBy('id', 'DESC')->get();
         $subjects = Subject::orderBy('id', 'DESC')->get();
-        return view('admin.question.index', compact('question_list','subjects'));
+        return view('admin.question.index', compact('question_list', 'subjects'));
     }
 
     /**
@@ -82,9 +82,11 @@ class QuestionsController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show($id)
+    public function show($subjectId)
     {
-        //
+        $questions = Question::where('subject_id', $subjectId)->get();
+
+        return view('admin.question.show', compact('questions'));
     }
 
     /**
@@ -193,10 +195,19 @@ class QuestionsController extends Controller
 
     public function importExcelData(Request $request)
     {
-        $request->validate([
-            'file_import' => 'required|mimes:xlsx,xls,csv|file|max:2048',
-            'selected_subject_id' => 'required|exists:subjects,id',
-        ]);
+        $request->validate(
+            [
+                'file_import' => 'required|mimes:xlsx,xls,csv|file|max:2048',
+                'selected_subject_id' => 'required|exists:subjects,id',
+            ],
+            [
+                'required' => 'Vui lòng chọn file cần import',
+                'mimes' => 'File phải có định dạng xlsx, xls, csv',
+                'file' => 'File không hợp lệ',
+                'max' => 'File không được quá 2MB',
+                'exists' => 'Môn học không tồn tại',
+            ]
+        );
 
         $file = $request->file('file_import');
         Excel::import(new QuestionsImport($request->selected_subject_id), $file);
@@ -212,7 +223,7 @@ class QuestionsController extends Controller
         $question->status = $status;
         $question->updated_at = now('Asia/Ho_Chi_Minh');
         $question->save();
-    
+
         return $status;
     }
 }

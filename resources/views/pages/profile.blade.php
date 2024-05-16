@@ -89,7 +89,16 @@
         $user_gender = Auth::guard('students')->user()->gender;
     @endphp
     <div class="container-xl px-4 mt-4">
-        <form action="{{route('save_profile')}}" method="POST" enctype="multipart/form-data">
+        @if ($errors->any())
+            <div class="alert alert-danger" role="alert">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+        <form action="{{ route('save_profile') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="row">
                 <div class="col-xl-4">
@@ -98,12 +107,20 @@
                         <div class="card-header">Hình ảnh sinh viên</div>
                         <div class="card-body text-center">
                             <!-- Profile picture image-->
-                            <img class="img-account-profile rounded-circle mb-2"
-                                src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="">
+                            @if ($user_images)
+                                <img class="img-account-profile rounded-circle mb-2" src="{{ $user_images }}"
+                                    alt="">
+                            @else
+                                <img class="img-account-profile rounded-circle mb-2"
+                                    src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="">
+                            @endif
                             <!-- Profile picture help block-->
                             <div class="small font-italic text-muted mb-4">JPG hoặc PNG không lớn hơn 5 MB</div>
                             <!-- Profile picture upload button-->
-                            <button class="btn btn-primary" type="file">Tải lên hình ảnh mới</button>
+                            <div class="mb-3">
+                                <input type="file" class="file-upload" name="images" accept="image/*">
+                            </div>
+                            {{-- <button class="btn btn-primary" type="file">Tải lên hình ảnh mới</button> --}}
                         </div>
                     </div>
                 </div>
@@ -115,7 +132,7 @@
                             <!-- Form Group (username)-->
                             <div class="mb-3">
                                 <label class="small mb-1" for="student_code">Mã sinh viên</label>
-                                <input class="form-control" name="student_code" id="student_code" type="text"
+                                <input class="form-control" id="student_code" type="text"
                                     value="{{ $user_student_code }}" disabled>
                             </div>
                             <!-- Form Group (email address)-->
@@ -166,7 +183,8 @@
                                         </option>
                                         <option value="other" {{ $user_gender == 'other' ? 'selected' : '' }}>Khác
                                         </option>
-                                        <option value="unknown" {{ $user_gender == 'unknown' ? 'selected' : '' }}>Không xác định</option>
+                                        <option value="unknown" {{ $user_gender == 'unknown' ? 'selected' : '' }}>Không xác
+                                            định</option>
                                     </select>
                                 </div>
 

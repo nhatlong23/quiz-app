@@ -43,7 +43,8 @@
                                 <div class="position-relative row form-group">
                                     <label for="subject_id" class="col-sm-2 col-form-label">Môn học :</label>
                                     <div class="col-sm-10">
-                                        <select name="subject_id" class="form-control">
+                                        <select name="subject_id" id="subject_id" class="form-control">
+                                            <option selected disabled>-------Chọn môn học-------</option>
                                             @foreach ($subjects as $subject)
                                                 <option value="{{ $subject->id }}"
                                                     {{ isset($questions) && $questions->subject_id == $subject->id ? 'selected' : '' }}>
@@ -164,6 +165,26 @@
                 </div>
             </div>
         </div>
+        @push('scripts')
+            <script>
+                $(document).ready(function() {
+                    $("form").submit(function() {
+                        var subjectId = $("#subject_id").val();
+                        if (subjectId === null) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Lỗi...',
+                                text: 'Vui lòng chọn môn học!',
+                                timer: 1500,
+                                showConfirmButton: true,
+                                timerProgressBar: true,
+                            });
+                            return false;
+                        }
+                    });
+                });
+            </script>
+        @endpush
     @else
         <script>
             window.location = "/";

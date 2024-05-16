@@ -51,7 +51,7 @@
                                                 <button type="button"
                                                     class="btn mr-2 mb-2 btn-shadow btn-alternate quick_view_exam_button"
                                                     data-toggle="modal" data-target=".quick_view_exam"
-                                                    data-exam="{{ $list->content }}">
+                                                    data-exam-id="{{ $list->id }}">
                                                     {{ $list->content }}
                                                 </button>
                                             </form>
@@ -98,7 +98,7 @@
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="quick_view_exam_title">Tin - Bài thi cuối kì môn tin</h5>
+                            <h5 class="modal-title" id="quick_view_exam_title"></h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -170,6 +170,7 @@
                 const updateStatusExams = "{{ route('updateStatusExams') }}";
                 const quickViewExamRequest = "{{ route('quick_view_exam') }}";
                 const addExamToClass = "{{ route('addExamToClass') }}";
+                const deleteQuestionFromExam = "{{ route('deleteQuestionFromExam') }}";
 
                 $(document).ready(function() {
                     $('.exams_status').each(function() {
@@ -202,6 +203,8 @@
                         var exam_id = $(this).siblings('input[name="id_exam"]').val();
                         var subjects_id = $(this).siblings('input[name="subjects_id"]').val();
 
+                        $('.quick_view_exam').attr('data-exam-id', exam_id);
+
                         $.ajax({
                             url: quickViewExamRequest,
                             type: 'POST',
@@ -226,7 +229,8 @@
                                         '<td>' + question.option_d + '</td>' +
                                         '<td>' + question.answer + '</td>' +
                                         '<td>' + question.status + '</td>' +
-                                        '<td><button class="btn btn-danger delete-question">Xoá</button></td>' +
+                                        '<td><button data-question-id="' + question.id +
+                                        '" class="btn btn-danger delete-question">Xoá</button></td>' +
                                         '</tr>';
                                     $('#example_tbody').append(row);
                                 });
@@ -236,6 +240,43 @@
                             }
                         });
                     });
+                });
+
+                $(document).on('click', '.delete-question', function() {
+                    var confirmation = confirm("Bạn có chắc chắn muốn xoá câu hỏi này?");
+                    if (confirmation) {
+                        var questionId = $(this).data('question-id');
+                        var examId = $('.quick_view_exam').attr('data-exam-id');
+
+                        $.ajax({
+                            type: 'POST',
+                            url: deleteQuestionFromExam,
+                            data: {
+                                question_id: questionId,
+                                exam_id: examId,
+                                _token: '{{ csrf_token() }}',
+                            },
+                            success: function(response) {
+                                Swal.fire({
+                                    icon: 'success',
+                                    text: response.message,
+                                    timer: 3000,
+                                    timerProgressBar: true,
+                                }).then(function() {
+                                    location.reload();
+                                });
+                            },
+                            error: function(xhr, status, error) {
+                                console.error(xhr.responseText);
+                                Swal.fire({
+                                    icon: 'success',
+                                    text: 'Đã có lỗi',
+                                    timer: 3000,
+                                    timerProgressBar: true,
+                                });
+                            }
+                        });
+                    }
                 });
 
                 document.addEventListener("DOMContentLoaded", function() {
@@ -273,7 +314,6 @@
                         }
                     });
 
-                    // Lắng nghe sự kiện khi thay đổi giá trị của dropdown
                     var formSelect = document.querySelectorAll('.form-select');
                     formSelect.forEach(function(select) {
                         select.addEventListener('change', function() {
@@ -282,7 +322,6 @@
                         });
                     });
 
-                    // Lắng nghe sự kiện khi nút "Thêm đề thi vào lớp" được nhấn
                     var addExamButtons = document.querySelectorAll('.add_exam_to_class_button');
                     addExamButtons.forEach(function(button) {
                         button.addEventListener('click', function() {

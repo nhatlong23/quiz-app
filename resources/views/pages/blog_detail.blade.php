@@ -1,6 +1,26 @@
 @extends('welcome')
 
 @section('homepages')
+    <style>
+        #scrollToTopBtn {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 99;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            padding: 15px;
+            transition: opacity 0.3s;
+        }
+
+        #scrollToTopBtn:hover {
+            opacity: 0.7;
+        }
+    </style>
     <!-- Breadcrumb Begin -->
     <div class="breadcrumb-option">
         <div class="container">
@@ -54,7 +74,7 @@
                             <a href="#" class="leave-btn">Để lại bình luận</a>
                             <div class="blog__comment__item">
                                 <div class="blog__comment__item__pic">
-                                    <img src="{{asset('frontend/img/blog/details/comment-1.jpg')}}" alt="">
+                                    <img src="{{ asset('frontend/img/blog/details/comment-1.jpg') }}" alt="">
                                 </div>
                                 <div class="blog__comment__item__text">
                                     <h6>Brandon Kelley</h6>
@@ -69,7 +89,7 @@
                             </div>
                             <div class="blog__comment__item blog__comment__item--reply">
                                 <div class="blog__comment__item__pic">
-                                    <img src="{{asset('frontend/img/blog/details/comment-2.jpg')}}" alt="">
+                                    <img src="{{ asset('frontend/img/blog/details/comment-2.jpg') }}" alt="">
                                 </div>
                                 <div class="blog__comment__item__text">
                                     <h6>Brandon Kelley</h6>
@@ -84,7 +104,7 @@
                             </div>
                             <div class="blog__comment__item">
                                 <div class="blog__comment__item__pic">
-                                    <img src="{{asset('frontend/img/blog/details/comment-3.jpg')}}" alt="">
+                                    <img src="{{ asset('frontend/img/blog/details/comment-3.jpg') }}" alt="">
                                 </div>
                                 <div class="blog__comment__item__text">
                                     <h6>Brandon Kelley</h6>
@@ -106,34 +126,20 @@
                             <div class="section-title">
                                 <h4>Bài viết liên quan</h4>
                             </div>
-                            <a href="#" class="blog__feature__item">
-                                <div class="blog__feature__item__pic">
-                                    <img src="img/blog/sidebar/fp-1.jpg" alt="">
-                                </div>
-                                <div class="blog__feature__item__text">
-                                    <h6>Amf Cannes Red Carpet Celebrities Kend...</h6>
-                                    <span>Seb 17, 2019</span>
-                                </div>
-                            </a>
-                            <a href="#" class="blog__feature__item">
-                                <div class="blog__feature__item__pic">
-                                    <img src="img/blog/sidebar/fp-2.jpg" alt="">
-                                </div>
-                                <div class="blog__feature__item__text">
-                                    <h6>Amf Cannes Red Carpet Celebrities Kend...</h6>
-                                    <span>Seb 17, 2019</span>
-                                </div>
-                            </a>
-                            <a href="#" class="blog__feature__item">
-                                <div class="blog__feature__item__pic">
-                                    <img src="img/blog/sidebar/fp-3.jpg" alt="">
-                                </div>
-                                <div class="blog__feature__item__text">
-                                    <h6>Amf Cannes Red Carpet Celebrities Kend...</h6>
-                                    <span>Seb 17, 2019</span>
-                                </div>
-                            </a>
+                            @foreach ($relatedPosts as $relatedPost)
+                                <a href="{{ route('blog_detail', $relatedPost->slug) }}" class="blog__feature__item">
+                                    <div class="blog__feature__item__pic">
+                                        <img src="{{ asset($relatedPost->images) }}" width="50px"
+                                            alt="{{ $relatedPost->slug }}">
+                                    </div>
+                                    <div class="blog__feature__item__text">
+                                        <h6>{{ $relatedPost->title }}</h6>
+                                        <span>{{ $relatedPost->created_at }}</span>
+                                    </div>
+                                </a>
+                            @endforeach
                         </div>
+
                         <div class="blog__sidebar__item">
                             <div class="section-title">
                                 <h4>Tags cloud</h4>
@@ -149,6 +155,31 @@
                 </div>
             </div>
         </div>
+        <button onclick="scrollToTop()" id="scrollToTopBtn" title="Go to top">
+            <i class="fa fa-arrow-up" aria-hidden="true"></i>
+        </button>
     </section>
-    <!-- Blog Details Section End -->
+    @push('scripts')
+        <script>
+            function scrollToTop() {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            }
+
+            window.onscroll = function() {
+                scrollFunction()
+            };
+
+            function scrollFunction() {
+                var scrollToTopBtn = document.getElementById("scrollToTopBtn");
+                if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                    scrollToTopBtn.style.display = "block";
+                } else {
+                    scrollToTopBtn.style.display = "none";
+                }
+            }
+        </script>
+    @endpush
 @endsection

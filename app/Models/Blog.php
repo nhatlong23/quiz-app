@@ -18,4 +18,13 @@ class Blog extends Model
         'images',
         'status'
     ];
+
+    public function relatedPosts()
+    {
+        return $this->where('status', $this->status)
+            ->where('id', '!=', $this->id)
+            ->orderBy('created_at', 'desc')
+            ->limit(5)
+            ->get();
+    }
 }

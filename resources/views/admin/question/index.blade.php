@@ -9,7 +9,7 @@
                             <div class="page-title-icon">
                                 <i class="pe-7s-medal icon-gradient bg-tempting-azure"></i>
                             </div>
-                            <div>Liệt kê các Câu hỏi</div>
+                            <div>Liệt kê các câu hỏi theo đề</div>
                         </div>
                     </div>
                 </div>
@@ -28,51 +28,27 @@
                             <thead>
                                 <tr>
                                     <th>STT</th>
-                                    <th>Câu hỏi</th>
-                                    <th>Môn học</th>
-                                    <th>Trạng thái</th>
-                                    <th>Hành động</th>
+                                    <th>Câu hỏi môn học</th>
                                 </tr>
                             </thead>
                             <tbody>
+                                @php
+                                    $unique_subjects = [];
+                                    $count = 0;
+                                @endphp
                                 @foreach ($question_list as $key => $list)
-                                    <tr>
-                                        <td>{{ $key + 1 }}</td>
-                                        <td>
-                                            <form method="POST" action="{{ route('quick_view_question') }}">
-                                                @csrf
-                                                <input type="hidden" name="id_questions" value="{{ $list->id }}">
-                                                <input type="hidden" name="id_subjects" value="{{ $list->subject->id }}">
-                                                <button type="button" class="btn mr-2 mb-2 btn-primary quick_view_button"
-                                                    data-toggle="modal" data-target=".quick_view"
-                                                    data-question="{{ $list->question }}">
-                                                    {{ $list->question }}
-                                                </button>
-                                            </form>
-                                        </td>
-                                        <td>{{ $list->subject->name }}</td>
-                                        <td>
-                                        <td>
-                                            <input class="question_status" id="toggle-demo"
-                                                data-question-id="{{ $list->id }}" type="checkbox" data-on="Hiển thị"
-                                                data-off="Ẩn" data-toggle="toggle"
-                                                {{ isset($list->status) && $list->status == 1 ? 'checked' : '' }}>
-                                        </td>
-                                        </td>
-                                        <td>
-                                            <form method="POST" action="{{ route('questions.destroy', $list->id) }}"
-                                                onsubmit="return confirm('Bạn có chắc chắn muốn xóa sinh viên này?')">
-                                                @csrf
-                                                @method('DELETE')
-                                                <a href="{{ route('questions.edit', $list->id) }}"
-                                                    class="btn btn-secondary">
-                                                    <i class="pe-7s-note"></i>
-                                                </a>
-                                                <button type="submit" class="btn btn-danger"><i
-                                                        class="pe-7s-trash"></i></button>
-                                            </form>
-                                        </td>
-                                    </tr>
+                                    @if (!in_array($list->subject->name, $unique_subjects))
+                                        <tr>
+                                            <td>{{ $key }}</td>
+                                            <td>
+                                                <a class="btn mr-2 mb-2 btn-primary"
+                                                    href="{{ route('questions.show', $list->subject_id) }}">{{ $list->subject->name }}</a>
+                                            </td>
+                                        </tr>
+                                        @php
+                                            $unique_subjects[] = $list->subject->name;
+                                        @endphp
+                                    @endif
                                 @endforeach
                             </tbody>
                         </table>
@@ -82,12 +58,12 @@
                     <div class="main-card mb-3 card">
                         <div class="card-body">
                             <h5 class="card-title">Thêm file từ Excel</h5>
-                            <form action="{{ route('questions.import') }}" method="POST" enctype="multipart/form-data"
-                                class="">
+                            <form action="{{ route('questions.import') }}" method="POST" enctype="multipart/form-data">
                                 @csrf
                                 <div class="position-relative form-group">
                                     <label for="subject_id">Môn học:</label>
                                     <select name="subject_id" id="subject_id" class="form-control">
+                                        <option selected disabled>-------Chọn môn học-------</option>
                                         @foreach ($subjects as $subject)
                                             <option value="{{ $subject->id }}">
                                                 {{ $subject->name }}
@@ -108,129 +84,30 @@
                 </div>
             </div>
         </div>
-        @push('model')
-            <div class="modal fade quick_view" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
-                aria-hidden="true">
-                <div class="modal-dialog modal-lg">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="subject"></h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="main-card mb-3 card">
-                                <div class="card-body">
-                                    <table style="width: 100%;" id="example"
-                                        class="table table-hover table-striped table-bordered">
-                                        <thead>
-                                            <tr>
-                                                <th>Câu hỏi</th>
-                                                <th>Đáp án A</th>
-                                                <th>Đáp án B</th>
-                                                <th>Đáp án C</th>
-                                                <th>Đáp án D</th>
-                                                <th>Đáp án đúng</th>
-                                                <th>Mức độ</th>
-                                                <th>Hình ảnh</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td id="question"></td>
-                                                <td id="option_a"></td>
-                                                <td id="option_b"></td>
-                                                <td id="option_c"></td>
-                                                <td id="option_d"></td>
-                                                <td id="answer"></td>
-                                                <td id="level"></td>
-                                                <td id="picture"></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            {{-- <button type="button" class="btn btn-primary">Save changes</button> --}}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        @endpush
-
         @push('scripts')
             <script>
-                const updateStatusQuestions = "{{ route('updateStatusQuestions') }}";
-                const quickViewQuestion = "{{ route('quick_view_question') }}";
-
                 $(document).ready(function() {
-                    $('.question_status').each(function() {
-                        $(this).bootstrapToggle();
-                    });
-
-                    $('.question_status').change(function() {
-                        var questionId = $(this).data('question-id');
-                        var checked = $(this).prop('checked') ? 0 : 1;
-                        $.ajax({
-                            type: 'POST',
-                            url: updateStatusQuestions,
-                            data: {
-                                id: questionId,
-                                checked: checked,
-                                _token: csrfToken,
-                            },
-                            success: function(response) {
-                                location.reload();
-                            },
-                            error: function(xhr, status, error) {
-                                console.error(xhr.responseText);
-                            }
-                        });
+                    $("form").submit(function() {
+                        var subjectId = $("#subject_id").val();
+                        if (subjectId === null) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Lỗi...',
+                                text: 'Vui lòng chọn môn học!',
+                                timer: 1500,
+                                showConfirmButton: true,
+                                timerProgressBar: true,
+                            });
+                            return false;
+                        }
                     });
                 });
 
-                $(document).ready(function() {
-                    $('.quick_view_button').click(function() {
-                        var question = $(this).data('question');
-                        $('#quick_view_question').text(question);
-                        $('#quick_view_subject').text(subject);
-
-                        var question_id = $(this).siblings('input[name="id_questions"]').val();
-                        var subject_id = $(this).siblings('input[name="id_subjects"]').val();
-                        $.ajax({
-                            url: quickViewQuestion,
-                            type: 'POST',
-                            data: {
-                                id_questions: question_id,
-                                id_subjects: subject_id,
-                                _token: csrfToken,
-                            },
-                            success: function(response) {
-                                $('#question').text(response.question);
-                                $('#option_a').text(response.option_a);
-                                $('#option_b').text(response.option_b);
-                                $('#option_c').text(response.option_c);
-                                $('#option_d').text(response.option_d);
-                                $('#answer').text(response.answer);
-                                $('#picture').text(response.picture);
-                                $('#subject').text(response.subject);
-                                $('#level').text(response.level);
-                            },
-                            error: function(xhr, status, error) {
-                                console.error(xhr.responseText);
-                            }
-                        });
-                    });
-                });
                 document.getElementById('subject_id').addEventListener('change', function() {
                     var selectedSubjectId = this.value;
                     document.getElementById('selected_subject_id').value = selectedSubjectId;
                 });
             </script>
-
         @endpush
     @else
         <script>

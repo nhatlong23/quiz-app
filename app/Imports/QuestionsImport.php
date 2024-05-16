@@ -4,6 +4,7 @@ namespace App\Imports;
 
 use App\Models\Question;
 use App\Models\Level;
+use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
@@ -38,7 +39,7 @@ class QuestionsImport implements ToCollection, WithHeadingRow
                     'answer' => $row['answer'],
                     'picture' => $row['picture'],
                     'status' => $row['status'],
-                    'updated_at' => now(),
+                    'updated_at' => Carbon::now('Asia/Ho_Chi_Minh'),
                 ]);
             } else {
                 Question::create([
@@ -52,7 +53,7 @@ class QuestionsImport implements ToCollection, WithHeadingRow
                     'answer' => $row['answer'],
                     'picture' => $row['picture'],
                     'status' => $row['status'],
-                    'created_at' => now(),
+                    'created_at' => Carbon::now('Asia/Ho_Chi_Minh'),
                 ]);
             }
         }

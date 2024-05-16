@@ -24,25 +24,25 @@
                             <ul>
                                 <li>
                                     <h6><i class="fa fa-map-marker"></i> Địa chỉ</h6>
-                                    <p>160 Pennsylvania Ave NW, Washington, Castle, PA 16101-5161</p>
+                                    <p>Bình Thái 1, Cẩm Lệ, Đà Nẵng</p>
                                 </li>
                                 <li>
                                     <h6><i class="fa fa-phone"></i> Số điện thoại</h6>
-                                    <p><span>125-711-811</span><span>125-668-886</span></p>
+                                    <p><span>0899-244-850</span><span>0325-616-957</span></p>
                                 </li>
                                 <li>
                                     <h6><i class="fa fa-headphones"></i> Hỗ trợ</h6>
-                                    <p>Support.photography@gmail.com</p>
+                                    <p>hotro.tracnghiem@gmail.com</p>
                                 </li>
                             </ul>
                         </div>
                         <div class="contact__form">
-                            <h5>Gửi tin nhắn </h5>
-                            <form action="#" method="POST" enctype="multipart/form-data">
+                            <h5>Gửi thông tin </h5>
+                            <form action="{{ route('send.contact.email') }}" method="POST">
                                 @csrf
-                                <input type="text" name="" placeholder="Tên">
-                                <input type="text" name="" placeholder="Email">
-                                <textarea name="" placeholder="Thông điệp"></textarea>
+                                <input type="text" name="name" placeholder="Tên" required>
+                                <input type="email" name="email" placeholder="Email" required>
+                                <textarea name="message" placeholder="Thông điệp" required></textarea>
                                 <button type="submit" class="site-btn">Gửi thông tin</button>
                             </form>
                         </div>
@@ -53,7 +53,8 @@
                         <iframe
                             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d61358.908429942465!2d108.1616302092546!3d16.017066571461974!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3142199deb085271%3A0x8ac5d36794034e22!2zQ-G6qW0gTOG7hywgxJDDoCBO4bq1bmcsIFZp4buHdCBOYW0!5e0!3m2!1svi!2s!4v1714965237395!5m2!1svi!2s"
                             width="800" height="600" style="border:0;" allowfullscreen="" loading="lazy"
-                            referrerpolicy="no-referrer-when-downgrade"></iframe>
+                            referrerpolicy="no-referrer-when-downgrade">
+                        </iframe>
                     </div>
                 </div>
             </div>

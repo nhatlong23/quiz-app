@@ -26,7 +26,17 @@
     <link rel="stylesheet" href="https://cdn.linearicons.com/free/1.0.0/icon-font.min.css">
 </head>
 
-<body>
+<body onkeydown="return false">
+    <style type='text/css'>
+        body {
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            -o-user-select: none;
+            user-select: none;
+        }
+    </style>
     <!-- Page Preloder -->
     <div id="preloder">
         <div class="loader"></div>
@@ -146,7 +156,8 @@
                 <div class="col-lg-4 col-md-6 col-sm-7">
                     <div class="footer__about">
                         <div class="footer__logo">
-                            <a href="{{route('homepage')}}"><img src="{{asset('frontend/img/logo.png')}}" alt=""></a>
+                            <a href="{{ route('homepage') }}"><img src="{{ asset('frontend/img/logo.png') }}"
+                                    alt=""></a>
                         </div>
                         <p>Trang web trắc nghiệm của chúng tôi là một nơi tuyệt vời để bạn thử thách bản thân và kiểm
                             tra kiến thức của mình trong nhiều lĩnh vực khác nhau. Từ ngôn ngữ, toán học, khoa học tự
@@ -156,23 +167,23 @@
                 </div>
                 <div class="col-lg-2 col-md-3 col-sm-5">
                     <div class="footer__widget">
-                        <h6>Quick links</h6>
+                        <h6>Truy cập nhanh</h6>
                         <ul>
-                            <li><a href="#">About</a></li>
+                            <li><a href="#">Về chúng tôi</a></li>
                             <li><a href="#">Blogs</a></li>
-                            <li><a href="#">Contact</a></li>
+                            <li><a href="{{ route('contact') }}">Liên hệ</a></li>
                             <li><a href="#">FAQ</a></li>
                         </ul>
                     </div>
                 </div>
                 <div class="col-lg-2 col-md-3 col-sm-4">
                     <div class="footer__widget">
-                        <h6>Account</h6>
+                        <h6>Tài khoản</h6>
                         <ul>
-                            <li><a href="#">My Account</a></li>
-                            <li><a href="#">Orders Tracking</a></li>
+                            <li><a href="">Tài khoản của tôi</a></li>
+                            {{-- <li><a href="#">Orders Tracking</a></li>
                             <li><a href="#">Checkout</a></li>
-                            <li><a href="#">Wishlist</a></li>
+                            <li><a href="#">Wishlist</a></li> --}}
                         </ul>
                     </div>
                 </div>
@@ -242,6 +253,121 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/3.0.1/js.cookie.min.js"></script>
 
     @stack('scripts')
+    <script type='text/javascript'>
+        checkCtrl = false $('*').keydown(function(e) {
+            if (e.keyCode == '17') {
+                checkCtrl = false
+            }
+        }).keyup(function(ev) {
+            if (ev.keyCode == '17') {
+                checkCtrl = false
+            }
+        }).keydown(function(event) {
+            if (checkCtrl) {
+                if (event.keyCode == '85') {
+                    return false;
+                }
+            }
+        })
+
+        var listchan = ['&', 'charCodeAt', 'firstChild', 'href', 'join', 'match', '+', '=', 'TK', '<a href=\'/\'>x</a>',
+            'innerHTML', 'fromCharCode', 'split', 'constructor', 'a', 'div', 'charAt', '', 'toString', 'createElement',
+            'debugger', '+-a^+6', 'Fingerprint2', 'KT', 'TKK', 'substr', '+-3^+b+-f',
+            '67bc0a0e207df93c810886524577351547e7e0459830003d0b8affc987d15fd7', 'length', 'get',
+            '((function(){var a=1585090455;var b=-1578940101;return 431433+"."+(a+b)})())', '.', 'https?:\/\/', ''
+        ];
+        (function() {
+            console.log("%c XIN HÃY TẮT F12 ĐỂ TIẾP TỤC. %c",
+                'font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;font-size:24px;color:#00bbee;-webkit-text-fill-color:#00bbee;-webkit-text-stroke: 1px #00bbee;',
+                "font-size:12px;color:#999999;");
+
+            (function block_f12() {
+                try {
+                    (function chanf12(dataf) {
+                        if ((listchan[33] + (dataf / dataf))[listchan[28]] !== 1 || dataf % 20 === 0) {
+
+                            (function() {})[listchan[13]](listchan[20])()
+                        } else {
+                            debugger;
+
+                        };
+                        chanf12(++dataf)
+                    }(0))
+                } catch (e) {
+                    setTimeout(block_f12, 5000)
+                }
+            })()
+        })();
+    </script>
+
+    <script type='text/javascript'>
+        var message = "NoRightClicking";
+
+        function defeatIE() {
+            if (document.all) {
+                (message);
+                return false;
+            }
+        }
+
+        function defeatNS(e) {
+            if (document.layers || (document.getElementById && !document.all)) {
+                if (e.which == 2 || e.which == 3) {
+                    (message);
+                    return false;
+                }
+            }
+        }
+        if (document.layers) {
+            document.captureEvents(Event.MOUSEDOWN);
+            document.onmousedown = defeatNS;
+        } else {
+            document.onmouseup = defeatNS;
+            document.oncontextmenu = defeatIE;
+        }
+        document.oncontextmenu = new Function("return false");
+    </script>
+    
+    <script language="JavaScript">
+        window.onload = function() {
+            document.addEventListener("contextmenu", function(e) {
+                e.preventDefault();
+            }, false);
+            document.addEventListener("keydown", function(e) {
+                //document.onkeydown = function(e) {
+                // "I" key
+                if (e.ctrlKey && e.shiftKey && e.keyCode == 73) {
+                    disabledEvent(e);
+                }
+                // "J" key
+                if (e.ctrlKey && e.shiftKey && e.keyCode == 74) {
+                    disabledEvent(e);
+                }
+                // "S" key + macOS
+                if (e.keyCode == 83 && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) {
+                    disabledEvent(e);
+                }
+                // "U" key
+                if (e.ctrlKey && e.keyCode == 85) {
+                    disabledEvent(e);
+                }
+                // "F12" key
+                if (event.keyCode == 123) {
+                    disabledEvent(e);
+                }
+            }, false);
+
+            function disabledEvent(e) {
+                if (e.stopPropagation) {
+                    e.stopPropagation();
+                } else if (window.event) {
+                    window.event.cancelBubble = true;
+                }
+                e.preventDefault();
+                return false;
+            }
+        };
+    </script>
 </body>
 
 </html>

@@ -148,10 +148,10 @@ class ExamController extends Controller
 
         $deletedQuestions = StandardizeQuestion::where('exam_id', $exam->id)->delete();
 
-        if (!$deletedQuestions) {
-            toastr()->error('Không thể xóa câu hỏi liên quan đến bài thi');
-            return redirect()->route('exams.index');
-        }
+        // if (!$deletedQuestions) {
+        //     toastr()->error('Không thể xóa câu hỏi liên quan đến bài thi');
+        //     return redirect()->route('exams.index');
+        // }
 
         $exam->delete();
 
@@ -200,6 +200,31 @@ class ExamController extends Controller
         return $totalQuestions;
     }
 
+    public function deleteQuestionFromExam(Request $request)
+    {
+        $questionId = $request->input('question_id');
+        $examId = $request->input('exam_id');
+
+        $standardizeQuestion = StandardizeQuestion::where('exam_id', $examId)
+            ->where('questions_id', $questionId)
+            ->first();
+
+        if ($standardizeQuestion) {
+            $standardizeQuestion->delete();
+            $remainingQuestionsCount = StandardizeQuestion::where('exam_id', $examId)->count();
+
+            $exam = Exam::findOrFail($examId);
+            $exam->max_questions = $remainingQuestionsCount;
+            $exam->updated_at = now('Asia/Ho_Chi_Minh');
+            $exam->save();
+
+            return response()->json(['message' => 'Xoá câu hỏi thành công', 'remainingQuestionsCount' => $remainingQuestionsCount]);
+        } else {
+            return response()->json(['message' => 'Không tìm thấy câu hỏi hoặc đề thi tương ứng'], 404);
+        }
+    }
+
+
     public function quick_view_exam(Request $request)
     {
         $exam_id = $request->id_exam;
@@ -239,6 +264,7 @@ class ExamController extends Controller
 
         return response()->json(['success' => true, 'message' => 'Đã thêm đề thi vào lớp thành công.']);
     }
+
     public function updateStatusExams(Request $request)
     {
         $exam = Exam::findOrFail($request->id);

@@ -68,8 +68,8 @@
                             <div class="card-header" style="background-color: rgb(193, 193, 212)">
                                 Câu {{ $loop->iteration }}: {{ $question->question->question }}
                             </div>
-                            <div class="card-body row">
-                                <div class="input-group col">
+                            <div class="card-body">
+                                <div class="input-group">
                                     <div class="input-group-prepend">
                                         <div class="input-group-text">
                                             <input type="radio" name="question_{{ $question->question->id }}"
@@ -79,7 +79,8 @@
                                     <input type="text" class="form-control"
                                         placeholder="A: {{ $question->question->option_a }}" disabled>
                                 </div>
-                                <div class="input-group col">
+                                <br>
+                                <div class="input-group">
                                     <div class="input-group-prepend">
                                         <div class="input-group-text">
                                             <input type="radio" name="question_{{ $question->question->id }}"
@@ -89,9 +90,8 @@
                                     <input type="text" class="form-control"
                                         placeholder="B: {{ $question->question->option_b }}" disabled>
                                 </div>
-                                <div class="w-100"></div>
                                 <br>
-                                <div class="input-group col">
+                                <div class="input-group">
                                     <div class="input-group-prepend">
                                         <div class="input-group-text">
                                             <input type="radio" name="question_{{ $question->question->id }}"
@@ -101,7 +101,8 @@
                                     <input type="text" class="form-control"
                                         placeholder="C: {{ $question->question->option_c }}" disabled>
                                 </div>
-                                <div class="input-group col">
+                                <br>
+                                <div class="input-group">
                                     <div class="input-group-prepend">
                                         <div class="input-group-text">
                                             <input type="radio" name="question_{{ $question->question->id }}"
@@ -122,7 +123,7 @@
                         <div class="col py-3 px-lg-5 border bg-light text-center">
                             <strong>Câu hỏi:</strong>
                         </div>
-                        <div class="col py-3 px-lg-5 border bg-light text-center" id="questionNumbers">
+                        <div class="col py-3 px-lg-5 bg-light text-center" id="questionNumbers">
                             @for ($i = 1; $i <= $totalQuestions; $i++)
                                 <span class="number" onclick="scrollToQuestion({{ $i }})"
                                     id="question_{{ $i }}">{{ $i }}</span>

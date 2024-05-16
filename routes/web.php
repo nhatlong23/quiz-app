@@ -29,6 +29,10 @@ use App\Http\Controllers\LoginStudentsController;
 //route homepage
 Route::get('/', [IndexController::class, 'homepage'])->name('homepage');
 Route::get('/load-more-blogs', [IndexController::class, 'loadMoreBlogs'])->name('loadMoreBlogs');
+Route::get('/blog-detail/{slug}', [IndexController::class, 'blog_detail'])->name('blog_detail');
+Route::get('/knowledge', [IndexController::class, 'knowledge'])->name('knowledge');
+Route::get('/contact', [IndexController::class, 'contact'])->name('contact');
+Route::post('/send-contact-email', [IndexController::class, 'sendContactEmail'])->name('send.contact.email');
 
 Route::middleware(['auth.student', 'check.class.access'])->group(function () {
     Route::get('/exam/{class_id}', [IndexController::class, 'redirectToExam'])->name('redirectToExam');
@@ -51,9 +55,6 @@ Route::middleware(['auth.student'])->group(function () {
 });
 
 Route::post('/checkLoginStudents', [LoginStudentsController::class, 'checkLoginStudents'])->name('checkLoginStudents');
-Route::get('/knowledge', [IndexController::class, 'knowledge'])->name('knowledge');
-Route::get('/contact', [IndexController::class, 'contact'])->name('contact');
-Route::get('/blog-detail/{slug}', [IndexController::class, 'blog_detail'])->name('blog_detail');
 
 Auth::routes();
 // Route::match(['get', 'post'], 'register', function(){
@@ -88,3 +89,4 @@ Route::post('update-status-students', [StudentsController::class, 'updateStatusS
 Route::post('update-status-class', [ClasssController::class, 'updateStatusClasss'])->name('updateStatusClasss');
 Route::post('update-status-blocks', [BlockController::class, 'updateStatusBlocks'])->name('updateStatusBlocks');
 Route::post('update-status-blogs', [BlogController::class, 'updateStatusBlogs'])->name('updateStatusBlogs');
+Route::post('delete-question-exam', [ExamController::class, 'deleteQuestionFromExam'])->name('deleteQuestionFromExam');

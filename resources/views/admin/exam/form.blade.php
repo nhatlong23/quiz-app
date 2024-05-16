@@ -148,6 +148,8 @@
                                                             :</label>
                                                         <div class="col-sm-10">
                                                             <select name="subjects_id" class="form-control" id="subject">
+                                                                <option disabled selected>------------Môn học------------
+                                                                </option>
                                                                 @foreach ($subjects as $subject)
                                                                     <option value="{{ $subject->id }}">
                                                                         {{ $subject->name }}
@@ -338,6 +340,11 @@
                 $(document).ready(function() {
                     $("#randomize_questions").on('click', function() {
                         var subjectId = $("#subject").val();
+                        if (subjectId === null) {
+                            alert("Vui lòng chọn một môn học trước khi tạo đề thi.");
+                            return;
+                        }
+
                         var counts = {};
                         var countFieldsFilled = 0;
 
@@ -406,6 +413,31 @@
                     });
                 }
 
+                function updateQuestionCount() {
+                    var rowCount = $('#example tbody tr').length;
+                    $("#total_questions").text(rowCount);
+                }
+
+                $(document).on('click', '.delete-question', function() {
+                    var confirmation = confirm("Bạn có chắc chắn muốn xoá câu hỏi này?");
+                    if (confirmation) {
+                        $(this).closest('tr').remove();
+                        updateQuestionCount();
+                        randomQuestions = updateRandomQuestionsAfterDelete(randomQuestions);
+                    }
+                });
+
+                function updateRandomQuestionsAfterDelete(randomQuestions) {
+                    var updatedRandomQuestions = {};
+                    $.each(randomQuestions, function(levelId, levelQuestions) {
+                        var updatedLevelQuestions = levelQuestions.filter(function(question) {
+                            return $('#example tbody tr').find('td').eq(1).text() !== question.question;
+                        });
+                        updatedRandomQuestions[levelId] = updatedLevelQuestions;
+                    });
+                    return updatedRandomQuestions;
+                }
+
                 $("#save_exams").on('click', function() {
                     var subjectId = $("#subject").val();
                     var content = $("#content").val();
@@ -469,8 +501,6 @@
                         }
                     });
                 });
-
-                
             </script>
         @endpush
     @else
