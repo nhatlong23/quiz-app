@@ -19,6 +19,9 @@ return new class extends Migration
             $table->string('number');
             $table->boolean('status');
             $table->timestamps();
+
+            $table->foreign('block_id')->references('id')->on('blocks')
+                ->onDelete('cascade');
         });
     }
 

@@ -19,6 +19,13 @@ return new class extends Migration
             $table->string('selected_option');
             $table->boolean('is_correct');
             $table->timestamps();
+
+            $table->foreign('question_id')->references('id')->on('questions')
+                ->onDelete('cascade');
+            $table->foreign('students_id')->references('id')->on('students')
+                ->onDelete('cascade');
+            $table->foreign('exam_id')->references('id')->on('exam')
+                ->onDelete('cascade');
         });
     }
 

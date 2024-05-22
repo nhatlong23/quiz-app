@@ -8,6 +8,11 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class SubjectsController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -30,28 +35,24 @@ class SubjectsController extends Controller
      */
     public function store(Request $request)
     {
-        try {
-            $validatedData = $request->validate([
-                'name' => 'required|unique:subjects|max:100',
-                'status' => 'required',
-            ], [
+        $validatedData = $request->validate([
+            'name' => 'required|unique:subjects|max:100',
+            'status' => 'required',
+        ], [
 
-                'name.required' => 'Vui lòng nhập tên môn học',
-                'name.unique' => 'Tên môn học đã tồn tại',
-                'name.max' => 'Tên môn học không được quá 100 ký tự',
-                'status.required' => 'Vui lòng chọn trạng thái của môn học',
-            ]);
+            'name.required' => 'Vui lòng nhập tên môn học',
+            'name.unique' => 'Tên môn học đã tồn tại',
+            'name.max' => 'Tên môn học không được quá 100 ký tự',
+            'status.required' => 'Vui lòng chọn trạng thái của môn học',
+        ]);
 
-            $subject = new Subject();
-            $subject->fill($validatedData);
-            $subject->created_at = now('Asia/Ho_Chi_Minh');
-            $subject->save();
+        $subject = new Subject();
+        $subject->fill($validatedData);
+        $subject->created_at = now('Asia/Ho_Chi_Minh');
+        $subject->save();
 
-            toastr()->success("Thêm thành công Môn học: $subject->name");
-            return redirect()->route('subjects.index');
-        } catch (\Throwable $th) {
-            return $th;
-        }
+        toastr()->success("Thêm thành công Môn học: $subject->name");
+        return redirect()->route('subjects.index');
     }
 
     /**
@@ -135,8 +136,7 @@ class SubjectsController extends Controller
         $subject->status = $status;
         $subject->updated_at = now('Asia/Ho_Chi_Minh');
         $subject->save();
-    
+
         return $status;
     }
-    
 }

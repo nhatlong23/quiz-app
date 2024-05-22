@@ -1,7 +1,29 @@
 @extends('layouts.app')
 @section('content')
-    @if (Auth::id())
-        <div class="app-main__outer">
+    <div class="app-main__outer">
+        <div class="app-main__inner">
+            <div class="app-page-title">
+                <div class="page-title-wrapper">
+                    <div class="page-title-heading">
+                        <div class="page-title-icon">
+                            <i class="pe-7s-medal icon-gradient bg-tempting-azure"></i>
+                        </div>
+                        <div>Liệt kê các môn học</div>
+                    </div>
+                    @can('subjects.create')
+                        <div class="page-title-actions">
+                            <div class="d-inline-block">
+                                <a href="{{ route('subjects.create') }}" class="btn-shadow btn btn-info">
+                                    <span class="btn-icon-wrapper pr-2 opacity-7">
+                                        <i class="fa fa-business-time fa-w-20"></i>
+                                    </span>
+                                    Thêm các môn học
+                                </a>
+                            </div>
+                        </div>
+                    @endcan
+                </div>
+            </div>
             @if ($errors->any())
                 <div class="alert alert-danger" role="alert">
                     <ul>
@@ -11,93 +33,88 @@
                     </ul>
                 </div>
             @endif
-            <div class="app-main__inner">
-                <div class="app-page-title">
-                    <div class="page-title-wrapper">
-                        <div class="page-title-heading">
-                            <div class="page-title-icon">
-                                <i class="pe-7s-medal icon-gradient bg-tempting-azure"></i>
-                            </div>
-                            <div>Liệt kê các môn học</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="main-card mb-3 card">
-                    <div class="card-body">
-                        <table style="width: 100%;" id="example" class="table table-hover table-striped table-bordered">
-                            <thead>
+            <div class="main-card mb-3 card">
+                <div class="card-body">
+                    <table style="width: 100%;" id="example" class="table table-hover table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th>STT</th>
+                                <th>Tên môn học</th>
+                                <th>Trạng thái môn học</th>
+                                <th>Hành động</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($subjects_list as $key => $list)
                                 <tr>
-                                    <th>STT</th>
-                                    <th>Tên môn học</th>
-                                    <th>Trạng thái môn học</th>
-                                    <th>Hành động</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($subjects_list as $key => $list)
-                                    <tr>
-                                        <td>{{ $key + 1 }}</td>
-                                        <td>{{ $list->name }}</td>
-                                        <td>
+                                    <td>{{ $key + 1 }}</td>
+                                    <td>{{ $list->name }}</td>
+                                    <td>
+                                        @can('updateStatusSubjects')
                                             <input class="subjects_status" id="toggle-demo"
                                                 data-subject-id="{{ $list->id }}" type="checkbox" data-on="Hiển thị"
                                                 data-off="Ẩn" data-toggle="toggle"
                                                 {{ isset($list->status) && $list->status == 1 ? 'checked' : '' }}>
-                                        </td>
-                                        <td>
-                                            <form method="POST" action="{{ route('subjects.destroy', $list->id) }}"
-                                                onsubmit="return confirm('Bạn có chắc chắn muốn xóa môn học này?')">
-                                                @csrf
-                                                @method('DELETE')
+                                        @else
+                                            <span class="badge badge-{{ $list->status == 1 ? 'success' : 'danger' }}">
+                                                {{ $list->status == 1 ? 'Hiển thị' : 'Ẩn' }}
+                                            </span>
+                                        @endcan
+                                    </td>
+                                    <td>
+                                        <form method="POST" action="{{ route('subjects.destroy', $list->id) }}"
+                                            onsubmit="return confirm('Bạn có chắc chắn muốn xóa môn học này?')">
+                                            @csrf
+                                            @method('DELETE')
+                                            @can('subjects.edit')
                                                 <a href="{{ route('subjects.edit', $list->id) }}" class="btn btn-secondary">
                                                     <i class="pe-7s-note"></i>
                                                 </a>
-                                                <button type="submit" class="btn btn-danger"><i
-                                                        class="pe-7s-trash"></i></button>
-                                            </form>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
+                                            @endcan
+                                            @can('subjects.destroy')
+                                                <button type="submit" class="btn btn-danger">
+                                                    <i class="pe-7s-trash"></i>
+                                                </button>
+                                            @endcan
+                                        </form>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
-        @push('scripts')
-            <script>
-                const updateStatusSubjects = "{{ route('updateStatusSubjects') }}";
+    </div>
+    @push('scripts')
+        <script>
+            const updateStatusSubjects = "{{ route('updateStatusSubjects') }}";
 
-                $(document).ready(function() {
-                    $('.subjects_status').each(function() {
-                        $(this).bootstrapToggle();
-                    });
+            $(document).ready(function() {
+                $('.subjects_status').each(function() {
+                    $(this).bootstrapToggle();
+                });
 
-                    $('.subjects_status').change(function() {
-                        var subjectId = $(this).data('subject-id');
-                        var checked = $(this).prop('checked') ? 0 : 1;
-                        $.ajax({
-                            type: 'POST',
-                            url: updateStatusSubjects,
-                            data: {
-                                id: subjectId,
-                                checked: checked,
-                                _token: csrfToken,
-                            },
-                            success: function(response) {
-                                location.reload();
-                            },
-                            error: function(xhr, status, error) {
-                                console.error(xhr.responseText);
-                            }
-                        });
+                $('.subjects_status').change(function() {
+                    var subjectId = $(this).data('subject-id');
+                    var checked = $(this).prop('checked') ? 0 : 1;
+                    $.ajax({
+                        type: 'POST',
+                        url: updateStatusSubjects,
+                        data: {
+                            id: subjectId,
+                            checked: checked,
+                            _token: csrfToken,
+                        },
+                        success: function(response) {
+                            location.reload();
+                        },
+                        error: function(xhr, status, error) {
+                            console.error(xhr.responseText);
+                        }
                     });
                 });
-            </script>
-        @endpush
-    @else
-        <script>
-            window.location = "/";
+            });
         </script>
-    @endif
+    @endpush
 @endsection

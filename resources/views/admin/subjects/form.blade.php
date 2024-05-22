@@ -1,8 +1,22 @@
 @extends('layouts.app')
 
 @section('content')
-    @if (Auth::id())
-        <div class="app-main__outer">
+    <div class="app-main__outer">
+        <div class="app-main__inner">
+            <div class="app-page-title">
+                <div class="page-title-wrapper">
+                    <div class="page-title-heading">
+                        <div class="page-title-icon">
+                            <i class="pe-7s-graph text-success"></i>
+                        </div>
+                        @if (!isset($subjects))
+                            <div>Thêm môn học</div>
+                        @else
+                            <div>Sửa môn học</div>
+                        @endif
+                    </div>
+                </div>
+            </div>
             @if ($errors->any())
                 <div class="alert alert-danger" role="alert">
                     <ul>
@@ -12,73 +26,53 @@
                     </ul>
                 </div>
             @endif
-            <div class="app-main__inner">
-                <div class="app-page-title">
-                    <div class="page-title-wrapper">
-                        <div class="page-title-heading">
-                            <div class="page-title-icon">
-                                <i class="pe-7s-graph text-success"></i>
-                            </div>
-                            @if (!isset($subjects))
-                                <div>Thêm môn học</div>
-                            @else
-                                <div>Sửa môn học</div>
-                            @endif
-                        </div>
-                    </div>
-                </div>
 
-                <div class="tab-content">
-                    <div class="tab-pane tabs-animation fade show active" id="tab-content-1" role="tabpanel">
-                        <div class="main-card mb-3 card">
-                            <div class="card-body">
-                                @if (!isset($subjects))
-                                    <form method="POST" action="{{ route('subjects.store') }}">
-                                    @else
-                                        <form method="POST" action="{{ route('subjects.update', $subjects->id) }}">
-                                            @method('PUT')
-                                @endif
-                                @csrf
-                                <div class="position-relative row form-group">
-                                    <label for="name" class="col-sm-2 col-form-label">Tên môn học :</label>
-                                    <div class="col-sm-10">
-                                        <input name="name" id="name" placeholder="Nhập tên môn học vào đây!!"
-                                            type="text" class="form-control" autocomplete="off"
-                                            value="{{ isset($subjects) ? $subjects->name : '' }}">
-                                    </div>
+            <div class="tab-content">
+                <div class="tab-pane tabs-animation fade show active" id="tab-content-1" role="tabpanel">
+                    <div class="main-card mb-3 card">
+                        <div class="card-body">
+                            @if (!isset($subjects))
+                                <form method="POST" action="{{ route('subjects.store') }}">
+                                @else
+                                    <form method="POST" action="{{ route('subjects.update', $subjects->id) }}">
+                                        @method('PUT')
+                            @endif
+                            @csrf
+                            <div class="position-relative row form-group">
+                                <label for="name" class="col-sm-2 col-form-label">Tên môn học :</label>
+                                <div class="col-sm-10">
+                                    <input name="name" id="name" placeholder="Nhập tên môn học vào đây!!"
+                                        type="text" class="form-control" autocomplete="off"
+                                        value="{{ isset($subjects) ? $subjects->name : '' }}">
                                 </div>
-                                <div class="position-relative row form-group">
-                                    <label for="status" class="col-sm-2 col-form-label">Trạng thái môn học :</label>
-                                    <div class="col-sm-10">
-                                        <select name="status" class="form-control">
-                                            <option value="1"
-                                                {{ isset($subjects) && $subjects->status == 1 ? 'selected' : '' }}>Hiển thị
-                                                môn học</option>
-                                            <option value="0"
-                                                {{ isset($subjects) && $subjects->status == 0 ? 'selected' : '' }}>Ẩn môn
-                                                học</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="position-relative row form-check">
-                                    <div class="col-sm-10 offset-sm-2">
-                                        @if (!isset($subjects))
-                                            <button type="submit" class="btn btn-secondary">Lưu dữ liệu</button>
-                                        @else
-                                            <button type="submit" class="btn btn-secondary">Cập nhật dữ liệu</button>
-                                        @endif
-                                    </div>
-                                </div>
-                                </form>
                             </div>
+                            <div class="position-relative row form-group">
+                                <label for="status" class="col-sm-2 col-form-label">Trạng thái môn học :</label>
+                                <div class="col-sm-10">
+                                    <select name="status" class="form-control">
+                                        <option value="1"
+                                            {{ isset($subjects) && $subjects->status == 1 ? 'selected' : '' }}>Hiển thị
+                                            môn học</option>
+                                        <option value="0"
+                                            {{ isset($subjects) && $subjects->status == 0 ? 'selected' : '' }}>Ẩn môn
+                                            học</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="position-relative row form-check">
+                                <div class="col-sm-10 offset-sm-2">
+                                    @if (!isset($subjects))
+                                        <button type="submit" class="btn btn-secondary">Lưu dữ liệu</button>
+                                    @else
+                                        <button type="submit" class="btn btn-secondary">Cập nhật dữ liệu</button>
+                                    @endif
+                                </div>
+                            </div>
+                            </form>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    @else
-        <script>
-            window.location = "/";
-        </script>
-    @endif
+    </div>
 @endsection

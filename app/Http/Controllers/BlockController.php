@@ -8,6 +8,10 @@ use Illuminate\Http\Request;
 
 class BlockController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     /**
      * Display a listing of the resource.
      */
@@ -139,7 +143,7 @@ class BlockController extends Controller
         $block->status = $status;
         $block->updated_at = now('Asia/Ho_Chi_Minh');
         $block->save();
-    
+
         return $status;
     }
 }

@@ -28,4 +28,8 @@ class Result extends Model
     {
         return $this->belongsTo(Exam::class, 'exam_id');
     }
+    public function resultQuestions()
+    {
+        return $this->hasMany(ResultQuestion::class, 'students_id', 'students_id');
+    }
 }

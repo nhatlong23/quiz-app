@@ -23,6 +23,9 @@ return new class extends Migration
             $table->unsignedBigInteger('subjects_id')->index();
             $table->boolean('status');
             $table->timestamps();
+
+            $table->foreign('subjects_id')->references('id')->on('subjects')
+                ->onDelete('cascade');
         });
     }
 

@@ -24,6 +24,11 @@ return new class extends Migration
             $table->string('answer');
             $table->boolean('status');
             $table->timestamps();
+
+            $table->foreign('subject_id')->references('id')->on('subjects')
+                ->onDelete('cascade');
+            $table->foreign('level_id')->references('id')->on('levels')
+                ->onDelete('cascade');
         });
     }
 

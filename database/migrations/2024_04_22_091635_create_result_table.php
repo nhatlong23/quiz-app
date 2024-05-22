@@ -18,6 +18,11 @@ return new class extends Migration
             $table->float('point');
             $table->boolean('status');
             $table->timestamps();
+
+            $table->foreign('students_id')->references('id')->on('students')
+                ->onDelete('cascade');
+            $table->foreign('exam_id')->references('id')->on('exam')
+                ->onDelete('cascade');
         });
     }
 

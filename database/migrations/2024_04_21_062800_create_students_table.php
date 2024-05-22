@@ -23,9 +23,12 @@ return new class extends Migration
             $table->string('password');
             $table->string('cccd');
             $table->string('phone');
-            $table->string('email');
+            $table->string('email')->unique();
             $table->boolean('status');
             $table->timestamps();
+
+            $table->foreign('class_id')->references('id')->on('class')
+                ->onDelete('cascade');
         });
     }
 

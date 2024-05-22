@@ -4,12 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Models\Block;
 use App\Models\Classs;
-use App\Models\Standardize_Exam;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class ClasssController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+    
     /**
      * Display a listing of the resource.
      */

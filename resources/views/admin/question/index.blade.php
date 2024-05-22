@@ -1,59 +1,79 @@
 @extends('layouts.app')
 @section('content')
-    @if (Auth::id())
-        <div class="app-main__outer">
-            <div class="app-main__inner">
-                <div class="app-page-title">
-                    <div class="page-title-wrapper">
-                        <div class="page-title-heading">
-                            <div class="page-title-icon">
-                                <i class="pe-7s-medal icon-gradient bg-tempting-azure"></i>
-                            </div>
-                            <div>Liệt kê các câu hỏi theo đề</div>
+    <div class="app-main__outer">
+        <div class="app-main__inner">
+            <div class="app-page-title">
+                <div class="page-title-wrapper">
+                    <div class="page-title-heading">
+                        <div class="page-title-icon">
+                            <i class="pe-7s-medal icon-gradient bg-tempting-azure"></i>
                         </div>
+                        <div>Liệt kê các câu hỏi theo đề</div>
                     </div>
+                    @can('questions.create')
+                        <div class="page-title-actions">
+                            <div class="d-inline-block">
+                                <a href="{{ route('questions.create') }}" class="btn-shadow btn btn-info">
+                                    <span class="btn-icon-wrapper pr-2 opacity-7">
+                                        <i class="fa fa-business-time fa-w-20"></i>
+                                    </span>
+                                    Thêm câu hỏi
+                                </a>
+                            </div>
+                        </div>
+                    @endcan
                 </div>
-                @if ($errors->any())
-                    <div class="alert alert-danger" role="alert">
-                        <ul>
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
-                <div class="main-card mb-3 card">
-                    <div class="card-body">
-                        <table style="width: 100%;" id="example" class="table table-hover table-striped table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>STT</th>
-                                    <th>Câu hỏi môn học</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @php
-                                    $unique_subjects = [];
-                                    $count = 0;
-                                @endphp
-                                @foreach ($question_list as $key => $list)
-                                    @if (!in_array($list->subject->name, $unique_subjects))
-                                        <tr>
-                                            <td>{{ $key }}</td>
+            </div>
+            @if ($errors->any())
+                <div class="alert alert-danger" role="alert">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+            <div class="main-card mb-3 card">
+                <div class="card-body">
+                    <table style="width: 100%;" id="example" class="table table-hover table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th>STT</th>
+                                <th>Câu hỏi môn học</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @php
+                                $unique_subjects = [];
+                                $count = 0;
+                            @endphp
+                            @foreach ($question_list as $key => $list)
+                                @if (!in_array($list->subject->name, $unique_subjects))
+                                    <tr>
+                                        <td>{{ $count }}</td>
+                                        @can('questions.view')
                                             <td>
                                                 <a class="btn mr-2 mb-2 btn-primary"
-                                                    href="{{ route('questions.show', $list->subject_id) }}">{{ $list->subject->name }}</a>
+                                                    href="{{ route('questions.show', $list->subject_id) }}">
+                                                    {{ $list->subject->name }}
+                                                </a>
                                             </td>
-                                        </tr>
-                                        @php
-                                            $unique_subjects[] = $list->subject->name;
-                                        @endphp
-                                    @endif
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
+                                        @else
+                                            <td>
+                                                {{ $list->subject->name }}
+                                            </td>
+                                        @endcan
+                                    </tr>
+                                    @php
+                                        $unique_subjects[] = $list->subject->name;
+                                    @endphp
+                                @endif
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
+            </div>
+            @can('questions.import')
                 <div class="col-md-5">
                     <div class="main-card mb-3 card">
                         <div class="card-body">
@@ -82,36 +102,32 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            @endcan
         </div>
-        @push('scripts')
-            <script>
-                $(document).ready(function() {
-                    $("form").submit(function() {
-                        var subjectId = $("#subject_id").val();
-                        if (subjectId === null) {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Lỗi...',
-                                text: 'Vui lòng chọn môn học!',
-                                timer: 1500,
-                                showConfirmButton: true,
-                                timerProgressBar: true,
-                            });
-                            return false;
-                        }
-                    });
-                });
-
-                document.getElementById('subject_id').addEventListener('change', function() {
-                    var selectedSubjectId = this.value;
-                    document.getElementById('selected_subject_id').value = selectedSubjectId;
-                });
-            </script>
-        @endpush
-    @else
+    </div>
+    @push('scripts')
         <script>
-            window.location = "/";
+            $(document).ready(function() {
+                $("form").submit(function() {
+                    var subjectId = $("#subject_id").val();
+                    if (subjectId === null) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Lỗi...',
+                            text: 'Vui lòng chọn môn học!',
+                            timer: 1500,
+                            showConfirmButton: true,
+                            timerProgressBar: true,
+                        });
+                        return false;
+                    }
+                });
+            });
+
+            document.getElementById('subject_id').addEventListener('change', function() {
+                var selectedSubjectId = this.value;
+                document.getElementById('selected_subject_id').value = selectedSubjectId;
+            });
         </script>
-    @endif
+    @endpush
 @endsection

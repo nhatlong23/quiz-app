@@ -13,12 +13,13 @@
     <meta name="description" content="Quản lý thi trắc nghiệm.">
 
     <meta name="msapplication-tap-highlight" content="no">
-    <link href="{{ asset('backend/css/main.d810cf0ae7f39f28f336.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('backend/css/main.d810cf0ae7f39f28f336.css') }}" >
     <link rel="stylesheet" href="{{ asset('backend/icon/css/pe-icon-7-stroke.css') }}">
     <link rel="stylesheet" href="{{ asset('backend/icon/css/helper.css') }}">
     <link rel="stylesheet" href="{{ asset('backend/css/bootstrap-tagsinput.css') }}">
-    <link rel="stylesheet" href="https://cdn.linearicons.com/free/1.0.0/icon-font.min.css">
-    <link href="{{ asset('backend/css/toastr.css') }}" rel="stylesheet" />
+    <link rel="stylesheet" href="{{ asset('backend/css/select2.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('backend/css/icon-font.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('backend/css/toastr.css') }}" />
 </head>
 
 <body>
@@ -1390,8 +1391,8 @@
                         <div class="app-sidebar__inner">
                             <ul class="vertical-nav-menu">
                                 @php
-                                    $segment = Request::segment(1);
-                                    $segment2 = Request::segment(2);
+                                    $segment = Request::segment(2);
+                                    $segment2 = Request::segment(3);
                                 @endphp
                                 <li class="app-sidebar__heading">Trang chủ</li>
                                 <li class="{{ $segment == 'home' ? 'mm-active' : '' }}">
@@ -1403,185 +1404,231 @@
                                         <li>
                                             <a href="{{ route('home') }}"
                                                 class="{{ $segment == 'home' && $segment2 != 'create' ? 'mm-active' : '' }}">
-                                                <i class="metismenu-icon"></i>Home
+                                                <i class="metismenu-icon"></i>Trang chủ
                                             </a>
                                         </li>
                                     </ul>
                                 </li>
                                 <li class="app-sidebar__heading">Quản lý</li>
-                                <li class="{{ $segment == 'subjects' ? 'mm-active' : '' }}">
-                                    <a href="#">
-                                        <i class="metismenu-icon pe-7s-rocket"></i>Quản lý môn học
-                                        <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
-                                    </a>
-                                    <ul>
-                                        <li>
-                                            <a href="{{ route('subjects.index') }}"
-                                                class="{{ $segment == 'subjects' && $segment2 != 'create' ? 'mm-active' : '' }}">
-                                                <i class="metismenu-icon"></i>Liệt kê môn học
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="{{ route('subjects.create') }}"
-                                                class="{{ $segment == 'subjects' && $segment2 == 'create' ? 'mm-active' : '' }}">
-                                                <i class="metismenu-icon"></i>Thêm môn học
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li class="{{ $segment == 'levels' ? 'mm-active' : '' }}">
-                                    <a href="#">
-                                        <i class="metismenu-icon pe-7s-ticket"></i> Quản lý mức độ câu hỏi
-                                        <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
-                                    </a>
-                                    <ul>
-                                        <li>
-                                            <a href="{{ route('levels.index') }}"
-                                                class="{{ $segment == 'levels' && $segment2 != 'create' ? 'mm-active' : '' }}">
-                                                <i class="metismenu-icon"></i> Liệt kê mức độ câu hỏi
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="{{ route('levels.create') }}"
-                                                class="{{ $segment == 'levels' && $segment2 == 'create' ? 'mm-active' : '' }}">
-                                                <i class="metismenu-icon"></i>Thêm mức độ câu hỏi
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li class="{{ $segment == 'questions' ? 'mm-active' : '' }}">
-                                    <a href="#">
-                                        <i class="metismenu-icon pe-7s-browser"></i>Quản lý câu hỏi
-                                        <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
-                                    </a>
-                                    <ul>
-                                        <li>
-                                            <a href="{{ route('questions.index') }}"
-                                                class="{{ $segment == 'questions' && $segment2 != 'create' ? 'mm-active' : '' }}">
-                                                <i class="metismenu-icon"></i> Liệt kê câu hỏi
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="{{ route('questions.create') }}"
-                                                class="{{ $segment == 'questions' && $segment2 == 'create' ? 'mm-active' : '' }}">
-                                                <i class="metismenu-icon"></i>Thêm câu hỏi
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li class="{{ $segment == 'exams' ? 'mm-active' : '' }}">
-                                    <a href="#">
-                                        <i class="metismenu-icon pe-7s-umbrella"></i> Quản lý bộ đề thi
-                                        <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
-                                    </a>
-                                    <ul>
-                                        <li>
-                                            <a href="{{ route('exams.index') }}"
-                                                class="{{ $segment == 'exams' && $segment2 != 'create' ? 'mm-active' : '' }}">
-                                                <i class="metismenu-icon"></i> Liệt kê bộ đề thi
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="{{ route('exams.create') }}"
-                                                class="{{ $segment == 'exams' && $segment2 == 'create' ? 'mm-active' : '' }}">
-                                                <i class="metismenu-icon"></i>Thêm bộ đề thi
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li class="{{ $segment == 'students' ? 'mm-active' : '' }}">
-                                    <a href="#">
-                                        <i class="metismenu-icon pe-7s-diamond"></i> Quản lý thí sinh
-                                        <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
-                                    </a>
-                                    <ul>
-                                        <li>
-                                            <a href="{{ route('students.index') }}"
-                                                class="{{ $segment == 'students' && $segment2 != 'create' ? 'mm-active' : '' }}">
-                                                <i class="metismenu-icon"></i> Liệt kê thí sinh
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="{{ route('students.create') }}"
-                                                class="{{ $segment == 'students' && $segment2 == 'create' ? 'mm-active' : '' }}">
-                                                <i class="metismenu-icon"></i>Thêm thí sinh
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li class="{{ $segment == 'class' ? 'mm-active' : '' }}">
-                                    <a href="#">
-                                        <i class="metismenu-icon pe-7s-plugin"></i>Quản lý lớp học
-                                        <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
-                                    </a>
-                                    <ul>
-                                        <li>
-                                            <a href="{{ route('class.index') }}"
-                                                class="{{ $segment == 'class' && $segment2 != 'create' ? 'mm-active' : '' }}">
-                                                <i class="metismenu-icon"></i>Liệt kê lớp học
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="{{ route('class.create') }}"
-                                                class="{{ $segment == 'class' && $segment2 == 'create' ? 'mm-active' : '' }}">
-                                                <i class="metismenu-icon"></i>Thêm lớp học
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li class="{{ $segment == 'blocks' ? 'mm-active' : '' }}">
-                                    <a href="#">
-                                        <i class="metismenu-icon pe-7s-ticket"></i> Quản lý khối học
-                                        <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
-                                    </a>
-                                    <ul>
-                                        <li>
-                                            <a href="{{ route('blocks.index') }}"
-                                                class="{{ $segment == 'blocks' && $segment2 != 'create' ? 'mm-active' : '' }}">
-                                                <i class="metismenu-icon"></i> Liệt kê khối học
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="{{ route('blocks.create') }}"
-                                                class="{{ $segment == 'blocks' && $segment2 == 'create' ? 'mm-active' : '' }}">
-                                                <i class="metismenu-icon"></i>Thêm khối học
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li class="{{ $segment == 'blogs' ? 'mm-active' : '' }}">
-                                    <a href="#">
-                                        <i class="metismenu-icon pe-7s-hammer"></i> Quản lý blog
-                                        <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
-                                    </a>
-                                    <ul>
-                                        <li>
-                                            <a href="{{ route('blogs.index') }}"
-                                                class="{{ $segment == 'blogs' && $segment2 != 'create' ? 'mm-active' : '' }}">
-                                                <i class="metismenu-icon"></i> Liệt kê blogs
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="{{ route('blogs.create') }}"
-                                                class="{{ $segment == 'blogs' && $segment2 == 'create' ? 'mm-active' : '' }}">
-                                                <i class="metismenu-icon"></i>Thêm blogs
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#">
-                                                <i class="metismenu-icon pe-7s-light"></i> Duyệt bình luận blog
-                                                <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
-                                            </a>
-                                            <ul>
-                                                <li>
-                                                    <a href="forms-controls.html">
-                                                        <i class="metismenu-icon"></i>Liệt kê bình luận
+                                @can('subjects.viewAny')
+                                    <li class="{{ $segment == 'subjects' ? 'mm-active' : '' }}">
+                                        <a href="#">
+                                            <i class="metismenu-icon pe-7s-rocket"></i>Quản lý môn học
+                                            <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
+                                        </a>
+                                        <ul>
+                                            <li class="{{ $segment == 'subjects' && $segment2 != 'create' ? 'mm-active' : '' }}">
+                                                <a href="{{ route('subjects.index') }}">
+                                                    <i class="metismenu-icon"></i>Liệt kê môn học
+                                                </a>
+                                            </li>
+                                            @can('subjects.create')
+                                                <li class="{{ $segment == 'subjects' && $segment2 == 'create' ? 'mm-active' : '' }}">
+                                                    <a href="{{ route('subjects.create') }}">
+                                                        <i class="metismenu-icon"></i>Thêm môn học
                                                     </a>
                                                 </li>
-                                            </ul>
-                                        </li>
-                                    </ul>
-                                </li>
+                                            @endcan
+                                        </ul>
+                                    </li>
+                                @endcan
+                                @can('levels.viewAny')
+                                    <li class="{{ $segment == 'levels' ? 'mm-active' : '' }}">
+                                        <a href="#">
+                                            <i class="metismenu-icon pe-7s-ticket"></i> Quản lý mức độ câu hỏi
+                                            <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
+                                        </a>
+                                        <ul>
+                                            <li>
+                                                <a href="{{ route('levels.index') }}"
+                                                    class="{{ $segment == 'levels' && $segment2 != 'create' ? 'mm-active' : '' }}">
+                                                    <i class="metismenu-icon"></i> Liệt kê mức độ câu hỏi
+                                                </a>
+                                            </li>
+                                            @can('levels.create')
+                                                <li>
+                                                    <a href="{{ route('levels.create') }}"
+                                                        class="{{ $segment == 'levels' && $segment2 == 'create' ? 'mm-active' : '' }}">
+                                                        <i class="metismenu-icon"></i>Thêm mức độ câu hỏi
+                                                    </a>
+                                                </li>
+                                            @endcan
+                                        </ul>
+                                    </li>
+                                @endcan
+                                @can('questions.viewAny')
+                                    <li class="{{ $segment == 'questions' ? 'mm-active' : '' }}">
+                                        <a href="#">
+                                            <i class="metismenu-icon pe-7s-browser"></i>Quản lý câu hỏi
+                                            <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
+                                        </a>
+                                        <ul>
+                                            <li>
+                                                <a href="{{ route('questions.index') }}"
+                                                    class="{{ $segment == 'questions' && $segment2 != 'create' ? 'mm-active' : '' }}">
+                                                    <i class="metismenu-icon"></i> Liệt kê câu hỏi
+                                                </a>
+                                            </li>
+                                            @can('questions.create')
+                                                <li>
+                                                    <a href="{{ route('questions.create') }}"
+                                                        class="{{ $segment == 'questions' && $segment2 == 'create' ? 'mm-active' : '' }}">
+                                                        <i class="metismenu-icon"></i>Thêm câu hỏi
+                                                    </a>
+                                                </li>
+                                            @endcan
+                                        </ul>
+                                    </li>
+                                @endcan
+                                @can('exams.viewAny')
+                                    <li class="{{ $segment == 'exams' ? 'mm-active' : '' }}">
+                                        <a href="#">
+                                            <i class="metismenu-icon pe-7s-umbrella"></i> Quản lý bộ đề thi
+                                            <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
+                                        </a>
+                                        <ul>
+                                            <li>
+                                                <a href="{{ route('exams.index') }}"
+                                                    class="{{ $segment == 'exams' && $segment2 != 'create' ? 'mm-active' : '' }}">
+                                                    <i class="metismenu-icon"></i> Liệt kê bộ đề thi
+                                                </a>
+                                            </li>
+                                            @can('exams.create')
+                                                <li>
+                                                    <a href="{{ route('exams.create') }}"
+                                                        class="{{ $segment == 'exams' && $segment2 == 'create' ? 'mm-active' : '' }}">
+                                                        <i class="metismenu-icon"></i>Thêm bộ đề thi
+                                                    </a>
+                                                </li>
+                                            @endcan
+                                        </ul>
+                                    </li>
+                                @endcan
+                                @can('students.viewAny')
+                                    <li class="{{ $segment == 'students' ? 'mm-active' : '' }}">
+                                        <a href="#">
+                                            <i class="metismenu-icon pe-7s-diamond"></i> Quản lý thí sinh
+                                            <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
+                                        </a>
+                                        <ul>
+                                            <li>
+                                                <a href="{{ route('students.index') }}"
+                                                    class="{{ $segment == 'students' && $segment2 != 'create' ? 'mm-active' : '' }}">
+                                                    <i class="metismenu-icon"></i> Liệt kê thí sinh
+                                                </a>
+                                            </li>
+                                            @can('students.create')
+                                                <li>
+                                                    <a href="{{ route('students.create') }}"
+                                                        class="{{ $segment == 'students' && $segment2 == 'create' ? 'mm-active' : '' }}">
+                                                        <i class="metismenu-icon"></i>Thêm thí sinh
+                                                    </a>
+                                                </li>
+                                            @endcan
+                                        </ul>
+                                    </li>
+                                @endcan
+                                @can('class.viewAny')
+                                    <li class="{{ $segment == 'class' ? 'mm-active' : '' }}">
+                                        <a href="#">
+                                            <i class="metismenu-icon pe-7s-plugin"></i>Quản lý lớp học
+                                            <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
+                                        </a>
+                                        <ul>
+                                            <li>
+                                                <a href="{{ route('class.index') }}"
+                                                    class="{{ $segment == 'class' && $segment2 != 'create' ? 'mm-active' : '' }}">
+                                                    <i class="metismenu-icon"></i>Liệt kê lớp học
+                                                </a>
+                                            </li>
+                                            @can('class.create')
+                                                <li>
+                                                    <a href="{{ route('class.create') }}"
+                                                        class="{{ $segment == 'class' && $segment2 == 'create' ? 'mm-active' : '' }}">
+                                                        <i class="metismenu-icon"></i>Thêm lớp học
+                                                    </a>
+                                                </li>
+                                            @endcan
+                                        </ul>
+                                    </li>
+                                @endcan
+                                @can('blocks.viewAny')
+                                    <li class="{{ $segment == 'blocks' ? 'mm-active' : '' }}">
+                                        <a href="#">
+                                            <i class="metismenu-icon pe-7s-ticket"></i> Quản lý khối học
+                                            <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
+                                        </a>
+                                        <ul>
+                                            <li>
+                                                <a href="{{ route('blocks.index') }}"
+                                                    class="{{ $segment == 'blocks' && $segment2 != 'create' ? 'mm-active' : '' }}">
+                                                    <i class="metismenu-icon"></i> Liệt kê khối học
+                                                </a>
+                                            </li>
+                                            @can('blocks.create')
+                                                <li>
+                                                    <a href="{{ route('blocks.create') }}"
+                                                        class="{{ $segment == 'blocks' && $segment2 == 'create' ? 'mm-active' : '' }}">
+                                                        <i class="metismenu-icon"></i>Thêm khối học
+                                                    </a>
+                                                </li>
+                                            @endcan
+                                        </ul>
+                                    </li>
+                                @endcan
+                                @can('result.viewAny')
+                                    <li class="{{ $segment == 'result' ? 'mm-active' : '' }}">
+                                        <a href="#">
+                                            <i class="metismenu-icon pe-7s-arc"></i> Quản lý kết quả thí sinh
+                                            <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
+                                        </a>
+                                        <ul>
+                                            <li>
+                                                <a href="{{ route('result.index') }}"
+                                                    class="{{ $segment == 'result' && $segment2 != 'create' ? 'mm-active' : '' }}">
+                                                    <i class="metismenu-icon"></i> Liệt kê kết quả thí sinh
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                @endcan
+                                @can('blocks.viewAny')
+                                    <li class="{{ $segment == 'blogs' ? 'mm-active' : '' }}">
+                                        <a href="#">
+                                            <i class="metismenu-icon pe-7s-hammer"></i> Quản lý blog
+                                            <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
+                                        </a>
+                                        <ul>
+                                            <li>
+                                                <a href="{{ route('blogs.index') }}"
+                                                    class="{{ $segment == 'blogs' && $segment2 != 'create' ? 'mm-active' : '' }}">
+                                                    <i class="metismenu-icon"></i> Liệt kê blogs
+                                                </a>
+                                            </li>
+                                            @can('blocks.create')
+                                                <li>
+                                                    <a href="{{ route('blogs.create') }}"
+                                                        class="{{ $segment == 'blogs' && $segment2 == 'create' ? 'mm-active' : '' }}">
+                                                        <i class="metismenu-icon"></i>Thêm blogs
+                                                    </a>
+                                                </li>
+                                            @endcan
+                                            <li>
+                                                <a href="#">
+                                                    <i class="metismenu-icon pe-7s-light"></i> Duyệt bình luận blog
+                                                    <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
+                                                </a>
+                                                <ul>
+                                                    <li>
+                                                        <a href="#">
+                                                            <i class="metismenu-icon"></i>Liệt kê bình luận
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                @endcan
                                 <li class="{{ $segment == 'infos' ? 'mm-active' : '' }}">
                                     <a href="#">
                                         <i class="metismenu-icon pe-7s-info"></i> Quản lý thông tin website
@@ -1596,6 +1643,79 @@
                                         </li>
                                     </ul>
                                 </li>
+                                <li class="app-sidebar__heading">Quản lý Phân Quyền</li>
+                                @can('permissions.viewAny')
+                                    <li class="{{ $segment == 'users' ? 'mm-active' : '' }}">
+                                        <a href="#">
+                                            <i class="metismenu-icon pe-7s-users"></i> Quản lý người quản trị
+                                            <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
+                                        </a>
+                                        <ul>
+                                            <li>
+                                                <a href="{{ route('users.index') }}"
+                                                    class="{{ $segment == 'users' && $segment2 != 'create' ? 'mm-active' : '' }}">
+                                                    <i class="metismenu-icon"></i> Liệt kê quản trị viên
+                                                </a>
+                                            </li>
+                                            @can('users.create')
+                                                <li>
+                                                    <a href="{{ route('users.create') }}"
+                                                        class="{{ $segment == 'users' && $segment2 == 'create' ? 'mm-active' : '' }}">
+                                                        <i class="metismenu-icon"></i>Thêm quản trị viên
+                                                    </a>
+                                                </li>
+                                            @endcan
+                                        </ul>
+                                    </li>
+                                @endcan
+                                @can('roles.viewAny')
+                                    <li class="{{ $segment == 'roles' ? 'mm-active' : '' }}">
+                                        <a href="#">
+                                            <i class="metismenu-icon pe-7s-study"></i> Quản lý vai trò
+                                            <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
+                                        </a>
+                                        <ul>
+                                            <li>
+                                                <a href="{{ route('roles.index') }}"
+                                                    class="{{ $segment == 'roles' && $segment2 != 'create' ? 'mm-active' : '' }}">
+                                                    <i class="metismenu-icon"></i> Liệt kê vai trò
+                                                </a>
+                                            </li>
+                                            @can('roles.create')
+                                                <li>
+                                                    <a href="{{ route('roles.create') }}"
+                                                        class="{{ $segment == 'roles' && $segment2 == 'create' ? 'mm-active' : '' }}">
+                                                        <i class="metismenu-icon"></i>Thêm vai trò
+                                                    </a>
+                                                </li>
+                                            @endcan
+                                        </ul>
+                                    </li>
+                                @endcan
+                                @can('permissions.viewAny')
+                                    <li class="{{ $segment == 'permissions' ? 'mm-active' : '' }}">
+                                        <a href="#">
+                                            <i class="metismenu-icon pe-7s-server"></i> Quản lý route quyền
+                                            <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
+                                        </a>
+                                        <ul>
+                                            <li>
+                                                <a href="{{ route('permissions.index') }}"
+                                                    class="{{ $segment == 'permissions' && $segment2 != 'create' ? 'mm-active' : '' }}">
+                                                    <i class="metismenu-icon"></i> Liệt kê route quyền
+                                                </a>
+                                            </li>
+                                            @can('permissions.create')
+                                                <li>
+                                                    <a href="{{ route('permissions.create') }}"
+                                                        class="{{ $segment == 'permissions' && $segment2 == 'create' ? 'mm-active' : '' }}">
+                                                        <i class="metismenu-icon"></i>Thêm route quyền
+                                                    </a>
+                                                </li>
+                                            @endcan
+                                        </ul>
+                                    </li>
+                                @endcan
                             </ul>
                         </div>
                     </div>
@@ -2044,13 +2164,14 @@
     @stack('model')
     <div class="app-drawer-overlay d-none animated fadeIn"></div>
     <script type="text/javascript" src="{{ asset('backend/scripts/main.d810cf0ae7f39f28f336.js') }}"></script>
-    <script src="https://kit.fontawesome.com/c3bc0ae91e.js" crossorigin="anonymous"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="{{ asset('backend/scripts/toastr.min.js') }}"></script>
-    <script src="{{ asset('backend/ckeditor5/ckeditor.js') }}"></script>
-    <script src="{{ asset('backend/scripts/bootstrap-tagsinput.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('backend/scripts/fontawesome.com/c3bc0ae91e.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('backend/scripts/jquery-3.6.0.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('backend/scripts/bootstrap-toggle.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('backend/scripts/sweetalert2@11.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('backend/scripts/toastr.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('backend/ckeditor5/ckeditor.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('backend/scripts/bootstrap-tagsinput.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('backend/scripts/select2.min.js') }}"></script>
 
     <script type="text/javascript">
         function ChangeToSlug() {

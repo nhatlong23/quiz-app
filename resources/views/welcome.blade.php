@@ -162,7 +162,8 @@
                         <p>Trang web trắc nghiệm của chúng tôi là một nơi tuyệt vời để bạn thử thách bản thân và kiểm
                             tra kiến thức của mình trong nhiều lĩnh vực khác nhau. Từ ngôn ngữ, toán học, khoa học tự
                             nhiên đến văn hóa và nghệ thuật, chúng tôi cung cấp hàng trăm bài kiểm tra và câu hỏi đa
-                            dạng để bạn có thể nâng cao kỹ năng và hiểu biết của mình.</p>
+                            dạng để bạn có thể nâng cao kỹ năng và hiểu biết của mình.
+                        </p>
                     </div>
                 </div>
                 <div class="col-lg-2 col-md-3 col-sm-5">
@@ -214,6 +215,11 @@
                             </script> All rights reserved | This
                             template is made with <i class="fa fa-heart" aria-hidden="true"></i> by <a
                                 href="https://colorlib.com" target="_blank">Colorlib</a>
+                            <a href="//www.dmca.com/Protection/Status.aspx?ID=b8eccf47-789c-4b91-bf8a-b4c502c46639"
+                                title="DMCA.com Protection Status" class="dmca-badge"> <img
+                                    src ="https://images.dmca.com/Badges/dmca-badge-w100-5x1-06.png?ID=b8eccf47-789c-4b91-bf8a-b4c502c46639"
+                                    alt="DMCA.com Protection Status" />
+                            </a>
                         </p>
                     </div>
                     <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
@@ -251,6 +257,7 @@
     <script src="https://cdn.linearicons.com/free/1.0.0/svgembedder.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/3.0.1/js.cookie.min.js"></script>
+    <script src="https://images.dmca.com/Badges/DMCABadgeHelper.min.js"></script>
 
     @stack('scripts')
     <script type='text/javascript'>
@@ -327,7 +334,7 @@
         }
         document.oncontextmenu = new Function("return false");
     </script>
-    
+
     <script language="JavaScript">
         window.onload = function() {
             document.addEventListener("contextmenu", function(e) {
