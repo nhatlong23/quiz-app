@@ -6,6 +6,7 @@ COPY . .
 
 RUN composer install --no-dev --optimize-autoloader
 
+RUN mkdir -p storage/logs && touch storage/logs/laravel.log
 RUN chmod -R 777 storage/logs/laravel.log
 
 COPY ./docker/config/quiz.conf /etc/nginx/conf.d/default.conf
