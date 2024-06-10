@@ -41,11 +41,15 @@ class BlogPolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user)
+    public function update(User $user, $id)
     {
-        return $user->checkPermissionAccess('blogs.edit')
-            ? Response::allow()
-            : Response::deny('You are not authorized to update blogs.');
+        $blogs = Blog::find($id);
+
+        if ($user->checkPermissionAccess('blogs.edit') && $user->id === $blogs->users_id) {
+            return Response::allow();
+        } else {
+            return Response::deny('You are not authorized to edit blogs.');
+        }
     }
 
     /**

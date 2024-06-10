@@ -102,6 +102,28 @@
         </div>
     </div>
     @push('scripts')
-        <script></script>
+        <script>
+            // document.addEventListener('DOMContentLoaded', function() {
+            //     document.querySelectorAll('.delete-permissions-button').forEach(function(button) {
+            //         button.addEventListener('click', function() {
+            //             var permissionsId = this.getAttribute('data-permissions-id');
+            //             Swal.fire({
+            //                 title: 'Xác nhận xoá sinh viên',
+            //                 text: "Bạn có chắc chắn muốn xóa quy này?",
+            //                 icon: 'warning',
+            //                 showCancelButton: true,
+            //                 confirmButtonColor: '#3085d6',
+            //                 cancelButtonColor: '#d33',
+            //                 confirmButtonText: 'Xoá',
+            //                 cancelButtonText: 'Hủy',
+            //             }).then((result) => {
+            //                 if (result.isConfirmed) {
+            //                     document.getElementById('delete-permissions-form-' + permissionsId).submit();
+            //                 }
+            //             });
+            //         });
+            //     });
+            // });
+        </script>
     @endpush
 @endsection

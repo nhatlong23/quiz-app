@@ -72,9 +72,16 @@
     </section>
     @push('scripts')
         <script>
+            const vietnameseCharacters = /[àáảãạâầấẩẫậăằắẳẵặèéẻẽẹêềếểễệìíỉĩịòóỏõọôồốổỗộơờớởỡợùúủũụưừứửữựỳýỷỹỵđ]/;
+
+            function checkUnikey(inputValue) {
+                return vietnameseCharacters.test(inputValue);
+            }
+
             $('.trigger-swal').on('click', function() {
                 let examId = $(this).data('exam-id');
                 let examTitle = $(this).data('exam-title');
+
                 Swal.fire({
                     title: examTitle,
                     input: 'password',
@@ -95,7 +102,15 @@
                             Swal.showValidationMessage('Vui lòng nhập mật khẩu');
                             return false;
                         }
-                        Swal.showLoading()
+
+                        // Check if Unikey is on
+                        if (checkUnikey(password)) {
+                            Swal.showValidationMessage(
+                                'Unikey đang bật. Vui lòng tắt Unikey và nhập lại mật khẩu.');
+                            return false;
+                        }
+
+                        Swal.showLoading();
                         return new Promise((resolve, reject) => {
                             $.ajax({
                                 method: 'POST',

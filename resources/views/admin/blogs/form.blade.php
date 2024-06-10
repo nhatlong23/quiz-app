@@ -62,15 +62,14 @@
                                     <textarea name="content" id="editor"> {{ isset($blogs) ? $blogs->content : '' }}</textarea>
                                 </div>
                             </div>
-                            {{-- <div class="position-relative row form-group">
-                                    <label for="tags" class="col-sm-2 col-form-label">Tags blogs :</label>
-                                    <div class="col-sm-10">
-                                        <input name="tags" data-role="tagsinput" type="text"
-                                            class="form-control" autocomplete="off"
-                                            value="{{ isset($blogs) ? $blogs->tags : '' }}">
-                                    </div>
-                                </div> --}}
                             <div class="position-relative row form-group">
+                                <label for="tags" class="col-sm-2 col-form-label">Tags blogs :</label>
+                                <div class="col-sm-10">
+                                    <input name="tags" data-role="tagsinput" type="text" class="form-control"
+                                        autocomplete="off" value="{{ isset($blogs) ? $blogs->tags : '' }}"> (Dùng dấu ",")
+                                </div>
+                            </div>
+                            {{-- <div class="position-relative row form-group">
                                 <label for="status" class="col-sm-2 col-form-label">Trạng thái blog :</label>
                                 <div class="col-sm-10">
                                     <select name="status" class="form-control">
@@ -82,7 +81,7 @@
                                         </option>
                                     </select>
                                 </div>
-                            </div>
+                            </div> --}}
                             <div class="position-relative row form-group">
                                 <label for="desc" class="col-sm-2 col-form-label">Hình ảnh blog :</label>
                                 <div class="col-sm-10">

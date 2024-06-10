@@ -21,10 +21,22 @@ class Question extends Model
         'answer',
         'subject_id',
         'level_id',
+        'block_id',
         'status',
     ];
+
     public function subject()
     {
         return $this->belongsTo(Subject::class, 'subject_id');
+    }
+
+    public function level()
+    {
+        return $this->belongsTo(Level::class, 'level_id');
+    }
+
+    public function block()
+    {
+        return $this->belongsTo(Block::class, 'block_id');
     }
 }

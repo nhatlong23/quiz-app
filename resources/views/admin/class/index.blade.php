@@ -83,8 +83,8 @@
                                         @endcan
                                     </td>
                                     <td>
-                                        <form method="POST" action="{{ route('class.destroy', $list->id) }}"
-                                            onsubmit="return confirm('Bạn có chắc chắn muốn xóa sinh viên này?')">
+                                        <form method="POST" id="delete-class-form-{{ $list->id }}"
+                                            action="{{ route('class.destroy', $list->id) }}">
                                             @csrf
                                             @method('DELETE')
                                             @can('class.edit')
@@ -93,7 +93,8 @@
                                                 </a>
                                             @endcan
                                             @can('class.destroy')
-                                                <button type="submit" class="btn btn-danger">
+                                                <button type="button" class="btn btn-danger delete-class-button"
+                                                    data-class-id="{{ $list->id }}">
                                                     <i class="pe-7s-trash"></i>
                                                 </button>
                                             @endcan
@@ -223,6 +224,30 @@
                         error: function(xhr, status, error) {
                             console.error(xhr.responseText);
                         }
+                    });
+                });
+            });
+        </script>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                document.querySelectorAll('.delete-class-button').forEach(function(button) {
+                    button.addEventListener('click', function() {
+                        var classId = this.getAttribute('data-class-id');
+                        Swal.fire({
+                            title: 'Xác nhận xoá lớp học',
+                            text: "Bạn có chắc chắn muốn xóa lớp học này?",
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: 'Xoá',
+                            cancelButtonText: 'Hủy',
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                document.getElementById('delete-class-form-' + classId).submit();
+                            }
+                        });
                     });
                 });
             });

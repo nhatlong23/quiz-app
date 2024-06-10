@@ -64,8 +64,8 @@
                                         @endcan
                                     </td>
                                     <td>
-                                        <form method="POST" action="{{ route('blocks.destroy', $list->id) }}"
-                                            onsubmit="return confirm('Bạn có chắc chắn muốn xóa khối học này?')">
+                                        <form method="POST" id="delete-block-form-{{ $list->id }}"
+                                            action="{{ route('blocks.destroy', $list->id) }}">
                                             @csrf
                                             @method('DELETE')
                                             @can('blocks.edit')
@@ -74,7 +74,8 @@
                                                 </a>
                                             @endcan
                                             @can('blocks.destroy')
-                                                <button type="submit" class="btn btn-danger">
+                                                <button type="button" class="btn btn-danger delete-block-button"
+                                                    data-block-id="{{ $list->id }}">
                                                     <i class="pe-7s-trash"></i>
                                                 </button>
                                             @endcan
@@ -114,6 +115,30 @@
                         error: function(xhr, status, error) {
                             console.error(xhr.responseText);
                         }
+                    });
+                });
+            });
+        </script>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                document.querySelectorAll('.delete-block-button').forEach(function(button) {
+                    button.addEventListener('click', function() {
+                        var blockId = this.getAttribute('data-block-id');
+                        Swal.fire({
+                            title: 'Xác nhận xoá khối học',
+                            text: "Bạn có chắc chắn muốn xóa khối học này?",
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: 'Xoá',
+                            cancelButtonText: 'Hủy',
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                document.getElementById('delete-block-form-' + blockId).submit();
+                            }
+                        });
                     });
                 });
             });

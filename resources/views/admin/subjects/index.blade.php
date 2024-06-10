@@ -62,8 +62,8 @@
                                         @endcan
                                     </td>
                                     <td>
-                                        <form method="POST" action="{{ route('subjects.destroy', $list->id) }}"
-                                            onsubmit="return confirm('Bạn có chắc chắn muốn xóa môn học này?')">
+                                        <form id="delete-subject-form-{{ $list->id }}" method="POST"
+                                            action="{{ route('subjects.destroy', $list->id) }}">
                                             @csrf
                                             @method('DELETE')
                                             @can('subjects.edit')
@@ -72,7 +72,8 @@
                                                 </a>
                                             @endcan
                                             @can('subjects.destroy')
-                                                <button type="submit" class="btn btn-danger">
+                                                <button type="button" class="btn btn-danger delete-subject-button"
+                                                    data-subject-id="{{ $list->id }}">
                                                     <i class="pe-7s-trash"></i>
                                                 </button>
                                             @endcan
@@ -91,10 +92,6 @@
             const updateStatusSubjects = "{{ route('updateStatusSubjects') }}";
 
             $(document).ready(function() {
-                $('.subjects_status').each(function() {
-                    $(this).bootstrapToggle();
-                });
-
                 $('.subjects_status').change(function() {
                     var subjectId = $(this).data('subject-id');
                     var checked = $(this).prop('checked') ? 0 : 1;
@@ -112,6 +109,30 @@
                         error: function(xhr, status, error) {
                             console.error(xhr.responseText);
                         }
+                    });
+                });
+            });
+        </script>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                document.querySelectorAll('.delete-subject-button').forEach(function(button) {
+                    button.addEventListener('click', function() {
+                        var subjectId = this.getAttribute('data-subject-id');
+                        Swal.fire({
+                            title: 'Xác nhận xoá môn học',
+                            text: "Bạn có chắc chắn muốn xoá môn học này không?",
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: 'Xoá',
+                            cancelButtonText: 'Hủy',
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                document.getElementById('delete-subject-form-' + subjectId).submit();
+                            }
+                        });
                     });
                 });
             });

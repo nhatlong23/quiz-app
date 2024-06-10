@@ -14,7 +14,7 @@
                                         <strong>{{ $blog->title }}</strong>
                                     </h6>
                                     <ul>
-                                        <li>by <span>admin</span></li>
+                                        <li>by <span>{{ $blog->user->name }}</span></li>
                                         <li>{{ $blog->created_at }}</li>
                                     </ul>
                                 </div>

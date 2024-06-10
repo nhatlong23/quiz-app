@@ -74,17 +74,16 @@
                                         @endcan
                                     </td>
                                     <td>
-                                        <form method="POST" action="{{ route('blogs.destroy', $list->id) }}"
-                                            onsubmit="return confirm('Bạn có chắc chắn muốn xóa blogs này?')">
+                                        <form method="POST" id="delete-blogs-form-{{ $list->id }}"
+                                            action="{{ route('blogs.destroy', $list->id) }}">
                                             @csrf
                                             @method('DELETE')
-                                            @can('blogs.edit')
-                                                <a href="{{ route('blogs.edit', $list->id) }}" class="btn btn-secondary">
-                                                    <i class="pe-7s-note"></i>
-                                                </a>
-                                            @endcan
+                                            <a href="{{ route('blogs.edit', $list->id) }}" class="btn btn-secondary">
+                                                <i class="pe-7s-note"></i>
+                                            </a>
                                             @can('blogs.destroy')
-                                                <button type="submit" class="btn btn-danger">
+                                                <button type="button" class="btn btn-danger delete-blogs-button"
+                                                    data-blogs-id="{{ $list->id }}">
                                                     <i class="pe-7s-trash"></i>
                                                 </button>
                                             @endcan
@@ -124,6 +123,30 @@
                         error: function(xhr, status, error) {
                             console.error(xhr.responseText);
                         }
+                    });
+                });
+            });
+        </script>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                document.querySelectorAll('.delete-blogs-button').forEach(function(button) {
+                    button.addEventListener('click', function() {
+                        var blogsId = this.getAttribute('data-blogs-id');
+                        Swal.fire({
+                            title: 'Xác nhận xoá blog',
+                            text: "Bạn có chắc chắn muốn xóa blog này?",
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: 'Xoá',
+                            cancelButtonText: 'Hủy',
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                document.getElementById('delete-blogs-form-' + blogsId).submit();
+                            }
+                        });
                     });
                 });
             });

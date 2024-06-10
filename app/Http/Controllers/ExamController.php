@@ -9,6 +9,7 @@ use App\Models\Subject;
 use App\Models\Classs;
 use App\Models\Standardize_Exam;
 use App\Models\StandardizeQuestion;
+use App\Models\Block;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 
@@ -18,7 +19,7 @@ class ExamController extends Controller
     {
         $this->middleware('auth');
     }
-    
+
     /**
      * Display a listing of the resource.
      */
@@ -36,7 +37,9 @@ class ExamController extends Controller
     {
         $subjects = Subject::orderBy('id', 'desc')->get();
         $levels = Level::orderBy('id', 'asc')->get();
-        return view('admin.exam.form', compact('subjects', 'levels'));
+        $blocks = Block::orderBy('id', 'asc')->get();
+
+        return view('admin.exam.form', compact('subjects', 'levels', 'blocks'));
     }
 
     /**
@@ -53,17 +56,19 @@ class ExamController extends Controller
             'randomQuestions' => 'required',
             'max_questions' => 'required',
             'subjectId' => 'required',
+            'blockId' => 'required',
         ], [
-            'content.required' => 'Vui lòng nhập nội dung bài thi',
-            'content.unique' => 'Nội dung bài thi đã tồn tại',
+            'content.required' => 'Vui lòng nhập tên bài thi',
+            'content.unique' => 'Tên bài thi đã tồn tại',
             'password.required' => 'Vui lòng nhập mật khẩu',
-            'opening_time.required' => 'Vui lòng nhập thời gian bắt đầu',
-            'closing_time.required' => 'Vui lòng nhập thời gian kết thúc',
-            'duration.required' => 'Vui lòng nhập thời gian làm bài',
+            'opening_time.required' => 'Vui lòng nhập thời gian bắt đầu làm bài',
+            'closing_time.required' => 'Vui lòng nhập thời gian kết thúc làm bài',
+            'duration.required' => 'Vui lòng nhập thời gian làm bài đơn vị là (phút) nhé :3',
             'password.same' => 'Mật khẩu không trùng khớp',
             'randomQuestions.required' => 'Vui lòng chọn câu hỏi ngẫu nhiên',
             'max_questions.required' => 'Vui lòng chọn số lượng câu hỏi',
             'subjectId.required' => 'Vui lòng chọn môn học',
+            'blockId.required' => 'Vui lòng chọn khối học',
         ]);
 
         $hashedPassword = Hash::make($dataValidate['password']);
@@ -76,6 +81,7 @@ class ExamController extends Controller
         $exam->duration = $dataValidate['duration'];
         $exam->max_questions = $dataValidate['max_questions'];
         $exam->subjects_id = $dataValidate['subjectId'];
+        $exam->blocks_id = $dataValidate['blockId'];
         $exam->status = 1;
         $exam->created_at = now('Asia/Ho_Chi_Minh');
         $exam->save();
@@ -111,7 +117,9 @@ class ExamController extends Controller
         $exam = Exam::findOrFail($id);
         $subjects = Subject::orderBy('id', 'desc')->get();
         $levels = Level::orderBy('id', 'asc')->get();
-        return view('admin.exam.form', compact('exam', 'subjects', 'levels'));
+        $blocks = Block::orderBy('id', 'asc')->get();
+
+        return view('admin.exam.form', compact('exam', 'subjects', 'levels', 'blocks'));
     }
 
     /**
@@ -166,10 +174,18 @@ class ExamController extends Controller
 
     public function ExamRequest(Request $request)
     {
-        $subjectId = $request->input('subject');
-        $counts = $request->input('counts');
+        $validatedData = $request->validate([
+            'subject' => 'required|integer|exists:subjects,id',
+            'block' => 'required|integer|exists:blocks,id',
+            'counts' => 'array|required',
+            'counts.*' => 'integer|min:1'
+        ]);
 
-        $questionsByLevel = $this->getQuestionsByLevel($subjectId, $counts);
+        $subjectId = $validatedData['subject'];
+        $blockId = $validatedData['block'];
+        $counts = $validatedData['counts'];
+
+        $questionsByLevel = $this->getQuestionsByLevel($subjectId, $blockId, $counts);
         $totalQuestions = $this->getTotalQuestions($questionsByLevel);
 
         return response()->json([
@@ -178,18 +194,18 @@ class ExamController extends Controller
         ]);
     }
 
-    private function getQuestionsByLevel($subjectId, $counts)
+    private function getQuestionsByLevel($subjectId, $blockId, $counts)
     {
         $questionsByLevel = [];
 
-        if ($counts !== null) {
-            foreach ($counts as $levelId => $count) {
-                $questionsByLevel[$levelId] = Question::where('level_id', $levelId)
-                    ->where('subject_id', $subjectId)
-                    ->inRandomOrder()
-                    ->limit($count)
-                    ->get();
-            }
+        foreach ($counts as $levelId => $count) {
+            $questionsByLevel[$levelId] = Question::where('level_id', $levelId)
+                ->where('subject_id', $subjectId)
+                ->where('block_id', $blockId)
+                ->where('status', 1)
+                ->inRandomOrder()
+                ->limit($count)
+                ->get();
         }
 
         return $questionsByLevel;
@@ -198,6 +214,7 @@ class ExamController extends Controller
     private function getTotalQuestions($questionsByLevel)
     {
         $totalQuestions = 0;
+
         foreach ($questionsByLevel as $questions) {
             $totalQuestions += count($questions);
         }

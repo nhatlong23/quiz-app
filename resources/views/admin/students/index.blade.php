@@ -80,8 +80,8 @@
                                         @endcan
                                     </td>
                                     <td>
-                                        <form method="POST" action="{{ route('students.destroy', $list->id) }}"
-                                            onsubmit="return confirm('Bạn có chắc chắn muốn xóa thí sinh này?')">
+                                        <form method="POST" id="delete-students-form-{{ $list->id }}"
+                                            action="{{ route('students.destroy', $list->id) }}">
                                             @csrf
                                             @method('DELETE')
                                             @can('students.edit')
@@ -90,7 +90,8 @@
                                                 </a>
                                             @endcan
                                             @can('students.destroy')
-                                                <button type="submit" class="btn btn-danger"0>
+                                                <button type="button" class="btn btn-danger delete-students-button"
+                                                    data-students-id="{{ $list->id }}">
                                                     <i class="pe-7s-trash"></i>
                                                 </button>
                                             @endcan
@@ -224,6 +225,31 @@
                         error: function(xhr, status, error) {
                             console.error(xhr.responseText);
                         }
+                    });
+                });
+            });
+        </script>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                document.querySelectorAll('.delete-students-button').forEach(function(button) {
+                    button.addEventListener('click', function() {
+                        var studentsId = this.getAttribute('data-students-id');
+                        Swal.fire({
+                            title: 'Xác nhận xoá sinh viên',
+                            text: "Bạn có chắc chắn muốn xóa sinh viên này?",
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: 'Xoá',
+                            cancelButtonText: 'Hủy',
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                document.getElementById('delete-students-form-' + studentsId)
+                                    .submit();
+                            }
+                        });
                     });
                 });
             });

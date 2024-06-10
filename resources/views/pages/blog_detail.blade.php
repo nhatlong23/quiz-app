@@ -139,18 +139,18 @@
                                 </a>
                             @endforeach
                         </div>
-
-                        <div class="blog__sidebar__item">
-                            <div class="section-title">
-                                <h4>Tags cloud</h4>
+                        @if (!empty($filtered_tags))
+                            <div class="blog__sidebar__item">
+                                <div class="section-title">
+                                    <h4>Tags</h4>
+                                </div>
+                                <div class="blog__sidebar__tags">
+                                    @foreach ($filtered_tags as $tags)
+                                        <a href="{{ route('tags', $tags) }}">{{ trim($tags) }}</a>
+                                    @endforeach
+                                </div>
                             </div>
-                            <div class="blog__sidebar__tags">
-                                <a href="#">Fashion</a>
-                                <a href="#">Street style</a>
-                                <a href="#">Diversity</a>
-                                <a href="#">Beauty</a>
-                            </div>
-                        </div>
+                        @endif
                     </div>
                 </div>
             </div>

@@ -60,7 +60,13 @@
         </div>
         <div id="mobile-menu-wrap"></div>
         <div class="offcanvas__auth">
-            <a href="{{ route('redirectToLogin') }}">Đăng nhập</a>
+            @if (!Auth::guard('students')->check())
+                <a href="{{ route('redirectToLogin') }}">Đăng nhập</a>
+            @else
+                <a href="{{ route('profile') }}">Hồ sơ</a>
+                <p>Lớp: {{ Auth::guard('students')->user()->student_class->name }}</p>
+                <a href="{{ route('logoutStudents') }}">Đăng xuất</a>
+            @endif
         </div>
     </div>
     <!-- Offcanvas Menu End -->
@@ -196,10 +202,10 @@
                             <button type="submit" class="site-btn">Đăng kí</button>
                         </form>
                         <div class="footer__social">
-                            <a href="#"><i class="fa fa-facebook"></i></a>
+                            <a href="https://www.facebook.com/phpid1586/" target="_blank" ><i class="fa fa-facebook"></i></a>
                             <a href="#"><i class="fa fa-twitter"></i></a>
                             <a href="#"><i class="fa fa-youtube-play"></i></a>
-                            <a href="#"><i class="fa fa-instagram"></i></a>
+                            <a href="https://www.instagram.com/nguyen_nhat_long/" target="_blank" ><i class="fa fa-instagram"></i></a>
                             <a href="#"><i class="fa fa-pinterest"></i></a>
                         </div>
                     </div>
@@ -234,7 +240,7 @@
         <div class="h-100 d-flex align-items-center justify-content-center">
             <div class="search-close-switch">+</div>
             <form class="search-model-form">
-                <input type="text" id="search-input" placeholder="Search here.....">
+                <input disabled type="text" id="search-input" placeholder="Khum có gì cả hehe .....">
             </form>
         </div>
     </div>

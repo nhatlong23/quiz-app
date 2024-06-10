@@ -12,7 +12,7 @@ class BlogController extends Controller
     {
         $this->middleware('auth');
     }
-    
+
     /**
      * Display a listing of the resource.
      */
@@ -40,8 +40,8 @@ class BlogController extends Controller
                 'title' => 'required',
                 'slug' => 'required',
                 'content' => 'required',
+                'tags' => 'nullable',
                 'image' => 'nullable|mimes:jpeg,jpg,png,gif|max:10000',
-                'status' => 'required|in:0,1',
             ],
             [
                 'title.required' => 'Vui lòng nhập tiêu đề',
@@ -49,13 +49,16 @@ class BlogController extends Controller
                 'content.required' => 'Vui lòng nhập nội dung',
                 'image.mimes' => 'Hình ảnh không đúng định dạng',
                 'image.max' => 'Hình ảnh không quá 10MB',
-                'status.required' => 'Vui lòng chọn trạng thái',
-                'status.in' => 'Trạng thái không hợp lệ',
             ]
         );
 
+        $users_id = auth()->user()->id;
+        $tags = $request->tags;
+
         $blog = new Blog();
         $blog->fill($validateData);
+        $blog->users_id = $users_id;
+        $blog->tags = $tags;
         $blog->created_at = now('Asia/Ho_Chi_Minh');
 
         if ($request->hasFile('images')) {
@@ -72,7 +75,7 @@ class BlogController extends Controller
 
         $blog->save();
 
-        toastr()->success("Thêm thành công blog: $blog->title");
+        toastr()->success("Thêm thành công blog: $blog->title và chờ duyệt từ admin");
         return redirect()->route('blogs.index');
     }
 
@@ -106,8 +109,8 @@ class BlogController extends Controller
                 'title' => 'required',
                 'slug' => 'required',
                 'content' => 'required',
+                'tags' => 'nullable',
                 'image' => 'nullable|mimes:jpeg,jpg,png,gif|max:10000',
-                'status' => 'required|in:0,1',
             ],
             [
                 'title.required' => 'Vui lòng nhập tiêu đề',
@@ -116,12 +119,12 @@ class BlogController extends Controller
                 'image.mimes' => 'Hình ảnh không đúng định dạng',
                 'image.max' => 'Hình ảnh không quá 10MB',
                 'status.required' => 'Vui lòng chọn trạng thái',
-                'status.in' => 'Trạng thái không hợp lệ',
             ]
         );
 
         $blog = Blog::findOrFail($id);
         $blog->fill($validateData);
+        $blog->tags = $request->tags;
         $blog->updated_at = now('Asia/Ho_Chi_Minh');
 
         if ($request->hasFile('images')) {

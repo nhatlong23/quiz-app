@@ -54,6 +54,21 @@
                             </div>
 
                             <div class="position-relative row form-group">
+                                <label for="block_id" class="col-sm-2 col-form-label">Khối học :</label>
+                                <div class="col-sm-10">
+                                    <select name="block_id" id="block_id" class="form-control">
+                                        <option selected disabled>-------Chọn khối học-------</option>
+                                        @foreach ($blocks as $block)
+                                            <option value="{{ $block->id }}"
+                                                {{ isset($questions) && $questions->block_id == $block->id ? 'selected' : '' }}>
+                                                {{ $block->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="position-relative row form-group">
                                 <label for="question" class="col-sm-2 col-form-label">Nội dung :</label>
                                 <div class="col-sm-10">
                                     <input name="question" id="question" placeholder="Nhập nội dung câu hỏi vào đây!!"

@@ -17,6 +17,7 @@ use App\Http\Controllers\LoginStudentsController;
 
 Route::get('/', [IndexController::class, 'homepage'])->name('homepage');
 Route::get('/load-more-blogs', [IndexController::class, 'loadMoreBlogs'])->name('loadMoreBlogs');
+Route::get('tags/{tag}', [IndexController::class, 'tags'])->name('tags');
 Route::get('/blog-detail/{slug}', [IndexController::class, 'blog_detail'])->name('blog_detail');
 Route::get('/knowledge', [IndexController::class, 'knowledge'])->name('knowledge');
 Route::get('/contact', [IndexController::class, 'contact'])->name('contact');

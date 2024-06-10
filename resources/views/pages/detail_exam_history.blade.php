@@ -18,7 +18,7 @@
         <h2>Chi tiết lịch sử thi</h2>
         <hr>
         <div id="accordion">
-            <table class="table">
+            <table class="table table-responsive table-hover table-striped table-bordered">
                 <thead>
                     <tr>
                         <th scope="col">#</th>

@@ -29,6 +29,7 @@
                                 <th>STT</th>
                                 <th>Câu hỏi</th>
                                 <th>Môn học</th>
+                                <th>Khối học</th>
                                 <th>Trạng thái</th>
                                 <th>Hành động</th>
                             </tr>
@@ -54,6 +55,7 @@
                                         @endcan
                                     </td>
                                     <td>{{ $list->subject->name }}</td>
+                                    <td>{{ $list->block->name }}</td>
                                     <td>
                                         @can('updateStatusQuestions')
                                             <input class="question_status" id="toggle-demo"

@@ -10,6 +10,10 @@
             color: #721c24;
             border-radius: 5px;
         }
+
+        .table-responsive {
+            max-height: 400px;
+        }
     </style>
     <div class="app-main__outer">
         <div class="app-main__inner">
@@ -38,87 +42,6 @@
             @endif
             <div id="error-message-container" hidden></div>
             <div class="tabs-animation">
-                {{-- <div class="mb-3 card">
-                        <div class="card-header-tab card-header">
-                            <div class="card-header-title font-size-lg text-capitalize font-weight-normal">
-                                <i class="header-icon lnr-charts icon-gradient bg-happy-green"> </i>
-                                Portfolio Performance
-                            </div>
-                            <div class="btn-actions-pane-right text-capitalize">
-                                <button class="btn-wide btn-outline-2x mr-md-2 btn btn-outline-focus btn-sm">View
-                                    All</button>
-                            </div>
-                        </div>
-                        <div class="no-gutters row">
-                            <div class="col-sm-6 col-md-4 col-xl-4">
-                                <div class="card no-shadow rm-border bg-transparent widget-chart text-left">
-                                    <div class="icon-wrapper rounded-circle">
-                                        <div class="icon-wrapper-bg opacity-10 bg-warning"></div>
-                                        <i class="lnr-laptop-phone text-dark opacity-8"></i>
-                                    </div>
-                                    <div class="widget-chart-content">
-                                        <div class="widget-subheading">Cash Deposits</div>
-                                        <div class="widget-numbers">1,7M</div>
-                                        <div class="widget-description opacity-8 text-focus">
-                                            <div class="d-inline text-danger pr-1">
-                                                <i class="fa fa-angle-down"></i>
-                                                <span class="pl-1">54.1%</span>
-                                            </div>
-                                            less earnings
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="divider m-0 d-md-none d-sm-block"></div>
-                            </div>
-                            <div class="col-sm-6 col-md-4 col-xl-4">
-                                <div class="card no-shadow rm-border bg-transparent widget-chart text-left">
-                                    <div class="icon-wrapper rounded-circle">
-                                        <div class="icon-wrapper-bg opacity-9 bg-danger"></div>
-                                        <i class="lnr-graduation-hat text-white"></i>
-                                    </div>
-                                    <div class="widget-chart-content">
-                                        <div class="widget-subheading">Invested Dividents</div>
-                                        <div class="widget-numbers"><span>9M</span></div>
-                                        <div class="widget-description opacity-8 text-focus">
-                                            Grow Rate:
-                                            <span class="text-info pl-1">
-                                                <i class="fa fa-angle-down"></i>
-                                                <span class="pl-1">14.1%</span>
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="divider m-0 d-md-none d-sm-block"></div>
-                            </div>
-                            <div class="col-sm-12 col-md-4 col-xl-4">
-                                <div class="card no-shadow rm-border bg-transparent widget-chart text-left">
-                                    <div class="icon-wrapper rounded-circle">
-                                        <div class="icon-wrapper-bg opacity-9 bg-success"></div>
-                                        <i class="lnr-apartment text-white"></i>
-                                    </div>
-                                    <div class="widget-chart-content">
-                                        <div class="widget-subheading">Capital Gains</div>
-                                        <div class="widget-numbers text-success"><span>$563</span></div>
-                                        <div class="widget-description text-focus">
-                                            Increased by
-                                            <span class="text-warning pl-1">
-                                                <i class="fa fa-angle-up"></i>
-                                                <span class="pl-1">7.35%</span>
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="text-center d-block p-3 card-footer">
-                            <button class="btn-pill btn-shadow btn-wide fsize-1 btn btn-primary btn-lg">
-                                <span class="mr-2 opacity-7">
-                                    <i class="icon icon-anim-pulse ion-ios-analytics-outline"></i>
-                                </span>
-                                <span class="mr-1">View Complete Report</span>
-                            </button>
-                        </div>
-                    </div> --}}
                 @if (!isset($exam))
                     <form action="{{ route('exams.store') }}" method="POST" enctype="multipart/form-data">
                     @else
@@ -144,12 +67,29 @@
                                                     <label for="subjects_id" class="col-sm-2 col-form-label">Môn học
                                                         :</label>
                                                     <div class="col-sm-10">
-                                                        <select name="subjects_id" class="form-control" id="subject">
+                                                        <select name="subjectId" class="form-control" id="subject">
                                                             <option disabled selected>------------Môn học------------
                                                             </option>
                                                             @foreach ($subjects as $subject)
-                                                                <option value="{{ $subject->id }}">
+                                                                <option value="{{ $subject->id }}"
+                                                                    {{ isset($exam) && $exam->subjects_id == $subject->id ? 'selected' : '' }}>
                                                                     {{ $subject->name }}
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="position-relative row form-group">
+                                                    <label for="blocks_id" class="col-sm-2 col-form-label">Khối học
+                                                        :</label>
+                                                    <div class="col-sm-10">
+                                                        <select name="blockId" class="form-control" id="block">
+                                                            <option disabled selected>------------Khối học------------
+                                                            </option>
+                                                            @foreach ($blocks as $block)
+                                                                <option value="{{ $block->id }}"
+                                                                    {{ isset($exam) && $exam->blocks_id == $block->id ? 'selected' : '' }}>
+                                                                    {{ $block->name }}
                                                                 </option>
                                                             @endforeach
                                                         </select>
@@ -163,6 +103,7 @@
                                                             <div class="col-sm-3">
                                                                 <label>{{ $level->name }} :</label>
                                                                 <input type="number" class="col-sm-10 count form-control"
+                                                                    name="counts[{{ $level->id }}]"
                                                                     data-level-id="{{ $level->id }}" min="0"
                                                                     value="0">
                                                             </div>
@@ -195,46 +136,44 @@
                                     <div class="main-card card">
                                         <div class="card-body">
                                             <div class="position-relative row form-group">
-                                                <label for="opening_time" class="col-sm-3 col-form-label">Thời gian mở
-                                                    đề :</label>
-                                                <div class="col-sm-5">
+                                                <label for="opening_time" class="col-sm-3 col-form-label">Thời gian mở đề
+                                                    :</label>
+                                                <div class="col-sm-8">
                                                     <input type="datetime-local" class="form-control" name="opening_time"
                                                         id="opening_time"
                                                         value="{{ isset($exam) ? $exam->opening_time : '' }}">
                                                 </div>
                                             </div>
                                             <div class="position-relative row form-group">
-                                                <label for="closing_time" class="col-sm-4 col-form-label">Thời gian đóng
-                                                    đề :</label>
-                                                <div class="col-sm-5">
+                                                <label for="closing_time" class="col-sm-4 col-form-label">Thời gian đóng đề
+                                                    :</label>
+                                                <div class="col-sm-7">
                                                     <input type="datetime-local" class="form-control" name="closing_time"
                                                         id="closing_time"
                                                         value="{{ isset($exam) ? $exam->closing_time : '' }}">
                                                 </div>
                                             </div>
                                             <div class="position-relative row form-group">
-                                                <label for="content" class="col-sm-3 col-form-label">Tên bài thi
-                                                    :</label>
-                                                <div class="col-sm-5">
-                                                    <input type="text" name="content" id="content" class="form-control"
-                                                        placeholder="Nhập tên bài thi"
+                                                <label for="content" class="col-sm-3 col-form-label">Tên bài thi :</label>
+                                                <div class="col-sm-8">
+                                                    <input type="text" name="content" id="content"
+                                                        class="form-control" placeholder="Nhập tên bài thi"
                                                         value="{{ isset($exam) ? $exam->content : '' }}">
                                                 </div>
                                             </div>
                                             <div class="position-relative row form-group">
-                                                <label for="duration" class="col-sm-3 col-form-label">Thời gian làm
-                                                    bài
+                                                <label for="duration" class="col-sm-3 col-form-label">Thời gian làm bài
                                                     (phút) :</label>
-                                                <div class="col-sm-5">
-                                                    <input type="number" placeholder="Nhập thời gian làm bài"
+                                                <div class="col-sm-8">
+                                                    <input type="number"
+                                                        placeholder="Nhập thời gian làm bài là phút nhé :)"
                                                         class="form-control" min="1" name="duration"
                                                         id="duration" value="{{ isset($exam) ? $exam->duration : '' }}">
                                                 </div>
                                             </div>
                                             <div class="form-row form-inline">
                                                 <div class="mb-2 mr-sm-2 mb-sm-0 position-relative form-group">
-                                                    <label for="exampleEmail22" class="mr-sm-2">Mật khẩu đề
-                                                        :</label>
+                                                    <label for="exampleEmail22" class="mr-sm-2">Mật khẩu đề :</label>
                                                     <input name="password" id="password" placeholder="Nhập mật khẩu"
                                                         type="password" class="form-control">
                                                 </div>
@@ -275,7 +214,7 @@
                                 </button>
                                 <div tabindex="-1" role="menu" aria-hidden="true"
                                     class="dropdown-menu-right rm-pointers dropdown-menu-shadow dropdown-menu-hover-link dropdown-menu">
-                                    <h6 tabindex="-1" class="dropdown-header">Header</h6>
+                                    <h6 tabindex="-1" class="dropdown-header">Tuỳ chọn</h6>
                                     <button type="button" tabindex="0" class="dropdown-item">
                                         <i class="dropdown-icon lnr-inbox"> </i><span>Menus</span>
                                     </button>
@@ -295,9 +234,9 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card-body">
-                        <table style="width: 100%;" id="example"
-                            class="table table-hover table-striped table-bordered">
+                    <div class="card-body table-responsive">
+                        <table style="width: 100%;" id="questions-table"
+                            class="table table-hover table-striped table-bordered table-fixed">
                             <thead>
                                 <tr>
                                     <th>STT</th>
@@ -308,13 +247,35 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td id="STT">Loading...</td>
-                                    <td id="content">Loading...</td>
-                                    <td id="option">Loading...</td>
-                                    <td id="answer">Loading...</td>
-                                    <td id="action">Loading...</td>
-                                </tr>
+                                @if (isset($exam))
+                                    @foreach ($exam->questions as $question)
+                                        <tr>
+                                            <td>{{ $loop->iteration }}</td>
+                                            <td>{{ $question->question }}</td>
+                                            <td>
+                                                <ul>
+                                                    <li>{{ $question->option_a }}</li>
+                                                    <li>{{ $question->option_b }}</li>
+                                                    <li>{{ $question->option_c }}</li>
+                                                    <li>{{ $question->option_d }}</li>
+                                                </ul>
+                                            </td>
+                                            <td>{{ $question->answer }}</td>
+                                            <td>
+                                                <input type="button" class="btn btn-danger delete-question"
+                                                    value="Xoá">
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                @else
+                                    <tr>
+                                        <td id="STT">Loading...</td>
+                                        <td id="content">Loading...</td>
+                                        <td id="option">Loading...</td>
+                                        <td id="answer">Loading...</td>
+                                        <td id="action">Loading...</td>
+                                    </tr>
+                                @endif
                             </tbody>
                         </table>
                     </div>
@@ -333,8 +294,17 @@
             $(document).ready(function() {
                 $("#randomize_questions").on('click', function() {
                     var subjectId = $("#subject").val();
-                    if (subjectId === null) {
-                        alert("Vui lòng chọn một môn học trước khi tạo đề thi.");
+                    var blockId = $("#block").val();
+
+                    if (subjectId === null || blockId === null) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Lỗi...',
+                            text: 'Vui lòng chọn một môn học và khối học trước khi tạo đề thi nhé!',
+                            timer: 4000,
+                            showConfirmButton: true,
+                            timerProgressBar: true,
+                        });
                         return;
                     }
 
@@ -343,7 +313,7 @@
 
                     $(".count").each(function() {
                         var levelId = $(this).data('level-id');
-                        var count = $(this).val();
+                        var count = parseInt($(this).val());
 
                         if (count && count > 0) {
                             counts[levelId] = count;
@@ -352,7 +322,14 @@
                     });
 
                     if (countFieldsFilled < 2) {
-                        alert("Vui lòng nhập số lượng câu hỏi cho mỗi cấp độ (có thể bỏ qua 1 cấp độ).");
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Lỗi...',
+                            text: 'Vui lòng nhập số lượng câu hỏi cho mỗi cấp độ (có thể bỏ qua 1 cấp độ).',
+                            timer: 4000,
+                            showConfirmButton: true,
+                            timerProgressBar: true,
+                        });
                         return;
                     }
 
@@ -361,15 +338,29 @@
                         url: examsRequestUrl,
                         data: {
                             subject: subjectId,
+                            block: blockId,
                             counts: counts,
                             _token: csrfToken,
                         },
                         success: function(response) {
-                            displayCountQuestions(response);
-                            randomQuestions = response.questionsByLevel;
-                            displayRandomQuestions(response.questionsByLevel);
+                            if (response.totalQuestions === 0) {
+                                Swal.fire({
+                                    icon: 'warning',
+                                    title: 'Thông báo',
+                                    text: 'Không có câu hỏi nào tương ứng với các yêu cầu của bạn.',
+                                    timer: 4000,
+                                    showConfirmButton: true,
+                                    timerProgressBar: true,
+                                });
+                            } else {
+                                displayCountQuestions(response);
+                                randomQuestions = response.questionsByLevel;
+                                displayRandomQuestions(response.questionsByLevel);
+                            }
                         },
-                        error: function(xhr, status, error) {}
+                        error: function(xhr, status, error) {
+                            console.log(error);
+                        }
                     });
                 });
             });
@@ -380,7 +371,7 @@
             }
 
             function displayRandomQuestions(questions) {
-                var tbody = $('#example tbody');
+                var tbody = $('#questions-table tbody');
                 tbody.empty();
 
                 var questionCount = 0;
@@ -407,24 +398,34 @@
             }
 
             function updateQuestionCount() {
-                var rowCount = $('#example tbody tr').length;
+                var rowCount = $('#questions-table tbody tr').length;
                 $("#total_questions").text(rowCount);
             }
 
             $(document).on('click', '.delete-question', function() {
-                var confirmation = confirm("Bạn có chắc chắn muốn xoá câu hỏi này?");
-                if (confirmation) {
-                    $(this).closest('tr').remove();
-                    updateQuestionCount();
-                    randomQuestions = updateRandomQuestionsAfterDelete(randomQuestions);
-                }
+                Swal.fire({
+                    title: 'Xác nhận xoá câu hỏi',
+                    text: "Bạn có chắc chắn muốn xoá câu hỏi này không?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Xoá',
+                    cancelButtonText: 'Hủy',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $(this).closest('tr').remove();
+                        updateQuestionCount();
+                        randomQuestions = updateRandomQuestionsAfterDelete(randomQuestions);
+                    }
+                });
             });
 
             function updateRandomQuestionsAfterDelete(randomQuestions) {
                 var updatedRandomQuestions = {};
                 $.each(randomQuestions, function(levelId, levelQuestions) {
                     var updatedLevelQuestions = levelQuestions.filter(function(question) {
-                        return $('#example tbody tr').find('td').eq(1).text() !== question.question;
+                        return $('#questions-table tbody tr').find('td').eq(1).text() !== question.question;
                     });
                     updatedRandomQuestions[levelId] = updatedLevelQuestions;
                 });
@@ -433,6 +434,7 @@
 
             $("#save_exams").on('click', function() {
                 var subjectId = $("#subject").val();
+                var blockId = $("#block").val();
                 var content = $("#content").val();
                 var max_questions = $("#total_questions").html();
                 var opening_time = $("#opening_time").val();
@@ -442,7 +444,14 @@
                 var confirm_password = $("#confirm_password").val();
 
                 if (!randomQuestions) {
-                    alert("Vui lòng ngẫu nhiên câu hỏi trước khi lưu bài kiểm tra.");
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Lỗi...',
+                        text: 'Vui lòng ngẫu nhiên câu hỏi trước khi lưu bài kiểm tra.',
+                        timer: 4000,
+                        showConfirmButton: true,
+                        timerProgressBar: true,
+                    });
                     return;
                 }
 
@@ -453,6 +462,7 @@
                     url: examsRequestStore,
                     data: {
                         subjectId: subjectId,
+                        blockId: blockId,
                         content: content,
                         max_questions: max_questions,
                         opening_time: opening_time,

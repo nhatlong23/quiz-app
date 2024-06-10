@@ -6,6 +6,7 @@ use App\Imports\QuestionsImport;
 use App\Models\Question;
 use App\Models\Subject;
 use App\Models\Level;
+use App\Models\Block;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
@@ -17,7 +18,7 @@ class QuestionsController extends Controller
     {
         $this->middleware('auth');
     }
-    
+
     /**
      * Display a listing of the resource.
      */
@@ -25,7 +26,9 @@ class QuestionsController extends Controller
     {
         $question_list = Question::orderBy('id', 'DESC')->get();
         $subjects = Subject::orderBy('id', 'DESC')->get();
-        return view('admin.question.index', compact('question_list', 'subjects'));
+        $blocks = Block::orderBy('id', 'DESC')->get();
+
+        return view('admin.question.index', compact('question_list', 'subjects', 'blocks'));
     }
 
     /**
@@ -35,7 +38,9 @@ class QuestionsController extends Controller
     {
         $levels = Level::orderBy('id', 'ASC')->get();
         $subjects = Subject::orderBy('id', 'DESC')->get();
-        return view('admin.question.form', compact('subjects', 'levels'));
+        $blocks = Block::orderBy('id', 'DESC')->get();
+
+        return view('admin.question.form', compact('subjects', 'levels', 'blocks'));
     }
 
     /**
@@ -53,6 +58,7 @@ class QuestionsController extends Controller
             'option_d' => 'required',
             'subject_id' => 'required|numeric',
             'level_id' => 'required|numeric',
+            'block_id' => 'required|numeric',
             'status' => 'required',
         ], [
             'required' => 'Vui lòng nhập :attribute',
@@ -102,7 +108,9 @@ class QuestionsController extends Controller
         $questions = Question::findOrFail($id);
         $subjects = Subject::orderBy('id', 'DESC')->get();
         $levels = Level::orderBy('id', 'ASC')->get();
-        return view('admin.question.form', compact('questions', 'subjects', 'levels'));
+        $blocks = Block::orderBy('id', 'DESC')->get();
+
+        return view('admin.question.form', compact('questions', 'subjects', 'levels', 'blocks'));
     }
 
     /**
@@ -120,6 +128,7 @@ class QuestionsController extends Controller
             'option_d' => 'required',
             'subject_id' => 'required|numeric',
             'level_id' => 'required|numeric',
+            'block_id' => 'required|numeric',
             'status' => 'required',
         ], [
             'required' => 'Vui lòng nhập :attribute',
@@ -203,7 +212,8 @@ class QuestionsController extends Controller
         $request->validate(
             [
                 'file_import' => 'required|mimes:xlsx,xls,csv|file|max:2048',
-                'selected_subject_id' => 'required|exists:subjects,id',
+                'subject_id' => 'required|exists:subjects,id',
+                'block_id' => 'required|exists:blocks,id',
             ],
             [
                 'required' => 'Vui lòng chọn file cần import',
@@ -215,7 +225,10 @@ class QuestionsController extends Controller
         );
 
         $file = $request->file('file_import');
-        Excel::import(new QuestionsImport($request->selected_subject_id), $file);
+        $subject_id = $request->subject_id;
+        $block_id = $request->block_id;
+
+        Excel::import(new QuestionsImport($subject_id, $block_id), $file);
 
         toastr()->success('Import dữ liệu thành công');
         return redirect()->route('questions.index');

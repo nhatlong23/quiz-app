@@ -21,6 +21,7 @@ class Exam extends Model
         'closing_time',
         'duration',
         'subjects_id',
+        'blocks_id',
         'status',
     ];
 
@@ -30,6 +31,12 @@ class Exam extends Model
         return $this->belongsTo(Subject::class, 'subjects_id');
     }
 
+    //1 bai thi thuoc 1 khoi
+    public function exam_block()
+    {
+        return $this->belongsTo(Block::class, 'blocks_id');
+    }
+    
     public function questions()
     {
         return $this->hasManyThrough(

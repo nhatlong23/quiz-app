@@ -254,22 +254,18 @@ class IndexController extends Controller
 
     public function sendContactEmail(Request $request)
     {
-        // Validate form input
-        $request->validate([
-            'name' => 'required',
-            'email' => 'required|email',
-            'message' => 'required',
-        ]);
+        // $request->validate([
+        //     'name' => 'required',
+        //     'email' => 'required|email',
+        //     'message' => 'required',
+        // ]);
 
-        // Extract form data
-        $name = $request->input('name');
-        $email = $request->input('email');
-        $message = $request->input('message');
+        // $name = $request->input('name');
+        // $email = $request->input('email');
+        // $message = $request->input('message');
 
-        // Send email
-        Mail::to('nhatlong2356@gmail.com')->send(new SendContactMail($name, $email, $message));
+        // Mail::to('nhatlong2356@gmail.com')->send(new SendContactMail($name, $email, $message));
 
-        // Optionally, you can redirect the user back with a success message
         return redirect()->back()->with('success', 'Email sent successfully!');
     }
 
@@ -278,6 +274,19 @@ class IndexController extends Controller
         $blogs = Blog::where('slug', $slug)->where('status', '1')->firstOrFail();
         $relatedPosts = $blogs->relatedPosts();
 
-        return view('pages.blog_detail', compact('blogs', 'relatedPosts'));
+        $show_tags = explode(',', $blogs->tags);
+        $filtered_tags = array_filter($show_tags);
+
+        return view('pages.blog_detail', compact('blogs', 'relatedPosts', 'filtered_tags'));
+    }
+
+    public function tags($tags)
+    {
+        $blogs = Blog::where('tags', 'like', '%' . $tags . '%')
+            ->orWhere('title', 'like', '%' . $tags . '%')
+            ->where('status', '1')
+            ->get();
+
+        return view('pages.tags', compact('blogs', 'tags'));
     }
 }

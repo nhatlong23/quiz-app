@@ -1,5 +1,10 @@
 @extends('layouts.app')
 @section('content')
+    <style>
+        .table-responsive {
+            max-height: 400px;
+        }
+    </style>
     <div class="app-main__outer">
         <div class="app-main__inner">
             <div class="app-page-title">
@@ -86,8 +91,8 @@
                                         @endcan
                                     </td>
                                     <td>
-                                        <form method="POST" action="{{ route('exams.destroy', $list->id) }}"
-                                            onsubmit="return confirm('Bạn có chắc chắn muốn xóa đề thi này?')">
+                                        <form id="delete-exam-form-{{ $list->id }}" method="POST"
+                                            action="{{ route('exams.destroy', $list->id) }}">
                                             @csrf
                                             @method('DELETE')
                                             @can('exams.edit')
@@ -96,7 +101,8 @@
                                                 </a>
                                             @endcan
                                             @can('exams.destroy')
-                                                <button type="submit" class="btn btn-danger">
+                                                <button type="button" class="btn btn-danger delete-exam-button"
+                                                    data-exam-id="{{ $list->id }}">
                                                     <i class="pe-7s-trash"></i>
                                                 </button>
                                             @endcan
@@ -131,7 +137,7 @@
                     </div>
                     <div class="modal-body">
                         <div class="main-card mb-3 card">
-                            <div class="card-body">
+                            <div class="card-body table-responsive">
                                 <table style="width: 100%;" id="example"
                                     class="table table-hover table-striped table-bordered">
                                     <thead>
@@ -353,6 +359,29 @@
                     button.addEventListener('click', function() {
                         examId = this.dataset.examModelId;
                         // console.log("ID của đề thi:", examId);
+                    });
+                });
+            });
+        </script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                document.querySelectorAll('.delete-exam-button').forEach(function(button) {
+                    button.addEventListener('click', function() {
+                        var examId = this.getAttribute('data-exam-id');
+                        Swal.fire({
+                            title: 'Xác nhận xoá đề thi',
+                            text: "Bạn có chắc chắn muốn xoá đề thi này không?",
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: 'Xoá',
+                            cancelButtonText: 'Hủy',
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                document.getElementById('delete-exam-form-' + examId).submit();
+                            }
+                        });
                     });
                 });
             });

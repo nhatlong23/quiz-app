@@ -16,8 +16,14 @@ class Blog extends Model
         'slug',
         'content',
         'images',
+        'users_id',
         'status'
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'users_id');
+    }
 
     public function relatedPosts()
     {

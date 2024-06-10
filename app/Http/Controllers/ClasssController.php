@@ -42,7 +42,7 @@ class ClasssController extends Controller
                 'name' => 'required|unique:class|max:100',
                 'desc' => 'required|max:255',
                 'block_id' => 'required|numeric',
-                'number' => 'required|max:255',
+                'number' => 'required|max:255|numeric',
                 'status' => 'required',
             ],
             [
@@ -55,6 +55,7 @@ class ClasssController extends Controller
                 'block_id.numeric' => 'Khối lớp phải là số',
                 'number.required' => 'Vui lòng nhập số lượng học sinh',
                 'number.max' => 'Số lượng học sinh không được quá 255 ký tự',
+                'number.numeric' => 'Số lượng học sinh phải là số',
                 'status.required' => 'Vui lòng chọn trạng thái lớp học',
             ]
         );

@@ -91,7 +91,17 @@
                                         @endforeach
                                     </select>
                                 </div>
-                                <input type="hidden" name="selected_subject_id" id="selected_subject_id">
+                                <div class="position-relative form-group">
+                                    <label for="block_id">Khối học:</label>
+                                    <select name="block_id" id="block_id" class="form-control">
+                                        <option selected disabled>-------Chọn khối học-------</option>
+                                        @foreach ($blocks as $block)
+                                            <option value="{{ $block->id }}">
+                                                {{ $block->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
                                 <div class="position-relative form-group">
                                     <label for="file_import">File:</label>
                                     <input name="file_import" id="file_import" type="file" class="form-control-file"
@@ -110,11 +120,13 @@
             $(document).ready(function() {
                 $("form").submit(function() {
                     var subjectId = $("#subject_id").val();
-                    if (subjectId === null) {
+                    var blockId = $("#block_id").val();
+
+                    if (subjectId === null && blockId === null) {
                         Swal.fire({
                             icon: 'error',
                             title: 'Lỗi...',
-                            text: 'Vui lòng chọn môn học!',
+                            text: 'Vui lòng chọn môn học or chọn khối học!',
                             timer: 1500,
                             showConfirmButton: true,
                             timerProgressBar: true,

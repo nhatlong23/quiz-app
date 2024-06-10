@@ -12,10 +12,12 @@ use Maatwebsite\Excel\Concerns\WithHeadingRow;
 class QuestionsImport implements ToCollection, WithHeadingRow
 {
     protected $subject_id;
+    protected $block_id;
 
-    public function __construct($subject_id)
+    public function __construct($subject_id, $block_id)
     {
         $this->subject_id = $subject_id;
+        $this->block_id = $block_id;
     }
 
     public function collection(Collection $rows)
@@ -30,6 +32,7 @@ class QuestionsImport implements ToCollection, WithHeadingRow
             if ($questions) {
                 Question::where('question', $row['question'])->update([
                     'subject_id' => $this->subject_id,
+                    'block_id' => $this->block_id,
                     'level_id' => $levelId,
                     'question' => $row['question'],
                     'option_a' => $row['option_a'],
@@ -44,6 +47,7 @@ class QuestionsImport implements ToCollection, WithHeadingRow
             } else {
                 Question::create([
                     'subject_id' => $this->subject_id,
+                    'block_id' => $this->block_id,
                     'level_id' => $levelId,
                     'question' => $row['question'],
                     'option_a' => $row['option_a'],

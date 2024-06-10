@@ -71,7 +71,7 @@
                                 <label for="number" class="col-sm-2 col-form-label">Sĩ số lớp học :</label>
                                 <div class="col-sm-10">
                                     <input name="number" id="number" placeholder="Nhập sĩ số lớp học vào đây!!"
-                                        type="text" class="form-control" autocomplete="off"
+                                        type="number" class="form-control" autocomplete="off"
                                         value="{{ isset($class) ? $class->number : '' }}">
                                 </div>
                             </div>
@@ -80,8 +80,8 @@
                                 <div class="col-sm-10">
                                     <select name="status" class="form-control">
                                         <option value="1" {{ isset($class) && $class->status == 1 ? 'selected' : '' }}>
-                                            Hiển thị lớp
-                                            học</option>
+                                            Hiển thị lớp học
+                                        </option>
                                         <option value="0"
                                             {{ isset($class) && $class->status == 0 ? 'selected' : '' }}>Ẩn lớp học
                                         </option>
