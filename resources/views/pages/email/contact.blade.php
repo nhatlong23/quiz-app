@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Contact Form Submission</title>
+    <title>Thông tin liên hệ</title>
 </head>
 <body>
-    <h2>New Contact Form Submission</h2>
-    <p><strong>Name:</strong> {{ $name }}</p>
-    <p><strong>Email:</strong> {{ $email }}</p>
-    <p><strong>Message:</strong> {{ $message }}</p>
+    <h2>Thông tin liên hệ mới</h2>
+    <p><strong>Tên người liên hệ:</strong> {{ $name }}</p>
+    <p><strong>Email người liên hệ:</strong> {{ $email }}</p>
+    <p><strong>Tin nhắn người liên hệ:</strong> {{ $emailMessage }}</p>
 </body>
 </html>

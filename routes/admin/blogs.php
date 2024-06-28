@@ -13,5 +13,8 @@ Route::group(['prefix' => 'admin'], function () {
         Route::put('update/{id}', [BlogController::class, 'update'])->name('blogs.update');
         Route::delete('delete/{id}', [BlogController::class, 'destroy'])->name('blogs.destroy')->middleware('can:blogs.destroy');
         Route::post('update-status-blogs', [BlogController::class, 'updateStatusBlogs'])->name('updateStatusBlogs')->middleware('can:updateStatusBlogs');
+        Route::post('update-status-comment', [BlogController::class, 'updateStatusComments'])->name('updateStatusComments')->middleware('can:updateStatusComments');
+        Route::get('review-comment', [BlogController::class, 'review_comment'])->name('review_comment')->middleware('can:review_comment');
+        Route::post('reply-comment', [BlogController::class, 'reply_comment'])->name('reply_comment')->middleware('can:reply_comment');
     });
 });

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Blog;
+use App\Models\Comment;
 use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 use Illuminate\Http\Request;
 
@@ -154,6 +155,39 @@ class BlogController extends Controller
         $blog->delete();
         toastr()->success("Xóa thành công blog: $blog->title");
         return redirect()->route('blogs.index');
+    }
+
+    public function review_comment()
+    {
+        $comment_list = Comment::with('blog')->orderBy('id', 'desc')->get();
+        return view('admin.blogs.comment', compact('comment_list'));
+    }
+
+    public function updateStatusComments(Request $request)
+    {
+        $comment = Comment::findOrFail($request->id);
+        $status = $request->checked ? 1 : 0;
+        $comment->status = $status;
+        $comment->updated_at = now('Asia/Ho_Chi_Minh');
+        $comment->save();
+
+        return $comment;
+    }
+
+    public function reply_comment(Request $request)
+    {
+        $data = $request->all();
+        $comment = new Comment();
+        $comment->content = $data['content_reply'];
+        $comment->blogs_id = $data['blog_id_reply'];
+        $comment->parent_comment_id = $data['parent_comment_id'];
+        $comment->status = 1;
+        $comment->name = auth()->user()->name;
+        $comment->email = auth()->user()->email;
+        $comment->updated_at = now('Asia/Ho_Chi_Minh');
+        $comment->save();
+
+        return redirect()->back();
     }
 
     public function updateStatusBlogs(Request $request)

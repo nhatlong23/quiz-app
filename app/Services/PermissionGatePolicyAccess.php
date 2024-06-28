@@ -115,6 +115,9 @@ class PermissionGatePolicyAccess
         Gate::define('blogs.edit', [BlogPolicy::class, 'update']);
         Gate::define('blogs.destroy', [BlogPolicy::class, 'delete']);
         Gate::define('updateStatusBlogs', [BlogPolicy::class, 'updateStatusBlogs']);
+        Gate::define('updateStatusComments', [BlogPolicy::class, 'updateStatusComments']);
+        Gate::define('review_comment', [BlogPolicy::class, 'review_comment']);
+        Gate::define('reply_comment', [BlogPolicy::class, 'reply_comment']);
     }
 
     public function defineGatePermissions()

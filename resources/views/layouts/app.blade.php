@@ -1592,7 +1592,7 @@
                                         </ul>
                                     </li>
                                 @endcan
-                                @can('blocks.viewAny')
+                                @can('blogs.viewAny')
                                     <li class="{{ $segment == 'blogs' ? 'mm-active' : '' }}">
                                         <a href="#">
                                             <i class="metismenu-icon pe-7s-hammer"></i> Quản lý blog
@@ -1605,7 +1605,7 @@
                                                     <i class="metismenu-icon"></i> Liệt kê blogs
                                                 </a>
                                             </li>
-                                            @can('blocks.create')
+                                            @can('blogs.create')
                                                 <li>
                                                     <a href="{{ route('blogs.create') }}"
                                                         class="{{ $segment == 'blogs' && $segment2 == 'create' ? 'mm-active' : '' }}">
@@ -1613,19 +1613,21 @@
                                                     </a>
                                                 </li>
                                             @endcan
-                                            <li>
-                                                <a href="#">
-                                                    <i class="metismenu-icon pe-7s-light"></i> Duyệt bình luận blog
-                                                    <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
-                                                </a>
-                                                <ul>
-                                                    <li>
-                                                        <a href="#">
-                                                            <i class="metismenu-icon"></i>Liệt kê bình luận
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </li>
+                                            @can('review_comment')
+                                                <li>
+                                                    <a href="#">
+                                                        <i class="metismenu-icon pe-7s-light"></i> Duyệt bình luận blog
+                                                        <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
+                                                    </a>
+                                                    <ul>
+                                                        <li>
+                                                            <a href="{{ route('review_comment') }}">
+                                                                <i class="metismenu-icon"></i>Liệt kê bình luận
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </li>
+                                            @endcan
                                         </ul>
                                     </li>
                                 @endcan

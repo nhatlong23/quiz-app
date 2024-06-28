@@ -68,6 +68,27 @@ class BlogPolicy
             ? Response::allow()
             : Response::deny('You are not authorized to update status blogs.');
     }
+
+    public function updateStatusComments(User $user)
+    {
+        return $user->checkPermissionAccess('updateStatusComments')
+            ? Response::allow()
+            : Response::deny('You are not authorized to update status comments.');
+    }
+
+    public function review_comment(User $user)
+    {
+        return $user->checkPermissionAccess('review_comment')
+            ? Response::allow()
+            : Response::deny('You are not authorized to review comment.');
+    }
+
+    public function reply_comment(User $user)
+    {
+        return $user->checkPermissionAccess('reply_comment')
+            ? Response::allow()
+            : Response::deny('You are not authorized to reply comment.');
+    }
     /**
      * Determine whether the user can restore the model.
      */

@@ -13,6 +13,7 @@ use App\Models\Blog;
 use App\Models\ResultQuestion;
 use App\Mail\SendContactMail;
 use Illuminate\Support\Facades\Mail;
+use App\Models\Comment;
 use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 
 use Illuminate\Support\Facades\Hash;
@@ -254,19 +255,21 @@ class IndexController extends Controller
 
     public function sendContactEmail(Request $request)
     {
-        // $request->validate([
-        //     'name' => 'required',
-        //     'email' => 'required|email',
-        //     'message' => 'required',
-        // ]);
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'emailMessage' => 'required|string',
+        ]);
 
-        // $name = $request->input('name');
-        // $email = $request->input('email');
-        // $message = $request->input('message');
+        $name = $validatedData['name'];
+        $email = $validatedData['email'];
+        $emailMessage = $validatedData['emailMessage'];
+        
+        Mail::to('nhatlong2356@gmail.com')->send(new SendContactMail($name, $email, $emailMessage));
 
-        // Mail::to('nhatlong2356@gmail.com')->send(new SendContactMail($name, $email, $message));
+        toastr()->success('Gửi email thành công');
 
-        return redirect()->back()->with('success', 'Email sent successfully!');
+        return redirect()->back();
     }
 
     public function blog_detail($slug)
@@ -288,5 +291,43 @@ class IndexController extends Controller
             ->get();
 
         return view('pages.tags', compact('blogs', 'tags'));
+    }
+
+    public function load_comment(Request $request)
+    {
+        $blogs_id = $request->blogs_id;
+        $comments = Comment::where('blogs_id', $blogs_id)->where('status', 1)->orderBy('id', 'ASC')->get();
+
+        return response()->json($comments);
+    }
+
+    public function send_comment(Request $request)
+    {
+        $comment = new Comment();
+        $comment->blogs_id = $request->comment_blogs_id;
+
+        if (Auth::guard('students')->check()) {
+            $comment->name = Auth::guard('students')->user()->name;
+            $comment->email = Auth::guard('students')->user()->email;
+        } else {
+            $comment->name = $request->comment_name;
+            $comment->email = $request->comment_email;
+        }
+
+        $comment->content = $request->comment_content;
+        $comment->status = 0;
+        $comment->created_at = now('Asia/Ho_Chi_Minh');
+        $comment->save();
+
+        return redirect()->back()->with('success', 'Bình luận của bạn đã được gửi.');
+    }
+
+    public function like_comment(Request $request)
+    {
+        $comment = Comment::find($request->comment_id);
+        $comment->likes += 1;
+        $comment->save();
+
+        return response()->json(['likes' => $comment->likes]);
     }
 }

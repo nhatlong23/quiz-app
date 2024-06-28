@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\IndexController;
 use App\Http\Controllers\LoginStudentsController;
-
+use App\Http\Controllers\TelegramController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -22,6 +22,11 @@ Route::get('/blog-detail/{slug}', [IndexController::class, 'blog_detail'])->name
 Route::get('/knowledge', [IndexController::class, 'knowledge'])->name('knowledge');
 Route::get('/contact', [IndexController::class, 'contact'])->name('contact');
 Route::post('/send-contact-email', [IndexController::class, 'sendContactEmail'])->name('send.contact.email');
+Route::post('/send-email-telegram', [TelegramController::class, 'sendEmailTelegram'])->name('send.email.telegram');
+
+Route::post('/load-comment', [IndexController::class, 'load_comment'])->name('load_comment');
+Route::post('/send-comment', [IndexController::class, 'send_comment'])->name('send_comment');
+Route::post('/like-comment', [IndexController::class, 'like_comment'])->name('like_comment');
 
 Route::middleware(['auth.student', 'check.class.access'])->group(function () {
     Route::get('/exam/{class_id}', [IndexController::class, 'redirectToExam'])->name('redirectToExam');
@@ -44,3 +49,5 @@ Route::middleware(['auth.student'])->group(function () {
 });
 
 Route::post('/checkLoginStudents', [LoginStudentsController::class, 'checkLoginStudents'])->name('checkLoginStudents');
+
+Route::get('/updated-activity', [TelegramController::class, 'updatedActivity'])->name('updatedActivity');

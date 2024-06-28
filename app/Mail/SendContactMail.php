@@ -12,29 +12,23 @@ class SendContactMail extends Mailable
 
     public $name;
     public $email;
-    public $message;
+    public $emailMessage;
 
-    /**
-     * Create a new message instance.
-     *
-     * @return void
-     */
-    public function __construct($name, $email, $message)
+    public function __construct($name, $email, $emailMessage)
     {
         $this->name = $name;
         $this->email = $email;
-        $this->message = $message;
+        $this->emailMessage = $emailMessage;
     }
 
-    /**
-     * Build the message.
-     *
-     * @return $this
-     */
     public function build()
     {
-        return $this->from($this->email, $this->name)
-            ->subject('New Contact Form Submission')
-            ->view('pages.email.contact');
+        return $this->subject('Thông báo về liên hệ mới từ website')
+            ->view('pages.email.contact')
+            ->with([
+                'name' => $this->name, 
+                'email' => $this->email, 
+                'emailMessage' => $this->emailMessage,
+            ]);
     }
 }

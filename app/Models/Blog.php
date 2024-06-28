@@ -33,4 +33,9 @@ class Blog extends Model
             ->limit(5)
             ->get();
     }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class, 'blogs_id');
+    }
 }

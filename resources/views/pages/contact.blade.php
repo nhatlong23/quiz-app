@@ -32,7 +32,7 @@
                                 </li>
                                 <li>
                                     <h6><i class="fa fa-headphones"></i> Hỗ trợ</h6>
-                                    <p>hotro.tracnghiem@gmail.com</p>
+                                    <p>hotro@longtech.id.vn</p>
                                 </li>
                             </ul>
                         </div>
@@ -42,7 +42,7 @@
                                 @csrf
                                 <input type="text" name="name" placeholder="Tên" required>
                                 <input type="email" name="email" placeholder="Email" required>
-                                <textarea name="message" placeholder="Thông điệp" required></textarea>
+                                <textarea name="emailMessage" placeholder="Thông điệp" required></textarea>
                                 <button type="submit" class="site-btn">Gửi thông tin</button>
                             </form>
                         </div>

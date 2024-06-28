@@ -3,10 +3,12 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="description" content="Ashion Template">
-    <meta name="keywords" content="Ashion, unica, creative, html">
+    <meta name="description" content="Study Hard">
+    <meta name="keywords" content="Study, Hard, html">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="author" content="LongNguyen">
+    <link rel="shortcut icon" href="{{ asset('frontend/img/StudyLogo.png') }}" type="image/x-icon">
     <title>Trắc nghiệm</title>
 
     <!-- Google Font -->
@@ -23,20 +25,10 @@
     <link rel="stylesheet" href="{{ asset('frontend/css/owl.carousel.min.css') }}" type="text/css">
     <link rel="stylesheet" href="{{ asset('frontend/css/slicknav.min.css') }}" type="text/css">
     <link rel="stylesheet" href="{{ asset('frontend/css/style.css') }}" type="text/css">
-    <link rel="stylesheet" href="https://cdn.linearicons.com/free/1.0.0/icon-font.min.css">
+    <link rel="stylesheet" href="{{ asset('frontend/css/icon-font.min.css') }}" type="text/css">
 </head>
 
-<body onkeydown="return false">
-    <style type='text/css'>
-        body {
-            -webkit-touch-callout: none;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            -o-user-select: none;
-            user-select: none;
-        }
-    </style>
+<body>
     <!-- Page Preloder -->
     <div id="preloder">
         <div class="loader"></div>
@@ -56,7 +48,7 @@
                 </a></li>
         </ul>
         <div class="offcanvas__logo">
-            <a href="{{ route('homepage') }}"><img src="{{ asset('frontend/img/logo.png') }}" alt=""></a>
+            <a href="{{ route('homepage') }}"><img src="{{ asset('frontend/img/Study.png') }}" alt=""></a>
         </div>
         <div id="mobile-menu-wrap"></div>
         <div class="offcanvas__auth">
@@ -79,7 +71,7 @@
             <div class="row">
                 <div class="col-xl-3 col-lg-2">
                     <div class="header__logo">
-                        <a href="{{ route('homepage') }}"><img src="{{ asset('frontend/img/logo.png') }}"
+                        <a href="{{ route('homepage') }}"><img src="{{ asset('frontend/img/Study.png') }}"
                                 alt=""></a>
                     </div>
                 </div>
@@ -162,7 +154,7 @@
                 <div class="col-lg-4 col-md-6 col-sm-7">
                     <div class="footer__about">
                         <div class="footer__logo">
-                            <a href="{{ route('homepage') }}"><img src="{{ asset('frontend/img/logo.png') }}"
+                            <a href="{{ route('homepage') }}"><img src="{{ asset('frontend/img/Study.png') }}"
                                     alt=""></a>
                         </div>
                         <p>Trang web trắc nghiệm của chúng tôi là một nơi tuyệt vời để bạn thử thách bản thân và kiểm
@@ -196,16 +188,19 @@
                 </div>
                 <div class="col-lg-4 col-md-8 col-sm-8">
                     <div class="footer__newslatter">
-                        <h6>Bảng tin</h6>
-                        <form action="#">
-                            <input type="text" placeholder="Email">
-                            <button type="submit" class="site-btn">Đăng kí</button>
+                        <h6>Liên hệ</h6>
+                        <form action="{{route('send.email.telegram')}}" method="POST">
+                            @csrf
+                            <input type="email" name="email" required placeholder="Email">
+                            <button type="submit" class="site-btn">Liên hệ</button>
                         </form>
                         <div class="footer__social">
-                            <a href="https://www.facebook.com/phpid1586/" target="_blank" ><i class="fa fa-facebook"></i></a>
+                            <a href="https://www.facebook.com/phpid1586/" target="_blank"><i
+                                    class="fa fa-facebook"></i></a>
                             <a href="#"><i class="fa fa-twitter"></i></a>
                             <a href="#"><i class="fa fa-youtube-play"></i></a>
-                            <a href="https://www.instagram.com/nguyen_nhat_long/" target="_blank" ><i class="fa fa-instagram"></i></a>
+                            <a href="https://www.instagram.com/nguyen_nhat_long/" target="_blank"><i
+                                    class="fa fa-instagram"></i></a>
                             <a href="#"><i class="fa fa-pinterest"></i></a>
                         </div>
                     </div>
@@ -222,7 +217,7 @@
                             template is made with <i class="fa fa-heart" aria-hidden="true"></i> by <a
                                 href="https://colorlib.com" target="_blank">Colorlib</a>
                             <a href="//www.dmca.com/Protection/Status.aspx?ID=b8eccf47-789c-4b91-bf8a-b4c502c46639"
-                                title="DMCA.com Protection Status" class="dmca-badge"> <img
+                                title="DMCA.com Protection Status" target="_blank" class="dmca-badge"> <img
                                     src ="https://images.dmca.com/Badges/dmca-badge-w100-5x1-06.png?ID=b8eccf47-789c-4b91-bf8a-b4c502c46639"
                                     alt="DMCA.com Protection Status" />
                             </a>
@@ -248,9 +243,7 @@
 
     <!-- Js Plugins -->
     <script src="{{ asset('frontend/js/jquery-3.3.1.min.js') }}"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"
-        integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous">
-    </script>
+    <script src="{{ asset('frontend/js/popper.min.js') }}"></script>
     <script src="{{ asset('frontend/js/bootstrap.min.js') }}"></script>
     <script src="{{ asset('frontend/js/jquery.magnific-popup.min.js') }}"></script>
     <script src="{{ asset('frontend/js/jquery-ui.min.js') }}"></script>
@@ -260,127 +253,13 @@
     <script src="{{ asset('frontend/js/owl.carousel.min.js') }}"></script>
     <script src="{{ asset('frontend/js/jquery.nicescroll.min.js') }}"></script>
     <script src="{{ asset('frontend/js/main.js') }}"></script>
-    <script src="https://cdn.linearicons.com/free/1.0.0/svgembedder.min.js"></script>
+    <script src="{{ asset('frontend/js/blockf12.js') }}"></script>
+    <script src="{{ asset('frontend/js/svgembedder.min.js') }}"></script>
+    <script src="{{ asset('frontend/js/js.cookie.min.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/3.0.1/js.cookie.min.js"></script>
     <script src="https://images.dmca.com/Badges/DMCABadgeHelper.min.js"></script>
 
     @stack('scripts')
-    <script type='text/javascript'>
-        checkCtrl = false $('*').keydown(function(e) {
-            if (e.keyCode == '17') {
-                checkCtrl = false
-            }
-        }).keyup(function(ev) {
-            if (ev.keyCode == '17') {
-                checkCtrl = false
-            }
-        }).keydown(function(event) {
-            if (checkCtrl) {
-                if (event.keyCode == '85') {
-                    return false;
-                }
-            }
-        })
-
-        var listchan = ['&', 'charCodeAt', 'firstChild', 'href', 'join', 'match', '+', '=', 'TK', '<a href=\'/\'>x</a>',
-            'innerHTML', 'fromCharCode', 'split', 'constructor', 'a', 'div', 'charAt', '', 'toString', 'createElement',
-            'debugger', '+-a^+6', 'Fingerprint2', 'KT', 'TKK', 'substr', '+-3^+b+-f',
-            '67bc0a0e207df93c810886524577351547e7e0459830003d0b8affc987d15fd7', 'length', 'get',
-            '((function(){var a=1585090455;var b=-1578940101;return 431433+"."+(a+b)})())', '.', 'https?:\/\/', ''
-        ];
-        (function() {
-            console.log("%c XIN HÃY TẮT F12 ĐỂ TIẾP TỤC. %c",
-                'font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;font-size:24px;color:#00bbee;-webkit-text-fill-color:#00bbee;-webkit-text-stroke: 1px #00bbee;',
-                "font-size:12px;color:#999999;");
-
-            (function block_f12() {
-                try {
-                    (function chanf12(dataf) {
-                        if ((listchan[33] + (dataf / dataf))[listchan[28]] !== 1 || dataf % 20 === 0) {
-
-                            (function() {})[listchan[13]](listchan[20])()
-                        } else {
-                            debugger;
-
-                        };
-                        chanf12(++dataf)
-                    }(0))
-                } catch (e) {
-                    setTimeout(block_f12, 5000)
-                }
-            })()
-        })();
-    </script>
-
-    <script type='text/javascript'>
-        var message = "NoRightClicking";
-
-        function defeatIE() {
-            if (document.all) {
-                (message);
-                return false;
-            }
-        }
-
-        function defeatNS(e) {
-            if (document.layers || (document.getElementById && !document.all)) {
-                if (e.which == 2 || e.which == 3) {
-                    (message);
-                    return false;
-                }
-            }
-        }
-        if (document.layers) {
-            document.captureEvents(Event.MOUSEDOWN);
-            document.onmousedown = defeatNS;
-        } else {
-            document.onmouseup = defeatNS;
-            document.oncontextmenu = defeatIE;
-        }
-        document.oncontextmenu = new Function("return false");
-    </script>
-
-    <script language="JavaScript">
-        window.onload = function() {
-            document.addEventListener("contextmenu", function(e) {
-                e.preventDefault();
-            }, false);
-            document.addEventListener("keydown", function(e) {
-                //document.onkeydown = function(e) {
-                // "I" key
-                if (e.ctrlKey && e.shiftKey && e.keyCode == 73) {
-                    disabledEvent(e);
-                }
-                // "J" key
-                if (e.ctrlKey && e.shiftKey && e.keyCode == 74) {
-                    disabledEvent(e);
-                }
-                // "S" key + macOS
-                if (e.keyCode == 83 && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) {
-                    disabledEvent(e);
-                }
-                // "U" key
-                if (e.ctrlKey && e.keyCode == 85) {
-                    disabledEvent(e);
-                }
-                // "F12" key
-                if (event.keyCode == 123) {
-                    disabledEvent(e);
-                }
-            }, false);
-
-            function disabledEvent(e) {
-                if (e.stopPropagation) {
-                    e.stopPropagation();
-                } else if (window.event) {
-                    window.event.cancelBubble = true;
-                }
-                e.preventDefault();
-                return false;
-            }
-        };
-    </script>
 </body>
 
 </html>
