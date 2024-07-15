@@ -102,11 +102,9 @@
             @csrf
             <div class="row">
                 <div class="col-xl-4">
-                    <!-- Profile picture card-->
                     <div class="card mb-4 mb-xl-0">
                         <div class="card-header">Hình ảnh sinh viên</div>
                         <div class="card-body text-center">
-                            <!-- Profile picture image-->
                             @if ($user_images)
                                 <img class="img-account-profile rounded-circle mb-2" src="{{ $user_images }}"
                                     alt="">
@@ -114,9 +112,7 @@
                                 <img class="img-account-profile rounded-circle mb-2"
                                     src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="">
                             @endif
-                            <!-- Profile picture help block-->
                             <div class="small font-italic text-muted mb-4">JPG hoặc PNG không lớn hơn 5 MB</div>
-                            <!-- Profile picture upload button-->
                             <div class="mb-3">
                                 <input type="file" class="file-upload" name="images" accept="image/*">
                             </div>
@@ -125,55 +121,44 @@
                     </div>
                 </div>
                 <div class="col-xl-8">
-                    <!-- Account details card-->
                     <div class="card mb-4">
                         <div class="card-header">Chi tiết tài khoản</div>
                         <div class="card-body">
-                            <!-- Form Group (username)-->
                             <div class="mb-3">
                                 <label class="small mb-1" for="student_code">Mã sinh viên</label>
                                 <input class="form-control" id="student_code" type="text"
                                     value="{{ $user_student_code }}" disabled>
                             </div>
-                            <!-- Form Group (email address)-->
                             <div class="mb-3">
                                 <label class="small mb-1" for="email">Địa chỉ email</label>
                                 <input class="form-control" id="email" type="email" value="{{ $user_email }}"
                                     disabled>
                             </div>
-                            <!-- Form Row-->
                             <div class="row gx-3 mb-3">
-                                <!-- Form Group (first name)-->
                                 <div class="col-md-6">
                                     <label class="small mb-1" for="name">Tên sinh viên</label>
                                     <input class="form-control" id="name" name="name" type="text"
                                         placeholder="{{ $user_name }}" value="{{ $user_name }}">
                                 </div>
-                                <!-- Form Group (last name)-->
                                 <div class="col-md-6">
                                     <label class="small mb-1" for="cccd">Số CCCD</label>
                                     <input class="form-control" id="cccd" name="cccd" type="number"
                                         placeholder="{{ $user_cccd }}" value="{{ $user_cccd }}">
                                 </div>
                             </div>
-                            <!-- Form Row-->
                             <div class="row gx-3 mb-3">
-                                <!-- Form Group (phone number)-->
                                 <div class="col-md-6">
                                     <label class="small mb-1" for="phone">Số điện thoại</label>
                                     <input class="form-control" id="phone" name="phone" type="number"
                                         placeholder="{{ $user_phone }}" value="{{ $user_phone }}">
                                 </div>
-                                <!-- Form Group (birthday)-->
                                 <div class="col-md-6">
-                                    <label class="small mb-1" for="birth">Birthday</label>
+                                    <label class="small mb-1" for="birth">Ngày sinh</label>
                                     <input class="form-control" id="birth" type="date" name="birth"
                                         placeholder="{{ $user_birth }}" value="{{ $user_birth }}">
                                 </div>
                             </div>
-                            <!-- Form Row        -->
                             <div class="row gx-3 mb-3">
-                                <!-- Form Group (organization name)-->
                                 <div class="col-md-6">
                                     <label class="small mb-1" for="gender">Giới tính</label>
                                     <select name="gender" class="form-control h-75 d-inline-block">
@@ -188,7 +173,6 @@
                                     </select>
                                 </div>
 
-                                <!-- Form Group (current_password)-->
                                 <div class="col-md-6">
                                     <label class="small mb-1" for="current_password">Mật khẩu cũ</label>
                                     <input class="form-control" id="current_password" name="current_password"
@@ -196,22 +180,18 @@
                                 </div>
                             </div>
 
-                            <!-- Form Row-->
                             <div class="row gx-3 mb-3">
-                                <!-- Form Group (password number)-->
                                 <div class="col-md-6">
                                     <label class="small mb-1" for="password">Nhập mật khẩu mới</label>
                                     <input class="form-control" id="password" name="password" type="password"
                                         placeholder="Nhập mật khẩu mới vào đây">
                                 </div>
-                                <!-- Form Group (password confirm)-->
                                 <div class="col-md-6">
                                     <label class="small mb-1" for="confirm_password">Nhập lại mật khẩu mới</label>
                                     <input class="form-control" id="confirm_password" type="password"
                                         name="confirm_password" placeholder="Nhập lại mật khẩu mới">
                                 </div>
                             </div>
-                            <!-- Save changes button-->
                             <button class="btn btn-primary" type="submit">Lưu thay đổi</button>
                         </div>
                     </div>

@@ -135,9 +135,10 @@
                                 <div class="col-sm-10">
                                     <select name="class_id" class="form-control">
                                         <option selected disabled>-------Chọn lớp học--------</option>
-                                        @foreach ($class_name as $class_names)
-                                            <option value="{{ $class_names->id }}">
-                                                {{ $class_names->name }}
+                                        @foreach ($class_name as $class)
+                                            <option value="{{ $class->id }}" 
+                                                {{ isset($students) && $students->class_id == $class->id ? 'selected' : '' }}>
+                                                {{ $class->name }}
                                             </option>
                                         @endforeach
                                     </select>

@@ -13,6 +13,7 @@ class Exam extends Model
 
     protected $table = 'exam';
     protected $fillable = [
+        'code',
         'content',
         'audio',
         'max_questions',

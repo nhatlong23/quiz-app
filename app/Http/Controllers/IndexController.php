@@ -14,6 +14,7 @@ use App\Models\ResultQuestion;
 use App\Mail\SendContactMail;
 use Illuminate\Support\Facades\Mail;
 use App\Models\Comment;
+use App\Models\Visitor;
 use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 
 use Illuminate\Support\Facades\Hash;
@@ -24,6 +25,8 @@ class IndexController extends Controller
     public function homepage()
     {
         $blogs = Blog::orderBy('id', 'desc')->where('status', '1')->take(6)->get();
+        $visitors = Visitor::with('student')->get();
+
         return view('pages.index', compact('blogs'));
     }
 
@@ -178,6 +181,7 @@ class IndexController extends Controller
             $student->cccd != $validateData['cccd'] ||
             $student->birth != $validateData['birth'] ||
             $student->gender != $validateData['gender'] ||
+            $student->phone != $validateData['phone'] ||
             $request->hasFile('images')
         ) {
 

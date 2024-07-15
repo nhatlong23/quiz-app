@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" type="image/png" href="images/icons/favicon.ico" />
     <link rel="icon" href="img/mdb-favicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="{{ asset('frontend/img/login/logoLogin.png') }}" type="image/x-icon">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" />
@@ -50,7 +51,7 @@
 
                                     <div class="text-center">
                                         <a href="{{ route('homepage') }}"><img
-                                                src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/lotus.webp"
+                                                src="{{ asset('frontend/img/login/logoLogin.png') }}"
                                                 style="width: 185px;" alt="logo"></a>
                                         <h4 class="mt-1 mb-5 pb-1">Chúng tôi là IT trường THPT Cẩm Lệ</h4>
                                     </div>
@@ -60,12 +61,12 @@
                                         <p>Xin hãy đăng nhập vào tài khoản của bạn</p>
                                     
                                         <div data-mdb-input-init class="form-outline mb-4">
-                                            <input name="email" type="email" class="form-control" placeholder="Vui lòng nhập email mà trường đã cấp" />
+                                            <input name="email" type="email" class="form-control" required placeholder="Vui lòng nhập email mà trường đã cấp" />
                                             <label class="form-label" for="email">Email</label>
                                         </div>
                                     
                                         <div data-mdb-input-init class="form-outline mb-4">
-                                            <input name="password" type="password" class="form-control" placeholder="Vui lòng nhập mật khẩu" />
+                                            <input name="password" type="password" class="form-control" required placeholder="Vui lòng nhập mật khẩu" />
                                             <label class="form-label" for="password">Mật khẩu</label>
                                         </div>
                                     
@@ -78,7 +79,7 @@
                                     
                                         <div class="d-flex align-items-center justify-content-center pb-4">
                                             <p class="mb-0 me-2">Bạn chưa có tài khoản?</p>
-                                            <button type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-outline-danger">Liên hệ admin</button>
+                                            <a href="{{route('contact')}}"><input type="button" class="btn btn-outline-danger" value="Liên hệ admin"></a>
                                         </div>
                                     </form>
                                 </div>

@@ -42,6 +42,17 @@ class ExamController extends Controller
         return view('admin.exam.form', compact('subjects', 'levels', 'blocks'));
     }
 
+    private function generateCode($length = 32)
+    {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charactersLength = strlen($characters);
+        $code = '';
+        for ($i = 0; $i < $length; $i++) {
+            $code .= $characters[rand(0, $charactersLength - 1)];
+        }
+        return $code;
+    }
+
     /**
      * Store a newly created resource in storage.
      */
@@ -72,9 +83,11 @@ class ExamController extends Controller
         ]);
 
         $hashedPassword = Hash::make($dataValidate['password']);
+        $generateCode = $this->generateCode();
 
         $exam = new Exam();
         $exam->content = $dataValidate['content'];
+        $exam->code = $generateCode;
         $exam->password = $hashedPassword;
         $exam->opening_time = $dataValidate['opening_time'];
         $exam->closing_time = $dataValidate['closing_time'];

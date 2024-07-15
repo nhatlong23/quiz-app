@@ -118,10 +118,10 @@
                                         @endif
                                     </button>
                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                        <a class="dropdown-item" href="{{ route('logoutStudents') }}">Đăng xuất</a>
                                         <a class="dropdown-item" href="{{ route('profile') }}">Hồ sơ</a>
                                         <a class="dropdown-item" href="#">Lớp :
                                             {{ Auth::guard('students')->user()->student_class->name }}</a>
+                                        <a class="dropdown-item" href="{{ route('logoutStudents') }}">Đăng xuất</a>
                                     </div>
                                 </div>
                             </div>
@@ -179,7 +179,7 @@
                     <div class="footer__widget">
                         <h6>Tài khoản</h6>
                         <ul>
-                            <li><a href="">Tài khoản của tôi</a></li>
+                            <li><a href="{{ route('profile') }}">Tài khoản của tôi</a></li>
                             {{-- <li><a href="#">Orders Tracking</a></li>
                             <li><a href="#">Checkout</a></li>
                             <li><a href="#">Wishlist</a></li> --}}
@@ -189,7 +189,7 @@
                 <div class="col-lg-4 col-md-8 col-sm-8">
                     <div class="footer__newslatter">
                         <h6>Liên hệ</h6>
-                        <form action="{{route('send.email.telegram')}}" method="POST">
+                        <form action="{{ route('send.email.telegram') }}" method="POST">
                             @csrf
                             <input type="email" name="email" required placeholder="Email">
                             <button type="submit" class="site-btn">Liên hệ</button>

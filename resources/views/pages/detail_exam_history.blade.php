@@ -13,13 +13,26 @@
             </div>
         </div>
     </div>
+    <style>
+        .table-responsive {
+            height: 500px;
+            /* Chiều cao của bảng cuộn */
+            overflow-y: auto;
+        }
 
+        thead.thead-fixed {
+            position: sticky;
+            top: 0;
+            background-color: white;
+            z-index: 1;
+        }
+    </style>
     <div class="container spad">
         <h2>Chi tiết lịch sử thi</h2>
         <hr>
         <div id="accordion">
             <table class="table table-responsive table-hover table-striped table-bordered">
-                <thead>
+                <thead class="thead-fixed">
                     <tr>
                         <th scope="col">#</th>
                         <th scope="col">Câu hỏi</th>

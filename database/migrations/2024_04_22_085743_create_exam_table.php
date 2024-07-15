@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('exam', function (Blueprint $table) {
             $table->id();
+            $table->string('code');
             $table->text('content');
             $table->text('audio')->nullable();
             $table->string('max_questions');
