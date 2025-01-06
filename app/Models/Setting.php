@@ -5,22 +5,17 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Info extends Model
+class Setting extends Model
 {
     public $timestamps = false;
     use HasFactory;
 
-    protected $table = 'infos';
+    protected $table = 'settings';
     protected $fillable = [
         'name',
-        'address',
-        'phone',
-        'email',
-        'map',
-        'about',
-        'terms_of_service',
-        'privacy_policy',
-        'logo',
-        'favicon',
+        'desc',
+        'key_name',
+        'key_value',
+        'key_value_end',
     ];
 }

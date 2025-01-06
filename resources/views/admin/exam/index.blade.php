@@ -46,9 +46,10 @@
                                 <th>STT</th>
                                 <th>Tên đề thi</th>
                                 <th>Môn thi</th>
+                                <th>Khối học</th>
                                 <th>Số câu hỏi</th>
-                                <th>Thời gian bắt đầu thi</th>
-                                <th>Thời gian kết thúc thi</th>
+                                <th>Thời gian bắt đầu</th>
+                                <th>Thời gian kết thúc</th>
                                 <th>Trạng thái</th>
                                 <th>Hành động</th>
                             </tr>
@@ -76,6 +77,7 @@
                                         @endcan
                                     </td>
                                     <td>{{ $list->exam_subject->name }}</td>
+                                    <td>{{ $list->exam_block->name }}</td>
                                     <td>{{ $list->max_questions }}</td>
                                     <td>{{ $list->formatted_opening_time }}</td>
                                     <td>{{ $list->formatted_closing_time }}</td>
@@ -184,7 +186,6 @@
                                     @foreach ($class_list as $class)
                                         <option value="{{ $class->id }}">{{ $class->name }}</option>
                                     @endforeach
-
                                 </select>
                             @endif
                         </div>

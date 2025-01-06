@@ -254,7 +254,22 @@ class IndexController extends Controller
 
     public function contact()
     {
-        return view('pages.contact');
+        return view('pages.footer.contact');
+    }
+    
+    public function about()
+    {
+        return view('pages.footer.about');
+    }
+
+    public function terms()
+    {
+        return view('pages.footer.terms');
+    }
+
+    public function privacy()
+    {
+        return view('pages.footer.privacy');
     }
 
     public function sendContactEmail(Request $request)

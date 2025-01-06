@@ -82,7 +82,7 @@
                                 </div>
                                 <div class="widget-chart-content">
                                     <div class="widget-subheading">Tổng đề thi</div>
-                                    <div class="widget-numbers">{{$totalExams}}</div>
+                                    <div class="widget-numbers">{{ $totalExams }}</div>
                                 </div>
                             </div>
                             <div class="divider m-0 d-md-none d-sm-block"></div>
@@ -108,7 +108,7 @@
                                 </div>
                                 <div class="widget-chart-content">
                                     <div class="widget-subheading">Tổng số thí sinh</div>
-                                    <div class="widget-numbers text-success"><span>{{$totalStudents}}</span></div>
+                                    <div class="widget-numbers text-success"><span>{{ $totalStudents }}</span></div>
                                 </div>
                             </div>
                         </div>
@@ -125,6 +125,128 @@
                             <span class="mr-1">View Complete Report</span>
                         </button>
                     </div>
+                </div>
+
+                <div class="mb-3 card">
+                    <div class="card-header-tab card-header">
+                        <div class="card-header-title font-size-lg text-capitalize font-weight-normal">
+                            <i class="header-icon lnr-charts icon-gradient bg-happy-green"> </i>
+                            Chỉnh sửa cài đặt
+                        </div>
+                    </div>
+                    <div class="no-gutters row">
+                        <div class="col-sm-6 col-md-6 col-xl-6">
+                            <div class="card no-shadow rm-border bg-transparent widget-chart text-left">
+                                <div class="tab-pane tabs-animation fade show active" id="tab-content-1" role="tabpanel">
+                                    <div class="main-card card">
+                                        <div class="card-body">
+                                            <div class="position-relative row form-group">
+                                                <label for="name" class="col-sm-4 col-form-label">Tên :</label>
+                                                <div class="col-sm-8">
+                                                    <input type="text" name="name" autocomplete="off"
+                                                        id="name" class="form-control" placeholder="Nhập tên"
+                                                        value="{{ !isset($settings) ? $settings->name : '' }}">
+                                                </div>
+                                            </div>
+                                            <div class="position-relative row form-group">
+                                                <label for="description" class="col-sm-4 col-form-label">Mô tả :</label>
+                                                <div class="col-sm-8">
+                                                    <textarea name="desc" id="desc" class="form-control" placeholder="Nhập mô tả">{{ !isset($settings) ? $settings->desc : '' }}</textarea>
+                                                </div>
+                                            </div>
+                                            <div class="position-relative row form-group">
+                                                <label for="key_name" class="col-sm-4 col-form-label">Key name :</label>
+                                                <div class="col-sm-8">
+                                                    <input type="text" name="key_name" autocomplete="off"
+                                                        id="key_name" class="form-control" placeholder="Nhập key name"
+                                                        value="{{ !isset($settings) ? $settings->key_name : '' }}">
+                                                </div>
+                                            </div>
+                                            <div class="position-relative row form-group">
+                                                <label for="key_value" class="col-sm-4 col-form-label">Key value:</label>
+                                                <div class="col-sm-8">
+                                                    <input type="text" class="form-control" name="key_value"
+                                                        autocomplete="off" id="key_value" placeholder="Enter text..."
+                                                        value="{{ !isset($settings) ? $settings->key_value : '' }}">
+                                                </div>
+                                            </div>
+                                            <div hidden class="position-relative row form-group">
+                                                <label for="key_value_end" class="col-sm-4 col-form-label">Key value
+                                                    end:</label>
+                                                <div class="col-sm-8">
+                                                    <input type="datetime-local" class="form-control"
+                                                        name="key_value_end" autocomplete="off" id="key_value_end"
+                                                        value="{{ !isset($settings) ? $settings->key_value_end : '' }}">
+                                                </div>
+                                            </div>
+                                            <div class="position-relative row form-group">
+                                                <div class="col-sm-8"></div>
+                                                <div class="col-sm-12">
+                                                    <label>
+                                                        <input type="checkbox" id="type_toggle" checked>
+                                                        <span id="type_label">Sử dụng phương thức nhập dạng text</span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="form-row form-inline">
+                                                <div>
+                                                    @if (isset($settings))
+                                                        <input type="button" id="save_settings"
+                                                            class="btn btn-shadow btn-secondary" value="Tạo">
+                                                    @else
+                                                        <input type="button" id="save_settings"
+                                                            class="btn btn-shadow btn-secondary" value="Cập nhật">
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6 col-md-6 col-xl-6">
+                            <div class="card no-shadow rm-border bg-transparent widget-chart text-left">
+                                <div class="tab-pane tabs-animation fade show active" id="tab-content-1" role="tabpanel">
+                                    <div class="main-card card">
+                                        <div class="card-body">
+                                            <table style="width: 100%;" id=""
+                                                class="table table-hover table-striped table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Tên cài đặt</th>
+                                                        <th>Mô tả cài đặt</th>
+                                                        <th>Key name</th>
+                                                        <th>Key value</th>
+                                                        <th>Key value end</th>
+                                                        <th>Hành động</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach ($settings as $setting)
+                                                        <tr>
+                                                            <td>{{ $setting->name }}</td>
+                                                            <td>{{ $setting->desc }}</td>
+                                                            <td>{{ $setting->key_name }}</td>
+                                                            <td>{{ $setting->key_value }}</td>
+                                                            <td>{{ $setting->key_value_end ? $setting->key_value_end : 'null' }}</td>
+                                                            <td>
+                                                                <a href="#" class="btn btn-primary">Sửa</a>
+                                                                <a href="#" class="btn btn-danger">Xóa</a>
+                                                            </td>
+                                                        </tr>
+                                                    @endforeach
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
 
                 <div class=" mb-3 card">
@@ -202,4 +324,33 @@
             </div>
         </div>
     </div>
+    @push('scripts')
+        <script>
+            const checkbox = document.getElementById('type_toggle');
+            const inputField = document.getElementById('key_value');
+            const inputFieldEnd = document.getElementById('key_value_end').parentElement.parentElement; // Lấy div cha
+            const label = document.getElementById('type_label');
+
+            // Trạng thái mặc định
+            inputField.type = 'text';
+            inputField.placeholder = 'Enter text...';
+            inputFieldEnd.hidden = true; // Ẩn dòng chứa key_value_end
+            label.textContent = 'Sử dụng phương thức nhập dạng text'; // Thiết lập nhãn ban đầu
+
+            // Lắng nghe sự kiện thay đổi của checkbox
+            checkbox.addEventListener('change', function() {
+                if (checkbox.checked) {
+                    inputField.type = 'text';
+                    inputField.placeholder = 'Enter text...';
+                    inputFieldEnd.hidden = true;
+                    label.textContent = 'Sử dụng phương thức nhập dạng text';
+                } else {
+                    inputField.type = 'datetime-local';
+                    inputField.placeholder = '';
+                    inputFieldEnd.hidden = false;
+                    label.textContent = 'Sử dụng phương thức nhập dạng datetime';
+                }
+            });
+        </script>
+    @endpush
 @endsection

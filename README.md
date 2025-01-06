@@ -21,10 +21,22 @@ Before you begin, make sure you have Docker installed on your system. You can do
 2. Navigate to the project directory:
 
     ```bash
-    cd quiz-website
+    cd quiz-app
     ```
 
-3. Build and start the Docker containers:
+3. Install PHP dependencies using Composer:
+
+    ```bash
+    composer install
+    ```
+
+4. Copy the environment configuration file:
+
+    ```bash
+    cp .env.production .env
+    ```
+
+5. Build and start the Docker containers:
 
     ```bash
     docker-compose build

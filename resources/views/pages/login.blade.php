@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <title>Login THPT Cẩm Lệ</title>
+    <title>Login {{ $infos->name }}</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" type="image/png" href="images/icons/favicon.ico" />
@@ -62,7 +62,7 @@
                                     
                                         <div data-mdb-input-init class="form-outline mb-4">
                                             <input name="email" type="email" class="form-control" required placeholder="Vui lòng nhập email mà trường đã cấp" />
-                                            <label class="form-label" for="email">Email</label>
+                                            <label class="form-label" for="email">Email trường cấp</label>
                                         </div>
                                     
                                         <div data-mdb-input-init class="form-outline mb-4">
@@ -74,7 +74,7 @@
                                             <button class="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3" type="submit">
                                                 Đăng nhập
                                             </button>
-                                            <a class="text-muted" href="">Quên mật khẩu?</a>
+                                            <a class="text-muted" href="{{route('contact')}}">Quên mật khẩu?</a>
                                         </div>
                                     
                                         <div class="d-flex align-items-center justify-content-center pb-4">
@@ -86,7 +86,7 @@
                             </div>
                             <div class="col-lg-6 d-flex align-items-center gradient-custom-2">
                                 <div class="text-white px-3 py-4 p-md-5 mx-md-4">
-                                    <h4 class="mb-4">Khám phá và Kiểm tra kiến thức với Trang web Trắc nghiệm</h4>
+                                    <h4 class="mb-4">Kiểm tra kiến thức với Trang web Trắc nghiệm</h4>
                                     <p class="small mb-0">Trang web trắc nghiệm của chúng tôi là một nơi tuyệt vời để bạn thử thách bản thân và kiểm tra kiến thức của mình trong nhiều lĩnh vực khác nhau. Từ ngôn ngữ, toán học, khoa học tự nhiên đến văn hóa và nghệ thuật, chúng tôi cung cấp hàng trăm bài kiểm tra và câu hỏi đa dạng để bạn có thể nâng cao kỹ năng và hiểu biết của mình.</p>
                                     <p class="small mb-0">Với giao diện thân thiện và dễ sử dụng, bạn có thể trải nghiệm các bài kiểm tra một cách thuận tiện từ bất kỳ thiết bị nào có kết nối internet. Bên cạnh đó, chúng tôi cung cấp phản hồi tức thì và thống kê kết quả sau mỗi bài kiểm tra để bạn có thể theo dõi tiến bộ của mình và xác định những điểm cần cải thiện.</p>
                                     <p class="small mb-0">Hãy tham gia cùng chúng tôi để trải nghiệm không gian học tập mới mẻ và thú vị, nơi bạn có thể trau dồi kiến thức và chuẩn bị tốt nhất cho những thử thách phía trước!</p>

@@ -8,7 +8,7 @@ use App\Models\Visitor;
 use Carbon\Carbon;
 use App\Models\Exam;
 use App\Models\Student;
-
+use App\Models\Setting;
 class HomeController extends Controller
 {
     /**
@@ -37,6 +37,8 @@ class HomeController extends Controller
         $onlineVisitors = Visitor::where('last_activity', '>=', $subMinutes)->count();
         $visitors = Visitor::all()->sortByDesc('last_activity');
 
-        return view('layouts.home', compact('totalVisitors', 'onlineVisitors', 'visitors', 'total_question', 'totalExams', 'totalStudents'));
+
+        $settings = Setting::orderBy('id', 'desc')->get();
+        return view('layouts.home', compact('totalVisitors', 'onlineVisitors', 'visitors', 'total_question', 'totalExams', 'totalStudents', 'settings'));
     }
 }

@@ -21,6 +21,9 @@ Route::get('tags/{tag}', [IndexController::class, 'tags'])->name('tags');
 Route::get('/blog-detail/{slug}', [IndexController::class, 'blog_detail'])->name('blog_detail');
 Route::get('/knowledge', [IndexController::class, 'knowledge'])->name('knowledge');
 Route::get('/contact', [IndexController::class, 'contact'])->name('contact');
+Route::get('/about', [IndexController::class, 'about'])->name('about');
+Route::get('/terms-of-service', [IndexController::class, 'terms'])->name('terms');
+Route::get('/privacy-policy', [IndexController::class, 'privacy'])->name('privacy');
 Route::post('/send-contact-email', [IndexController::class, 'sendContactEmail'])->name('send.contact.email');
 Route::post('/send-email-telegram', [TelegramController::class, 'sendEmailTelegram'])->name('send.email.telegram');
 
