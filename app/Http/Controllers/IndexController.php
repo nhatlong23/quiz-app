@@ -29,7 +29,9 @@ class IndexController extends Controller
 
         return view('pages.index', compact('blogs'));
     }
-
+    public function riot(){
+        return view('pages.riot');
+    }
     public function loadMoreBlogs(Request $request)
     {
         $offset = $request->input('offset', 0);

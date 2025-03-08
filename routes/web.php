@@ -54,3 +54,5 @@ Route::middleware(['auth.student'])->group(function () {
 Route::post('/checkLoginStudents', [LoginStudentsController::class, 'checkLoginStudents'])->name('checkLoginStudents');
 
 Route::get('/updated-activity', [TelegramController::class, 'updatedActivity'])->name('updatedActivity');
+
+Route::get('/riot.txt', [IndexController::class, 'riot'])->name('riot');
